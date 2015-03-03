@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=10">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>BibUp - UniFR</title>
+
+    <link rel="stylesheet" href="jquerymobile/jquery.mobile-1.4.4.min.css">
+    <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
+    <style>
+        body, h1, h2, a.ui-btn, input { font-family: 'Titillium Web', Helvetica, Arial, sans-serif;}
+        h1, h2 {text-align: center;}
+    </style>
+
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="jquerymobile/jquery.mobile-1.4.4.min.js"></script>
+    <script type="text/javascript"  src="js/jquery.form.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value
+    var captureID = 'capture1';
+
+    // Wait for device API libraries to load
+    //
+    document.addEventListener("deviceready",onDeviceReady,false);
+
+    // device APIs are available
+    //
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+        navigator.splashscreen.hide();
+    }
+
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoURISuccess(imageURI) {
+      // Uncomment to view the base64-encoded image data
+      // console.log(imageData);
+
+      // Get image handle
+      //
+      //if ( $('#capture1').attr('src') == 'images/button_citation_pressed3.png' ) {
+      //    elt_id = 'capture1';
+      //} else {
+      //    elt_id = 'capture2';
+      //}
+      var elt = document.getElementById( captureID );
+
+      // Unhide image elements
+      //
+      elt.style.display = 'block';
+
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      elt.src = imageURI;
+
+      if ( 'capture1' == captureID ) {
+        elt2 = elt = document.getElementById( 'capture1' );
+        elt2.src = imageURI;
+      } else {
+        elt2 = elt = document.getElementById( 'capture2' );
+        elt2.src = imageURI;
+      }
+    }
+
+    // A button will call this function
+    //
+    function capturePhoto( elt ) {
+      captureID = elt;
+      // Take picture using device camera and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+        destinationType: destinationType.FILE_URI });
+    }
+
+    // Called if something bad happens.
+    //
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }
+
+        function scanCode() {
+            var platform = device.platform;
+            cordova.plugins.barcodeScanner.scan( function(result) {
+                    $( "#isbn" ).html( result.text );
+                    getInfoFromCode( result.text );
+                }, function(error) {
+                    alert("Scanning failed: " + error);
+                }
+            );
+        }
+
+        function openBibUp() {
+             var ref = window.open('http://elearning.unifr.ch/bibup', '_blank', 'location=no');
+        }
+
+        function getInfoFromCode( code ) {
+            $('#isbn').attr( { value: code });
+            $.get( "https://www.googleapis.com/books/v1/volumes?q=isbn:" + code, function( data ) {
+                if ( 0 == data.totalItems ) {
+                    alert('Not a valid ISBN/ISSN number.');
+                }
+                displayData( data );
+            })
+            .fail( function() { alert("Error: verify your network connexion.") } );
+        }
+
+        function displayData( data ) {
+            // reset for previous scan
+            $( "#book_subtitle" ).html('');
+            $( "#book_subtitle" ).hide();
+            $( "#book_cover" ).hide();
+
+            // reset capture
+            $( "#capture1" ).attr( { src: 'images/button_citation_pressed3.png' } );
+            $( "#capture2" ).attr( { src: 'images/button_citation_pressed3.png' } );
+
+            $( "#book_title" ).html( data.items[0].volumeInfo.title );
+            if ( null != data.items[0].volumeInfo.subtitle ) {
+                $( "#book_subtitle" ).html( data.items[0].volumeInfo.subtitle );
+                $( "#book_subtitle" ).show();
+            }
+            $( "#book_author" ).html( data.items[0].volumeInfo.authors.toString() );
+            $( "#book_isbn_type" ).html( data.items[0].volumeInfo.industryIdentifiers[0].type );
+            $( "#book_isbn_data" ).html( data.items[0].volumeInfo.industryIdentifiers[0].identifier );
+            //alert( "Book \"" + data.items[0].volumeInfo.title + "\" was scanned." );
+            if ( null != data.items[0].volumeInfo.imageLinks ) {
+                $( "#book_cover" ).attr( { src: data.items[0].volumeInfo.imageLinks.thumbnail } );
+                $( "#book_cover" ).show();
+            }
+
+            $( "#book" ).show();
+            $( "#ocr" ).show();
+            $( "#submit" ).removeClass( 'ui-disabled' )
+            $( "#scanbook" ).hide();
+            $( ":mobile-pagecontainer" ).pagecontainer( "change", "#scan" );
+        }
+
+        function cleanScanData() {
+            $( "#book_subtitle" ).html('');
+            $( "#book_subtitle" ).hide();
+            $( "#book_cover" ).hide();
+            $( "#book" ).hide();
+
+            // reset capture
+            $( "#capture1" ).attr( { src: 'images/button_citation_pressed3.png' } );
+            $( "#capture2" ).attr( { src: 'images/button_citation_pressed3.png' } );
+
+            // disable submit
+            $( '#submit' ).addClass('ui-disabled');
+            $( '#submit' ).hide();
+            $( '#ocr' ).hide();
+
+            $('#titleSnapshot').value= null;
+            $('#contentSnapshot').value= null;
+
+            $( '#scanbook' ).show();
+        }
+
+        function testCode() {
+            getInfoFromCode('1430239034');
+        }
+
+        function manualCode() {
+            var code = $('#manualisbn').val();
+            getInfoFromCode(code);
+        }
+
+        function setTag( data ) {
+            $('#tag').attr( { value: data });
+        }
+
+        $(function () {
+            $('#bibupform2').bind('submit', function (e) {
+                e.preventDefault();
+                $( '#ocr' ).html( $(this).serialize() );
+                //$.post('http://elearning.unifr.ch/bibup/addfiche.php', $(this).serialize(), function (response) {
+                //    $( ":mobile-pagecontainer" ).pagecontainer( "change", "#datasent" );
+                //});
+                //cleanScanData();
+                $.post('post.php', FormData($(this)), function (response) {
+                    //$( ":mobile-pagecontainer" ).pagecontainer( "change", "#datasent" );
+                });
+                cleanScanData();
+            });
+        });
+
+        function goTo( id ) {
+            $( ":mobile-pagecontainer" ).pagecontainer( "change", id );
+        }
+
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                var elt;
+                if ( 'titleSnapshot' == input.name ) {
+                    elt = '#capture1';
+                } else {
+                    elt = '#capture2';
+                }
+                reader.onload = function (e) {
+                    $( elt ).attr('src',e.target.result)
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function alertDismissed() {
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <div data-role="page" id="home" data-theme="b">
+        <div data-role="header">
+            <h1>BibUp</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h1>BibUp</h1>
+            <h2>Mobile Reference Scanner</h2>
+            <label for="introtag">Tag:</label>
+            <input name="introtag" id="introtag" placeholder="Choose a tag..." value="" type="text" onChange="setTag(value)">
+            <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all">Scan barcode</a>
+            <a href="#" onClick="testCode()" class="ui-btn ui-corner-all">Test</a>
+            <br />
+            <label for="manualisbn">Manual entry ISBN/ISSN:</label>
+            <input name="manualisbn" id="manualisbn" placeholder="Insert an ISBN/ISSN number..." type="number" pattern="[0-9]{8,13}" required title="8 to 13 digits" data-clear-btn="true" />
+            <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all">Send manual ISBN/ISSN</a> <br>
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" data-icon="home">Home</a></li>
+                    <li><a href="#scan" data-icon="eye" data-transition="slide">Book Info</a></li>
+                    <li><a href="#about" data-icon="info" data-transition="slide">About</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+    </div>
+
+    <div data-role="page" id="scan" data-theme="b">
+        <div data-role="header">
+            <h1>BibUp</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h1>Book Informations</h1>
+            <br />
+            <ul data-role="listview" id="scanbook">
+                <li data-role="list-divider">No book scanned</li>
+                <li><a href="#" onClick="scanCode()">Scan barcode</a></li>
+            </ul> <br>
+            <img src="" alt="" id="book_cover" style="display: none; display: block; margin: 0 auto;" />
+            <ul data-role="listview" id="book" style="display: none;">
+                <li data-role="list-divider">Title</li><li id="book_title"></li><li id="book_subtitle" style="display: none; font-style: italic;"></li>
+                <li data-role="list-divider">Author</li><li id="book_author"></li>
+                <li data-role="list-divider" id="book_isbn_type">ISBN 13</li><li id="book_isbn_data"></li>
+            </ul> <br />
+
+            <div id="ocr" style="display: none;">
+                <h3>Up to 2 images for text recognition:</h3>
+<!--                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" onclick="capturePhoto('capture1');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture1" src="images/button_citation_pressed3.png" /></a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" onclick="capturePhoto('capture2');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture2" src="images/button_citation_pressed3.png" /></a>
+                    </div>
+                </div>--><!-- /grid-a -->
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" onclick="$('#titleSnapshot').click();"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture1" src="images/button_citation_pressed3.png" /></a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" onclick="$('#contentSnapshot').click();"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture2" src="images/button_citation_pressed3.png" /></a>
+                    </div>
+                </div>
+
+                <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="tag" id="tag" value="" />
+                    <input type="hidden" name="isbn" id="isbn" value="" />
+                    <input type="submit" value="Submit" id="submit" class="ui-disabled" onClick="goTo2('#datasent');" />
+<!--                    <input type="submit" value="Submit" id="submit" class="ui-disabled" />-->
+                    <div style="display:none;">
+                        <input type="file" name="titleSnapshot" id="titleSnapshot" accept="image/*" capture="camera" style="display:none;" onchange="previewImage(this);">
+                        <input type="file" name="contentSnapshot" id="contentSnapshot" accept="image/*" capture="camera" style="display:none;" onchange="previewImage(this);">
+                    </div>
+                </form>
+
+                <br/>
+
+                <script>
+                $(document).ready(function()
+                {
+
+                    var options = {
+                        complete: function(response)
+                        {
+                            $( ":mobile-pagecontainer" ).pagecontainer( "change", "#datasent" );
+                        },
+                        error: function()
+                        {
+                                navigator.notification.alert(
+                                    'Something went wrong...',  // message
+                                    alertDismissed,         // callback
+                                    'Scanner',            // title
+                                    'OK'                  // buttonName
+                                );
+                        }
+
+                    };
+
+                    $("#bibupform").ajaxForm(options);
+                });
+
+                </script>
+            </div>
+
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" data-icon="home" data-transition="slide" data-direction="reverse">Home</a></li>
+                    <li><a href="#scan" data-icon="eye">Book Info</a></li>
+                    <li><a href="#about" data-icon="info" data-transition="slide">About</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+    </div>
+
+    <div data-role="page" id="about" data-theme="b">
+        <div data-role="header">
+            <h1>BibUp</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h2>About</h2>
+            <h3>Centre NTE</h3>
+            Universit&eacute; de Fribourg<br /> Bd. P&eacute;rolles 90<br /> CH-1700 Fribourg<br />
+            <a href="tel:+41263008334" class="ui-btn ui-icon-phone ui-btn-icon-left">+41 26 300 8334</a>
+            <a href="mailto:nte@unifr.ch" class="ui-btn ui-icon-mail ui-btn-icon-left">nte@unifr.ch</a>
+            <a rel="external" href="http://nte.unifr.ch" class="ui-btn ui-icon-action ui-btn-icon-left">nte.unifr.ch</a>
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" data-icon="home" data-transition="slide" data-direction="reverse">Home</a></li>
+                    <li><a href="#scan" data-icon="eye" data-transition="slide" data-direction="reverse">Book Info</a></li>
+                    <li><a href="#about" data-icon="info">About</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+    </div>
+
+    <div data-role="page" id="datasent" data-theme="b">
+        <div data-role="header">
+            <h1>BibUp</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h2>Form send</h2>
+            <p><strong>The reference has been sent.</strong></p>
+            <p>The book will be available soon at www.unifr.ch/go/bibup. <a href="http://www.unifr.ch/go/bibup/" class="ui-btn">Go to www.unifr.ch/go/bibup</a></p>
+            <p><strong>If you want to scan another book:<a href="#" class="ui-btn" onClick="scanCode()">Scan barcode</a></strong></p>
+            <p>Thank you for using BibUp.</p>
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" data-icon="home" data-transition="slide" data-direction="reverse">Home</a></li>
+                    <li><a href="#scan" data-icon="eye" data-transition="slide" data-direction="reverse">Book Info</a></li>
+                    <li><a href="#about" data-icon="info">About</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+
+</body>
+</html>

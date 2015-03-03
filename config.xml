@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns   = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+        id          = "ch.unifr.nte.bibup"
+        versionCode = "2"
+        version     = "2.0.0" >
+
+    <!-- versionCode is optional and Android only -->
+
+    <name>BibUp</name>
+
+    <description>
+        BibUp.
+    </description>
+
+    <author href="https://nte.unifr.ch" email="nte@unifr.ch">
+        Centre NTE, Université de Fribourg.
+    </author>
+
+    <icon src="res/icon.png" />
+
+    <preference name="SplashScreen" value="splash" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <gap:splash gap:platform="android" src="res/screens/splash.png" />
+    <gap:splash gap:platform="ios" src="res/screens/splash.png" />
+
+    <gap:plugin name="org.apache.cordova.core.inappbrowser" />
+    <gap:plugin name="org.apache.cordova.core.camera" />
+    <gap:plugin name="com.phonegap.plugins.barcodescanner" />
+    <gap:plugin name="org.apache.cordova.device" />
+    <gap:plugin name="org.apache.cordova.dialogs" />
+
+    <gap:platform name="ios" />
+    <gap:platform name="android" />
+</widget>
