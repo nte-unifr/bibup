@@ -254,7 +254,6 @@
         <div role="main" class="ui-content">
             <h1>BibUp</h1>
             <h2>Mobile Reference Scanner</h2>
-            <label for="introtag">Tag:</label>
             <input name="introtag" id="introtag" placeholder="Choose a tag..." value="" type="text" onChange="setTag(value)">
 
             <!-- jquery popup -->
@@ -278,7 +277,6 @@
             <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all">Scan barcode</a>
             <a href="#" onClick="testCode()" class="ui-btn ui-corner-all">Test</a>
             <br />
-            <label for="manualisbn">Manual entry ISBN/ISSN:</label>
             <input name="manualisbn" id="manualisbn" placeholder="Insert an ISBN/ISSN number..." type="number" pattern="[0-9]{8,13}" required title="8 to 13 digits" data-clear-btn="true" />
             <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all">Send manual ISBN/ISSN</a> <br>
         </div>
