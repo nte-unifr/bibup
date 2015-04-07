@@ -21,6 +21,11 @@
 
     <preference name="SplashScreen" value="splash" />
     <preference name="SplashScreenDelay" value="3000" />
+
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#000000" /> <!-- only if StatusBarOverlaysWebView is false -->
+    <preference name="StatusBarStyle" value="lightcontent" /> <!-- default, lightcontent, blacktranslucent, blackopaque -->
+
     <gap:splash gap:platform="android" src="res/screens/splash.png" />
     <gap:splash gap:platform="ios" src="res/screens/splash.png" />
 
@@ -29,6 +34,7 @@
     <gap:plugin name="com.phonegap.plugins.barcodescanner" />
     <gap:plugin name="org.apache.cordova.device" />
     <gap:plugin name="org.apache.cordova.dialogs" />
+    <gap:plugin name="org.apache.cordova.statusbar" />
 
     <gap:platform name="ios" />
     <gap:platform name="android" />
