@@ -8,6 +8,9 @@
 
     <link rel="stylesheet" href="jquerymobile/jquery.mobile-1.4.4.min.css">
     <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="css/themes/bg.min.css" />
+    <link rel="stylesheet" href="css/themes/bogart.css" />
+    <link rel="stylesheet" href="css/themes/bogart.min.css" />
 
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
     <style>
@@ -216,13 +219,35 @@
         function alertDismissed() {
         }
 
+
+        // Show native pop up
+        function tagInfo() {
+            navigator.notification.alert(
+                'You will use this tag to filter your references in the list on the Bibup website:<br /><a href="http://www.unifr.ch/go/bibup">http://www.unifr.ch/go/bibup</a><br />Use a tag that is easy for you to remember.',
+                alertDismissed,
+                'Tag Information',
+                'Ok'
+            );
+        }
+
+
+        function popupTest() {
+            msg = 'You will use this tag to filter your references in the list on the Bibup website: <br /><a href="http://www.unifr.ch/go/bibup">http://www.unifr.ch/go/bibup</a>';
+            navigator.notification.alert(
+                msg,
+                alertDismissed,
+                'Popup Test',
+                'Ok'
+            );
+        }
+
     </script>
 
 </head>
 
 <body>
 
-    <div data-role="page" id="home" data-theme="b">
+    <div data-role="page" id="home" data-theme="a">
         <div data-role="header">
             <h1>BibUp</h1>
         </div>
@@ -231,6 +256,25 @@
             <h2>Mobile Reference Scanner</h2>
             <label for="introtag">Tag:</label>
             <input name="introtag" id="introtag" placeholder="Choose a tag..." value="" type="text" onChange="setTag(value)">
+
+            <!-- jquery popup -->
+            <a href="#tag-info" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-alt-icon ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
+            <div data-role="popup" data-overlay-theme="a" data-theme="b" data-dismissible="false" id="tag-info">
+                <div data-role="header" data-theme="b">
+                    <h1>Tag Information</h1>
+                </div>
+                <div role="main" class="ui-content">
+                    <p>You will use this tag to filter your references in the list on the Bibup website:</p>
+                    <p><a href="http://www.unifr.ch/go/bibup">http://www.unifr.ch/go/bibup</a></p>
+                    <p>Use a tag that is easy for you to remember.</p>
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Ok</a>
+                </div>
+            </div>
+
+            <!-- native popup -->
+            <a href="#" onClick="tagInfo(); return false;" class="ui-alt-icon ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
+            <a href="#" onClick="popupTest();" class="ui-btn ui-corner-all">Native Popup Test</a>
+
             <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all">Scan barcode</a>
             <a href="#" onClick="testCode()" class="ui-btn ui-corner-all">Test</a>
             <br />
