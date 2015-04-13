@@ -1,0 +1,13 @@
+.ui-grid-span .ui-block-a { width: 90%; }
+.ui-grid-span .ui-block-b { width: 10%; }
+
+.center { margin: 0 auto; }
+
+.right { text-align: right; }
+
+.circle-btn {
+    width:          200px !important;
+    height:         200px !important;
+    border-radius:  50% !important;
+    line-height:    200px;
+}
