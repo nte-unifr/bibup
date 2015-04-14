@@ -4,7 +4,7 @@ $(document).ready(function(){
     $('.p-scan').on('tap', renderScanView);
     $('.p-about').on('tap', renderAboutView);
 
-    $('[data-role=footer]').addClass("ui-footer ui-bar-a ui-footer-fixed slideup");
+    $('[data-role=footer]').addClass("ui-footer ui-bar-a");
     $('[data-role=navbar]').addClass("ui-navbar ui-mini");
 
 });
@@ -109,14 +109,31 @@ function onFail(message) {
 }
 
 function scanCode() {
-    var platform = device.platform;
-    cordova.plugins.barcodeScanner.scan( function(result) {
-            $( "#isbn" ).html( result.text );
-            getInfoFromCode( result.text );
-        }, function(error) {
-            alert("Scanning failed: " + error);
-        }
-    );
+    if ($('#tag').attr('value')) {
+        var platform = device.platform;
+        cordova.plugins.barcodeScanner.scan( function(result) {
+                $( "#isbn" ).html( result.text );
+                getInfoFromCode( result.text );
+            }, function(error) {
+                alert("Scanning failed: " + error);
+            }
+        );
+    } else {
+        alert("You must provide a tag to filter your references later");
+    }
+
+}
+
+function mCode() {
+    alert("hello1");
+    //     if ($('#tag').attr('value')) {
+    //         alert("hello");
+    //         var code = $('#manualisbn').val();
+    //         getInfoFromCode(code);
+    //     } else {
+    //         alert("You must provide a tag to filter your references later");
+    //     }
+
 }
 
 function openBibUp() {
@@ -190,10 +207,17 @@ function testCode() {
     getInfoFromCode('1430239034');
 }
 
-function manualCode() {
-    var code = $('#manualisbn').val();
-    getInfoFromCode(code);
-}
+// function manualCode() {
+//     alert("hello1");
+//     if ($('#tag').attr('value')) {
+//         alert("hello");
+//         var code = $('#manualisbn').val();
+//         getInfoFromCode(code);
+//     } else {
+//         alert("You must provide a tag to filter your references later");
+//     }
+//
+// }
 
 function setTag( data ) {
     $('#tag').attr( { value: data });
