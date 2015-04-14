@@ -4,7 +4,7 @@ $(document).ready(function(){
     $('.p-scan').on('tap', renderScanView);
     $('.p-about').on('tap', renderAboutView);
 
-    $('[data-role=footer]').addClass("ui-footer ui-bar-b ui-footer-fixed slideup");
+    $('[data-role=footer]').addClass("ui-footer ui-bar-a ui-footer-fixed slideup");
     $('[data-role=navbar]').addClass("ui-navbar ui-mini");
 
 });
