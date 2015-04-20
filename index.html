@@ -89,7 +89,7 @@
                 <li data-role="list-divider">No book scanned</li>
                 <li><a href="#" onClick="scanCode()">Scan barcode</a></li>
             </ul> <br>
-            <img src="" alt="" id="book_cover" style="display: none; display: block; margin: 0 auto;" />
+            <img src="" alt="" id="book_cover" style="display: none; display: block; margin: 0 auto; margin-bottom: 10%;" />
             <ul data-role="listview" id="book" style="display: none;">
                 <li data-role="list-divider">Title</li><li id="book_title"></li><li id="book_subtitle" style="display: none; font-style: italic;"></li>
                 <li data-role="list-divider">Author</li><li id="book_author"></li>
@@ -98,14 +98,15 @@
 
             <div id="ocr" style="display: none;">
                 <h3>Up to 2 images for text recognition:</h3>
-<!--                <div class="ui-grid-a">
+                <div class="ui-grid-a">
                     <div class="ui-block-a">
                         <a href="#" onclick="capturePhoto('capture1');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture1" src="images/button_citation_pressed3.png" /></a>
                     </div>
                     <div class="ui-block-b">
                         <a href="#" onclick="capturePhoto('capture2');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture2" src="images/button_citation_pressed3.png" /></a>
                     </div>
-                </div>--><!-- /grid-a -->
+                </div><!-- /grid-a -->
+                <!--
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
                         <a href="#" onclick="$('#titleSnapshot').click();"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture1" src="images/button_citation_pressed3.png" /></a>
@@ -114,15 +115,16 @@
                         <a href="#" onclick="$('#contentSnapshot').click();"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture2" src="images/button_citation_pressed3.png" /></a>
                     </div>
                 </div>
+            -->
 
                 <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
                     <input type="submit" value="Submit" id="submit" class="ui-disabled" />
-<!--                    <input type="submit" value="Submit" id="submit" class="ui-disabled" />-->
+
                     <div style="display:none;">
-                        <input type="file" name="titleSnapshot" id="titleSnapshot" accept="image/*" capture="camera" style="display:none;" onchange="previewImage(this);">
-                        <input type="file" name="contentSnapshot" id="contentSnapshot" accept="image/*" capture="camera" style="display:none;" onchange="previewImage(this);">
+                        <input type="file" value="" name="titleSnapshot" id="titleSnapshot" accept="image/*" style="display:none;" onchange="previewImage(this);">
+                        <input type="file" value="" name="contentSnapshot" id="contentSnapshot" accept="image/*" style="display:none;" onchange="previewImage(this);">
                     </div>
                 </form>
                 <!--

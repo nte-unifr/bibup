@@ -75,21 +75,39 @@ function onDeviceReady() {
     navigator.splashscreen.hide();
 }
 
+
+// Called when a photo is successfully retrieved
+function onPhotoDataSuccess(imageData) {
+    var smallImage = document.getElementById(captureID);
+    smallImage.style.display = 'block';
+    smallImage.src = "data:image/jpeg;base64," + imageData;
+}
+
+
+
 // Called when a photo is successfully retrieved
 function onPhotoURISuccess(imageURI) {
-  var elt = document.getElementById( captureID );
+  var elt;// = document.getElementById( captureID );
+  var elt2;
   // Unhide image elements
-  elt.style.display = 'block';
+  // elt.style.display = 'block';
   // Show the captured photo
   // The inline CSS rules are used to resize the image
-  elt.src = imageURI;
+  // elt.src = imageURI;
 
   if ( 'capture1' == captureID ) {
-    elt2 = elt = document.getElementById( 'capture1' );
-    elt2.src = imageURI;
+      elt = document.getElementById( 'capture1' );
+      elt.style.display = 'block';
+      elt.src = imageURI;
+      elt2 = document.getElementById( 'titleSnapshot' );
+      elt2.value = imageURI;
+      alert("imageURI: " + imageURI);
   } else {
-    elt2 = elt = document.getElementById( 'capture2' );
-    elt2.src = imageURI;
+      elt = document.getElementById( 'capture2' );
+      elt.style.display = 'block';
+      elt.src = imageURI;
+      elt2 = document.getElementById( 'contentSnapshot' );
+      elt2.value = imageURI;
   }
 }
 
@@ -259,6 +277,7 @@ function goTo( id ) {
 
 
 function previewImage(input) {
+    alert("preview!");
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         var elt;
@@ -271,6 +290,9 @@ function previewImage(input) {
             $( elt ).attr('src',e.target.result)
         };
         reader.readAsDataURL(input.files[0]);
+        alert("1- " + input.files[0]);
+        alert("2- " + $('#titleSnapshot').attr('value'));
+        alert("3- " + $('#contentSnapshot').attr('value'));
     }
 }
 
