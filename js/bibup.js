@@ -109,27 +109,18 @@ function onFail(message) {
 }
 
 function scanCode() {
-    var platform = device.platform;
-    cordova.plugins.barcodeScanner.scan( function(result) {
-            $( "#isbn" ).html( result.text );
-            getInfoFromCode( result.text );
-        }, function(error) {
-            // alert("Scanning failed: " + error);
-            showNotification("Scanning failed: " + error, "Error");
-        }
-    );
-    // if ($('#tag').attr('value')) {
-    //     var platform = device.platform;
-    //     cordova.plugins.barcodeScanner.scan( function(result) {
-    //             $( "#isbn" ).html( result.text );
-    //             getInfoFromCode( result.text );
-    //         }, function(error) {
-    //             alert("Scanning failed: " + error);
-    //         }
-    //     );
-    // } else {
-    //     alert("You must provide a tag to filter your references later");
-    // }
+    if ($('#tag').attr('value')) {
+        var platform = device.platform;
+        cordova.plugins.barcodeScanner.scan( function(result) {
+                $( "#isbn" ).html( result.text );
+                getInfoFromCode( result.text );
+            }, function(error) {
+                showNotification("Scanning failed: " + error, "Error");
+            }
+        );
+    } else {
+        showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
+    }
 
 }
 
@@ -206,25 +197,18 @@ function testCode() {
 }
 
 function manualCode() {
-    if ($('#manualisbn').val()) {
-        var code = $('#manualisbn').val();
-        getInfoFromCode(code);
+    if ($('#tag').attr('value')) {
+        if ($('#manualisbn').val()) {
+            var code = $('#manualisbn').val();
+            getInfoFromCode(code);
+        } else {
+            showNotification("You must provide an ISBN/ISSN number", "Invalid Field");
+
+        }
+
     } else {
-        // alert("You must provide an ISBN/ISSN number");
-        showNotification("You must provide an ISBN/ISSN number", "Invalid Field");
+        showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
     }
-    // if ($('#tag').attr('value')) {
-    //     if ($('#manualisbn').val()) {
-    //         var code = $('#manualisbn').val();
-    //         getInfoFromCode(code);
-    //     } else {
-    //         alert("You must provide an ISBN/ISSN number");
-    //
-    //     }
-    //
-    // } else {
-    //     alert("You must provide a tag to filter your references later");
-    // }
 
 }
 
