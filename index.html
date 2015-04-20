@@ -13,7 +13,7 @@
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
     <style>
         body, h1, h2, a.ui-btn, input { font-family: 'Titillium Web', Helvetica, Arial, sans-serif;}
-        h1, h2 {text-align: center;}
+        /*h1, h2 {text-align: center;}*/
     </style>
 </head>
 
@@ -24,9 +24,7 @@
             <h1>Home Scanner</h1>
         </div>
         <div role="main" class="ui-content">
-            <h1>BibUp</h1>
-            <h2>Mobile Reference Scanner</h2>
-
+            <h1>Reference Tag</h1>
             <div class="ui-grid-b ui-grid-span">
                 <div class="ui-block-a">
                     <input name="introtag" id="introtag" placeholder="Choose a tag..." value="" type="text" onChange="setTag(value)">
@@ -50,20 +48,21 @@
                 </div>
             </div>
 
+            <h1>Reference Scanner</h1>
             <!--
             <a href="#" onClick="testCode()" class="ui-btn ui-corner-all circle-btn center"><span class="ui-btn-text">Test</span></a>
         -->
-            <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all circle-btn center"><span class="ui-btn-text">Scan barcode</span></a>
+            <a href="#" onClick="scanCode()" class="ui-btn ui-btn-b ui-corner-all circle-btn center"><span class="ui-btn-text">Scan barcode</span></a>
 
 
             <br /><br />
-
+            <h1>Manual ISBN/ISSN</h1>
 
             <input name="manualisbn" id="manualisbn" placeholder="Insert an ISBN/ISSN number..." type="number" pattern="[0-9]{8,13}" required title="8 to 13 digits" data-clear-btn="true" />
             <!--
             <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all" >Send manual ISBN/ISSN</a> <br />-->
 
-            <a href="#" onClick="manualCode()" data-role="button" data-inline="true">Send manual ISBN/ISSN</a>
+            <a href="#" onClick="manualCode()" class="ui-btn ui-btn-b ui-corner-all">Send manual ISBN/ISSN</a>
 
         </div>
         <div data-role="footer" data-id="f1" data-position="fixed">

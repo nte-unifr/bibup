@@ -109,32 +109,30 @@ function onFail(message) {
 }
 
 function scanCode() {
-    if ($('#tag').attr('value')) {
-        var platform = device.platform;
-        cordova.plugins.barcodeScanner.scan( function(result) {
-                $( "#isbn" ).html( result.text );
-                getInfoFromCode( result.text );
-            }, function(error) {
-                alert("Scanning failed: " + error);
-            }
-        );
-    } else {
-        alert("You must provide a tag to filter your references later");
-    }
+    var platform = device.platform;
+    cordova.plugins.barcodeScanner.scan( function(result) {
+            $( "#isbn" ).html( result.text );
+            getInfoFromCode( result.text );
+        }, function(error) {
+            // alert("Scanning failed: " + error);
+            showNotification("Scanning failed: " + error, "Error");
+        }
+    );
+    // if ($('#tag').attr('value')) {
+    //     var platform = device.platform;
+    //     cordova.plugins.barcodeScanner.scan( function(result) {
+    //             $( "#isbn" ).html( result.text );
+    //             getInfoFromCode( result.text );
+    //         }, function(error) {
+    //             alert("Scanning failed: " + error);
+    //         }
+    //     );
+    // } else {
+    //     alert("You must provide a tag to filter your references later");
+    // }
 
 }
 
-function mCode() {
-    alert("hello1");
-    //     if ($('#tag').attr('value')) {
-    //         alert("hello");
-    //         var code = $('#manualisbn').val();
-    //         getInfoFromCode(code);
-    //     } else {
-    //         alert("You must provide a tag to filter your references later");
-    //     }
-
-}
 
 function openBibUp() {
      var ref = window.open('http://elearning.unifr.ch/bibup', '_blank', 'location=no');
@@ -207,17 +205,28 @@ function testCode() {
     getInfoFromCode('1430239034');
 }
 
-// function manualCode() {
-//     alert("hello1");
-//     if ($('#tag').attr('value')) {
-//         alert("hello");
-//         var code = $('#manualisbn').val();
-//         getInfoFromCode(code);
-//     } else {
-//         alert("You must provide a tag to filter your references later");
-//     }
-//
-// }
+function manualCode() {
+    if ($('#manualisbn').val()) {
+        var code = $('#manualisbn').val();
+        getInfoFromCode(code);
+    } else {
+        // alert("You must provide an ISBN/ISSN number");
+        showNotification("You must provide an ISBN/ISSN number", "Invalid Field");
+    }
+    // if ($('#tag').attr('value')) {
+    //     if ($('#manualisbn').val()) {
+    //         var code = $('#manualisbn').val();
+    //         getInfoFromCode(code);
+    //     } else {
+    //         alert("You must provide an ISBN/ISSN number");
+    //
+    //     }
+    //
+    // } else {
+    //     alert("You must provide a tag to filter your references later");
+    // }
+
+}
 
 function setTag( data ) {
     $('#tag').attr( { value: data });

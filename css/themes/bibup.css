@@ -13,3 +13,11 @@
 }
 
 .font-big { font-size: 18px; }
+
+/*Input validation*/
+input:focus:invalid {
+    border:1px solid red;
+}
+/*input:required:valid {
+    border:1px solid green;
+}*/
