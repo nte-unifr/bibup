@@ -49,9 +49,9 @@
             </div>
 
             <h1>Reference Scanner</h1>
-            <!--
+            <!-- TODO: à cacher avant commit -->
             <a href="#" onClick="testCode()" class="ui-btn ui-corner-all circle-btn center"><span class="ui-btn-text">Test</span></a>
-        -->
+
             <a href="#" onClick="scanCode()" class="ui-btn ui-btn-b ui-corner-all circle-btn center"><span class="ui-btn-text">Scan barcode</span></a>
 
 
@@ -118,41 +118,24 @@
                 <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
-                    <input type="submit" value="Submit" id="submit" class="ui-disabled" onClick="goTo2('#datasent');" />
+                    <input type="submit" value="Submit" id="submit" class="ui-disabled" />
 <!--                    <input type="submit" value="Submit" id="submit" class="ui-disabled" />-->
                     <div style="display:none;">
                         <input type="file" name="titleSnapshot" id="titleSnapshot" accept="image/*" capture="camera" style="display:none;" onchange="previewImage(this);">
                         <input type="file" name="contentSnapshot" id="contentSnapshot" accept="image/*" capture="camera" style="display:none;" onchange="previewImage(this);">
                     </div>
                 </form>
+                <!--
+                <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="data-sent-success">
+                    <div data-role="header" data-theme="b">
+                        <h1>Reference sent</h1>
+                    </div>
+                    <div role="main" class="ui-content">
+                        <p>The reference has been sent! The book will be available soon at <a href="http://www.unifr.ch/go/bibup">www.unifr.ch/go/bibup</a></p>
+                        <a href="#home" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Ok</a>
+                    </div>
+                </div>-->
 
-                <br/>
-
-                <script>
-                $(document).ready(function()
-                {
-
-                    var options = {
-                        complete: function(response)
-                        {
-                            $( ":mobile-pagecontainer" ).pagecontainer( "change", "#datasent" );
-                        },
-                        error: function()
-                        {
-                                navigator.notification.alert(
-                                    'Something went wrong...',  // message
-                                    alertDismissed,         // callback
-                                    'Scanner',            // title
-                                    'OK'                  // buttonName
-                                );
-                        }
-
-                    };
-
-                    $("#bibupform").ajaxForm(options);
-                });
-
-                </script>
             </div>
 
         </div>
@@ -195,7 +178,7 @@
             <h1>BibUp</h1>
         </div>
         <div role="main" class="ui-content">
-            <h2>Form send</h2>
+            <h2>Form sent</h2>
             <p><strong>The reference has been sent.</strong></p>
             <p>The book will be available soon at www.unifr.ch/go/bibup. <a href="http://www.unifr.ch/go/bibup/" class="ui-btn">Go to www.unifr.ch/go/bibup</a></p>
             <p><strong>If you want to scan another book:<a href="#" class="ui-btn" onClick="scanCode()">Scan barcode</a></strong></p>

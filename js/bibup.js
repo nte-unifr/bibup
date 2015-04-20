@@ -216,14 +216,42 @@ function setTag( data ) {
     $('#tag').attr( { value: data });
 }
 
-$(function () {
-    $('#bibupform2').bind('submit', function (e) {
-        e.preventDefault();
-        $( '#ocr' ).html( $(this).serialize() );
-        $.post('post.php', FormData($(this)), function (response) {});
-        cleanScanData();
+
+$(function() {
+    var form = $('#bibupform');
+
+    $(form).submit(function(event) {
+        event.preventDefault();
+        var formData = $(form).serialize();
+        // show loader msg
+        $.mobile.loading( "show", {
+            text: "Depending on your network speed it might take some time (up to 3 minutes) to upload your data.",
+            textVisible: true,
+            theme: "b",
+            textonly: false,
+            html: ""
+        });
+        $.ajax({
+            type: 'POST',
+            url: $(form).attr('action'),
+            data: formData
+        })
+        .done(function() {
+            // showNotification("Ok", "Success");
+            // $( "#data-sent-success" ).popup( "open" )
+            // hide loader msg
+            $.mobile.loading('hide');
+            showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
+            cleanScanData();
+            goTo('#home');
+            // goTo('#datasent');
+        })
+        .fail(function() {
+            showNotification("Something went wrong. Please, try again.", "Error");
+        });
     });
 });
+
 
 function goTo( id ) {
     $( ":mobile-pagecontainer" ).pagecontainer( "change", id );
