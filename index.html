@@ -84,6 +84,7 @@
         </div>
         <div role="main" class="ui-content">
             <h1>Book Informations</h1>
+            <a href="#" onclick="testUpload();" class="ui-btn ui-btn-b ui-corner-all">Test Upload</a>
             <br />
             <ul data-role="listview" id="scanbook">
                 <li data-role="list-divider">No book scanned</li>
@@ -105,7 +106,7 @@
                     <div class="ui-block-b">
                         <a href="#" onclick="capturePhoto('capture2');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture2" src="images/button_citation_pressed3.png" /></a>
                     </div>
-                </div><!-- /grid-a -->
+                </div>
                 <!--
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
@@ -117,16 +118,21 @@
                 </div>
             -->
 
+
                 <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
                     <input type="submit" value="Submit" id="submit" class="ui-disabled" />
 
                     <div style="display:none;">
-                        <input type="file" value="" name="titleSnapshot" id="titleSnapshot" accept="image/*" style="display:none;" onchange="previewImage(this);">
-                        <input type="file" value="" name="contentSnapshot" id="contentSnapshot" accept="image/*" style="display:none;" onchange="previewImage(this);">
+                        <input type="file" value="" name="titleSnapshot" id="titleSnapshot" capture="camera" accept="image/*" style="display:none;">
+                        <input type="file" value="" name="contentSnapshot" id="contentSnapshot" capture="camera" accept="image/*" style="display:none;">
                     </div>
                 </form>
+
+                <script>
+
+                </script>
                 <!--
                 <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="data-sent-success">
                     <div data-role="header" data-theme="b">

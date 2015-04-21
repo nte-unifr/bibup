@@ -83,41 +83,72 @@ function onPhotoDataSuccess(imageData) {
     smallImage.src = "data:image/jpeg;base64," + imageData;
 }
 
+function sendForm() {
+    var options = new FileUploadOptions();
+    if (captureID == 'capture1') {
+        options.fileKey = "titleSnapshot"; //name of the form element
+    } else {
+        options.fileKey = "contentSnapshot"; //name of the form element
+    }
 
+    options.fileName = imageURI.substr(imageURI.lastIndexOf('/')+1);
+    options.mimeType = "image/*";
+
+    options.params = {
+        tag: document.getElementById("tag").value,
+        isbn: document.getElementById("isbn").value,
+        submit: document.getElementById("submit").value,
+        contentSnapshot: ""
+    }
+
+    var ft = new FileTransfer();
+    ft.upload(imageURI, $('#bibupform').attr('action'), win, fail, options);
+}
 
 // Called when a photo is successfully retrieved
 function onPhotoURISuccess(imageURI) {
-  var elt;// = document.getElementById( captureID );
-  var elt2;
-  // Unhide image elements
-  // elt.style.display = 'block';
-  // Show the captured photo
-  // The inline CSS rules are used to resize the image
-  // elt.src = imageURI;
+    var elt;// = document.getElementById( captureID );
+    // Unhide image elements
+    // elt.style.display = 'block';
+    // Show the captured photo
+    // The inline CSS rules are used to resize the image
+    // elt.src = imageURI;
+
 
   if ( 'capture1' == captureID ) {
       elt = document.getElementById( 'capture1' );
       elt.style.display = 'block';
       elt.src = imageURI;
-      elt2 = document.getElementById( 'titleSnapshot' );
-      elt2.value = imageURI;
-      alert("imageURI: " + imageURI);
   } else {
       elt = document.getElementById( 'capture2' );
       elt.style.display = 'block';
       elt.src = imageURI;
-      elt2 = document.getElementById( 'contentSnapshot' );
-      elt2.value = imageURI;
   }
+
 }
 
+function win(r) {
+    alert("Code = " + r.responseCode);
+    alert("Response = " + r.response);
+    alert("Sent = " + r.bytesSent);
+}
+function fail(error) {
+    alert("An error has occurred: Code = " = error.code);
+}
+
+function testUpload() {
+    alert("img-src: " + $('#capture1').attr('src'));
+    alert("titlesnap: " + $('#titleShapshot').attr('value'));
+    // alert("contentsnap: " + $('#contentShapshot').attr('value'));
+}
 // A button will call this function
 //
 function capturePhoto( elt ) {
   captureID = elt;
   // Take picture using device camera and retrieve image as base64-encoded string
   navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
-    destinationType: destinationType.FILE_URI });
+    destinationType: destinationType.FILE_URI,
+    sourceType: pictureSource.CAMERA });
 }
 
 // Called if something bad happens.
@@ -277,7 +308,6 @@ function goTo( id ) {
 
 
 function previewImage(input) {
-    alert("preview!");
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         var elt;
@@ -290,9 +320,6 @@ function previewImage(input) {
             $( elt ).attr('src',e.target.result)
         };
         reader.readAsDataURL(input.files[0]);
-        alert("1- " + input.files[0]);
-        alert("2- " + $('#titleSnapshot').attr('value'));
-        alert("3- " + $('#contentSnapshot').attr('value'));
     }
 }
 
