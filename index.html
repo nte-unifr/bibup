@@ -99,6 +99,16 @@
 
             <div id="ocr" style="display: none;">
                 <h3>Up to 2 images for text recognition:</h3>
+                <!--
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" onclick="capturePhoto('capture1');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture1" src="images/button_citation_pressed3.png" /></a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" onclick="capturePhoto('capture2');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture2" src="images/button_citation_pressed3.png" /></a>
+                    </div>
+                </div>-->
+
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
                         <a href="#" onclick="capturePhoto('capture1');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture1" src="images/button_citation_pressed3.png" /></a>
@@ -107,16 +117,6 @@
                         <a href="#" onclick="capturePhoto('capture2');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture2" src="images/button_citation_pressed3.png" /></a>
                     </div>
                 </div>
-                <!--
-                <div class="ui-grid-a">
-                    <div class="ui-block-a">
-                        <a href="#" onclick="$('#titleSnapshot').click();"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture1" src="images/button_citation_pressed3.png" /></a>
-                    </div>
-                    <div class="ui-block-b">
-                        <a href="#" onclick="$('#contentSnapshot').click();"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture2" src="images/button_citation_pressed3.png" /></a>
-                    </div>
-                </div>
-            -->
 
 
                 <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
@@ -125,14 +125,10 @@
                     <input type="submit" value="Submit" id="submit" class="ui-disabled" />
 
                     <div style="display:none;">
-                        <input type="file" value="" name="titleSnapshot" id="titleSnapshot" capture="camera" accept="image/*" style="display:none;">
-                        <input type="file" value="" name="contentSnapshot" id="contentSnapshot" capture="camera" accept="image/*" style="display:none;">
+                        <input type="file" value="" name="titleSnapshot" id="titleSnapshot" accept="image/*" style="display:none;" onclick="capturePhoto('capture1');">
+                        <input type="file" value="" name="contentSnapshot" id="contentSnapshot" accept="image/*" style="display:none;" onclick="capturePhoto('capture2');">
                     </div>
                 </form>
-
-                <script>
-
-                </script>
                 <!--
                 <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="data-sent-success">
                     <div data-role="header" data-theme="b">

@@ -29,13 +29,16 @@
     <gap:splash gap:platform="android" src="res/screens/splash.png" />
     <gap:splash gap:platform="ios" src="res/screens/splash.png" />
 
-    <gap:plugin name="org.apache.cordova.core.inappbrowser" />
-    <gap:plugin name="org.apache.cordova.core.camera" />
+    <gap:plugin name="org.apache.cordova.inappbrowser" />
+    <gap:plugin name="org.apache.cordova.camera" />
     <gap:plugin name="com.phonegap.plugins.barcodescanner" />
     <gap:plugin name="org.apache.cordova.device" />
     <gap:plugin name="org.apache.cordova.dialogs" />
     <gap:plugin name="org.apache.cordova.statusbar" />
+    <gap:plugin name="org.apache.cordova.file-transfer" />
 
     <gap:platform name="ios" />
     <gap:platform name="android" />
+
+    <access origin="*" />
 </widget>
