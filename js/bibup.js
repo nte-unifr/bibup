@@ -78,28 +78,37 @@ function onDeviceReady() {
 
 function sendForm() {
     var options = new FileUploadOptions();
+    var boundary = "----JIMENEZ";
     if (captureID == 'capture1') {
         options.fileKey = "titleSnapshot"; //name of the form element
+        options.fileName = "imagebiblio1.jpg"
     } else {
         options.fileKey = "contentSnapshot"; //name of the form element
+        options.fileName = "imagebiblio.jpg"
     }
     // alert(captureID);
 
     var imageURI = document.getElementById(captureID).src;
     // alert(imageURI);
 
-    options.fileName = imageURI.substr(imageURI.lastIndexOf('/')+1);
+    //options.fileName = imageURI.substr(imageURI.lastIndexOf('/')+1);
+
     // alert(options.fileName);
     options.mimeType = "image/*";
+
+    alert("isbn=" + document.getElementById("isbn").value);
 
     options.params = {
         tag: document.getElementById("tag").value,
         isbn: document.getElementById("isbn").value,
         submit: document.getElementById("submit").value,
-        contentSnapshot: ""
+        titleSnapshot: "button_citation3.png" //this means that no image was selected for this field
     }
 
     options.chunkedMode = false; //to prevent problems uploading to a Nginx server.
+
+    // options.headers = {'Content-Type':'multipart/form-data; boundary='+boundary};
+
 
     var ft = new FileTransfer();
     // alert("before upload");
