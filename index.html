@@ -14,6 +14,7 @@
     <style>
         body, h1, h2, a.ui-btn, input { font-family: 'Titillium Web', Helvetica, Arial, sans-serif;}
         /*h1, h2 {text-align: center;}*/
+
     </style>
 </head>
 
@@ -32,17 +33,17 @@
 
                 <div class="ui-block-b right">
                     <!-- jquery popup -->
-                    <a href="#tag-info" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-alt-icon ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline" data-theme="a">Info</a>
+                    <a href="#tag-info" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline">Info</a>
 
                     <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="tag-info">
-                        <div data-role="header" data-theme="b">
+                        <div data-role="header" data-theme="a">
                             <h1>Tag Information</h1>
                         </div>
                         <div role="main" class="ui-content">
                             <p>You will use this tag to filter your references in the list on the Bibup website:</p>
                             <p><a href="http://www.unifr.ch/go/bibup">http://www.unifr.ch/go/bibup</a></p>
                             <p>Use a tag that is easy for you to remember.</p>
-                            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Ok</a>
+                            <a href="#" class="ui-btn ui-corner-all ui-shadow" data-rel="back">Ok</a>
                         </div>
                     </div>
                 </div>
@@ -50,9 +51,9 @@
 
             <h1>Reference Scanner</h1>
             <!-- TODO: à cacher avant commit -->
-            <a href="#" onClick="testCode()" class="ui-btn ui-corner-all circle-btn center"><span class="ui-btn-text">Test</span></a>
+            <a href="#" onClick="testCode()" class="ui-btn ui-corner-all center"><span class="ui-btn-text">Test</span></a>
 
-            <a href="#" onClick="scanCode()" class="ui-btn ui-btn-b ui-corner-all circle-btn center"><span class="ui-btn-text">Scan barcode</span></a>
+            <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center"><span class="ui-btn-text">Scan barcode</span></a>
 
 
             <br /><br />
@@ -62,7 +63,7 @@
             <!--
             <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all" >Send manual ISBN/ISSN</a> <br />-->
 
-            <a href="#" onClick="manualCode()" class="ui-btn ui-btn-b ui-corner-all">Send manual ISBN/ISSN</a>
+            <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all">Send manual ISBN/ISSN</a>
 
         </div>
         <div data-role="footer" data-id="f1" data-position="fixed">
@@ -84,7 +85,7 @@
         </div>
         <div role="main" class="ui-content">
             <h1>Book Informations</h1>
-            <a href="#" onclick="testUpload();" class="ui-btn ui-btn-b ui-corner-all">Test Upload</a>
+            <a href="#" onclick="testUpload();" class="ui-btn ui-corner-all">Test Upload</a>
             <br />
             <ul data-role="listview" id="scanbook">
                 <li data-role="list-divider">No book scanned</li>
@@ -119,7 +120,7 @@
                 </div>
 
 
-                <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
+                <form id="bibupform" name="send" action="http://diufvm14.unifr.ch/tests/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
                     <input type="submit" value="Submit" id="submit" class="ui-disabled" />
@@ -193,7 +194,7 @@
                 <ul>
                     <li><a href="#home" data-icon="home" data-transition="slide" data-direction="reverse">Home</a></li>
                     <li><a href="#scan" data-icon="eye" data-transition="slide" data-direction="reverse">Book Info</a></li>
-                    <li><a href="#about" class="ui-btn-active ui-state-persist" data-icon="info">About</a></li>
+                    <li><a href="#about" class="p-about ui-state-persist" data-icon="info">About</a></li>
                 </ul>
             </div><!-- /navbar -->
         </div>
