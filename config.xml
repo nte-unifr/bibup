@@ -19,15 +19,18 @@
 
     <icon src="res/icon.png" />
 
+    <gap:platform name="ios" />
+    <gap:platform name="android" />
+
+    <gap:splash gap:platform="android" src="res/screens/splash.png" />
+    <gap:splash gap:platform="ios" src="res/screens/splash.png" />
     <preference name="SplashScreen" value="splash" />
     <preference name="SplashScreenDelay" value="3000" />
 
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#000000" /> <!-- only if StatusBarOverlaysWebView is false -->
     <preference name="StatusBarStyle" value="lightcontent" /> <!-- default, lightcontent, blacktranslucent, blackopaque -->
-
-    <gap:splash gap:platform="android" src="res/screens/splash.png" />
-    <gap:splash gap:platform="ios" src="res/screens/splash.png" />
+    
 
     <gap:plugin name="org.apache.cordova.inappbrowser" />
     <gap:plugin name="org.apache.cordova.camera" />
@@ -36,9 +39,8 @@
     <gap:plugin name="org.apache.cordova.dialogs" />
     <gap:plugin name="org.apache.cordova.statusbar" />
     <gap:plugin name="org.apache.cordova.file-transfer" />
-
-    <gap:platform name="ios" />
-    <gap:platform name="android" />
+    <gap:plugin name="org.apache.cordova.network-information" />
+    <gap:plugin name="org.apache.cordova.splashscreen" />
 
     <access origin="*" />
 </widget>
