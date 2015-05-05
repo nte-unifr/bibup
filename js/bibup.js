@@ -60,6 +60,37 @@ function showNotification(message , title){
     }
 }
 
+function checkConnection() {
+    var networkState = navigator.connection.type;
+
+    var states = {};
+    states[Connection.UNKNOWN]  = 'unknown';
+    // states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi';
+    states[Connection.CELL_2G]  = '2G';
+    states[Connection.CELL_3G]  = '3G';
+    states[Connection.CELL_4G]  = '4G';
+    //iOS and WP can't detect the type of cellular network connection: Connection.CELL for all cellular data.
+    states[Connection.CELL]     = 'Edge/2G/3G/4G';
+    states[Connection.NONE]     = 'No network connection';
+
+    if (networkState != Connection.WIFI) {
+        var txt = "";
+        if (networkState == Connection.NONE) {
+            txt += states[networkState] + " detected. Make sure your are connected.";
+        } else {
+            txt += "You are connected to a " + states[networkState] + " network. ";
+            txt += "This application needs to send an important amount of ";
+            txt += "data during the Optical Character Recognition. ";
+            txt += "WiFi is highly recommended!";
+        }
+
+        showNotification(txt, "WARNING");
+    }
+    // showNotification("hello", "WARNING");
+
+}
+
 
 var pictureSource;   // picture source
 var destinationType; // sets the format of returned value
@@ -73,12 +104,12 @@ function onDeviceReady() {
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
     navigator.splashscreen.hide();
+    checkConnection();
 }
 
 
 function sendForm() {
     var options = new FileUploadOptions();
-    var boundary = "----JIMENEZ";
     if (captureID == 'capture1') {
         options.fileKey = "titleSnapshot"; //name of the form element
         options.fileName = "imagebiblio1.jpg"
@@ -96,7 +127,7 @@ function sendForm() {
     // alert(options.fileName);
     options.mimeType = "image/*";
 
-    alert("isbn=" + document.getElementById("isbn").value);
+    // alert("isbn=" + document.getElementById("isbn").value);
 
     options.params = {
         tag: document.getElementById("tag").value,
