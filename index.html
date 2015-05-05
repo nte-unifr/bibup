@@ -85,6 +85,54 @@
         </div>
         <div role="main" class="ui-content">
             <h1>Book Informations</h1>
+            <a href="#help" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline">Info</a>
+            <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="help">
+                <div data-role="header" data-theme="a">
+                    <h1>Help</h1>
+                </div>
+                <div role="main" class="ui-content">
+                    <div class="ui-grid-b">
+                        <div class="ui-block-a">
+                            <img src="images/button_article.png" />
+                        </div>
+
+                        <div class="ui-block-b right">
+                            <p>Take a picture of a block of text in order to cite it. A good picture will provide a good OCR.</p>
+                        </div>
+                        <div class="ui-block-a">
+                            <img src="images/button_citation.png" />
+                        </div>
+
+                        <div class="ui-block-b right">
+                            <p>Take a picture of the first page of the article or chapter, in order to remember its title and authors.</p>
+                        </div>
+                        <div class="ui-block-a">
+                            <img src="images/wifi.png" />
+                        </div>
+
+                        <div class="ui-block-b right">
+                            <p>WiFi is recommended to avoir long process time and transfert of important amount of data.</p>
+                        </div>
+                        <div class="ui-block-a">
+                            <img src="images/logo_cadenas.png" />
+                        </div>
+
+                        <div class="ui-block-b right">
+                            <p>VPN access to UNIFR is needed if you want to capture the text of your scanned text (OCR processing).</p>
+                        </div>
+                        <div class="ui-block-a">
+                            <img src="images/logo_ref_url.png" />
+                        </div>
+
+                        <div class="ui-block-b right">
+                            <p>Go to <a href="http://www.unifr.ch/go/bibup">http://www.unifr.ch/go/bibup</a> and filter with the tag you provided to see your references.</p>
+                        </div>
+
+                    </div>
+
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow" data-rel="back">Go back</a>
+                </div>
+            </div>
             <a href="#" onclick="testUpload();" class="ui-btn ui-corner-all">Test Upload</a>
             <br />
             <ul data-role="listview" id="scanbook">
