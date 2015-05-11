@@ -1,9 +1,16 @@
+/* For 3 columns grid */
 .ui-grid-span .ui-block-a { width: 90%; }
 .ui-grid-span .ui-block-b { width: 10%; }
+/* For 2 columns grid */
+.ui-grid-span-2 .ui-block-a { width: 30%; }
+.ui-grid-span-2 .ui-block-b { width: 70%; }
+.ui-grid-span-2 img { width: 50%; text-align: center;}
+.ui-grid-span-2 img { height: auto; text-align: center;}
 
 .center { margin: 0 auto; }
 
 .right { text-align: right; }
+.center-2 { text-align: center; }
 
 .circle-btn {
     width:          150px !important;
