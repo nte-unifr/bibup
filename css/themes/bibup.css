@@ -29,11 +29,15 @@ input:focus:invalid {
     border:1px solid green;
 }*/
 
-/*img#book_cover {
-    display:        block;
-    margin:         0px auto;
-    margin-bottom:  10%;
-}*/
+
+/* List divider color --begin */
+li.ui-li-divider.ui-bar-inherit.ui-first-child,
+li.ui-li-divider.ui-bar-inherit {
+    background-color: #ddd;
+    color: #808080;
+    text-shadow: 0 1px 0 #fff;
+}
+/* List divider color --end */
 
 
 

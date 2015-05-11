@@ -12,17 +12,14 @@ $(document).ready(function(){
 // --- Render views
 //
 function renderHomeView(event) {
-    // event.preventDefault();
     homeView();
 }
 
 function renderScanView(event) {
-    // event.preventDefault();
     scanView();
 }
 
 function renderAboutView(event) {
-    // event.preventDefault();
     aboutView();
 }
 
@@ -87,7 +84,6 @@ function checkConnection() {
 
         showNotification(txt, "WARNING");
     }
-    // showNotification("hello", "WARNING");
 
 }
 
@@ -110,24 +106,17 @@ function onDeviceReady() {
 
 function sendForm() {
     var options = new FileUploadOptions();
+    var boundary = "----JIMENEZ";
     if (captureID == 'capture1') {
-        options.fileKey = "titleSnapshot"; //name of the form element
-        options.fileName = "imagebiblio1.jpg"
-    } else {
         options.fileKey = "contentSnapshot"; //name of the form element
         options.fileName = "imagebiblio.jpg"
+    } else {
+        options.fileKey = "titleSnapshot"; //name of the form element
+        options.fileName = "imagebiblio1.jpg"
     }
-    // alert(captureID);
 
     var imageURI = document.getElementById(captureID).src;
-    // alert(imageURI);
-
-    //options.fileName = imageURI.substr(imageURI.lastIndexOf('/')+1);
-
-    // alert(options.fileName);
     options.mimeType = "image/*";
-
-    // alert("isbn=" + document.getElementById("isbn").value);
 
     options.params = {
         tag: document.getElementById("tag").value,
@@ -137,31 +126,32 @@ function sendForm() {
     }
 
     options.chunkedMode = false; //to prevent problems uploading to a Nginx server.
-
-    // options.headers = {'Content-Type':'multipart/form-data; boundary='+boundary};
-
-
     var ft = new FileTransfer();
-    // alert("before upload");
     ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win, fail, options, true);
-    // alert("after upload");
 }
 function win(r) {
-    alert("Code = " + r.responseCode);
-    alert("Response = " + r.response);
-    alert("Sent = " + r.bytesSent);
+    // alert("Code = " + r.responseCode);
+    // alert("Response = " + r.response);
+    // alert("Sent = " + r.bytesSent);
+    $.mobile.loading('hide');
+    showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
+    cleanScanData();
+    goTo('#home');
 }
 function fail(error) {
-    alert("An error has occurred: Code = " + error.code);
-    // alert(error.FILE_NOT_FOUND_ERR + " " + error.INVALID_ID_URL_ERR + " " + error.CONNECTION_ERR);
-    if (error.code == error.FILE_NOT_FOUND_ERR) {
-        alert("file not found");
-    } else if (error.code == error.INVALID_ID_URL_ERR) {
-        alert("invalid url");
-    } else if (error.code == error.CONNECTION_ERR) {
-        alert("connection err");
+    var states = {};
+    var txt = '';
+    states[FileTransferError.FILE_NOT_FOUND_ERR]  = 'File not found.';
+    states[FileTransferError.INVALID_ID_URL_ERR]  = 'Invalid URL.';
+    states[FileTransferError.CONNECTION_ERR]      = 'Verify your connection and try again.';
+    states[FileTransferError.ABORT_ERR]           = 'Aborting';
+
+
+    if (error.code == FileTransferError.CONNECTION_ERR) {
+        txt += states[error.code]
+        showNotification(txt, "Error");
     } else {
-        alert("unknown");
+        showNotification("Something went wrong. Please, try again.", "Error");
     }
 }
 
@@ -197,14 +187,22 @@ function capturePhoto( elt ) {
 // Called if something bad happens.
 //
 function onFail(message) {
-  alert('Failed because: ' + message);
+    //direct call to alert can cause problems on iOS
+    setTimeout(function() {
+        showNotification("Failed because: " + message, "Error");
+    }, 0);
 }
 
 function scanCode() {
     if ($('#tag').attr('value')) {
         cordova.plugins.barcodeScanner.scan( function(result) {
-                $( "#isbn" ).html( result.text );
-                getInfoFromCode( result.text );
+                if (result.text != '') {
+                    $( "#isbn" ).html( result.text );
+                    getInfoFromCode( result.text );
+                } else { // go back to home page if scan is discarded
+                    goTo('#home');
+                }
+
             }, function(error) {
                 showNotification("Scanning failed: " + error, "Error");
             }
@@ -247,9 +245,14 @@ function displayData( data ) {
         $( "#book_subtitle" ).show();
     }
     $( "#book_author" ).html( data.items[0].volumeInfo.authors.toString() );
-    $( "#book_isbn_type" ).html( data.items[0].volumeInfo.industryIdentifiers[0].type );
-    $( "#book_isbn_data" ).html( data.items[0].volumeInfo.industryIdentifiers[0].identifier );
-    //alert( "Book \"" + data.items[0].volumeInfo.title + "\" was scanned." );
+    $( "#book_publisher" ).html( data.items[0].volumeInfo.publisher );
+    $( "#book_year" ).html( data.items[0].volumeInfo.publishedDate.split('-')[0] );
+    $( "#book_lang" ).html( data.items[0].volumeInfo.language );
+
+    // $( "#book_isbn_type" ).html( data.items[0].volumeInfo.industryIdentifiers[0].type );
+    $( "#book_isbn_data" ).html( data.items[0].volumeInfo.industryIdentifiers[1].identifier ); //show isbn_13
+
+
     if ( null != data.items[0].volumeInfo.imageLinks ) {
         $( "#book_cover" ).attr( { src: data.items[0].volumeInfo.imageLinks.thumbnail } );
         $( "#book_cover" ).show();
@@ -294,9 +297,7 @@ function manualCode() {
             getInfoFromCode(code);
         } else {
             showNotification("You must provide an ISBN/ISSN number", "Invalid Field");
-
         }
-
     } else {
         showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
     }
@@ -312,44 +313,17 @@ $(function() {
 
     $(form).submit(function(event) {
         event.preventDefault();
-        alert("submit");
+        // display a loading window during the transfer
+        $.mobile.loading( "show", {
+            text: "Depending on your network speed it might take some time (up to 3 minutes) to upload your data.",
+            textVisible: true,
+            theme: "b",
+            textonly: false,
+            html: ""
+        });
         sendForm();
     });
 });
-// $(function() {
-//     var form = $('#bibupform');
-//
-//     $(form).submit(function(event) {
-//         event.preventDefault();
-//         var formData = $(form).serialize();
-//         // show loader msg
-//         $.mobile.loading( "show", {
-//             text: "Depending on your network speed it might take some time (up to 3 minutes) to upload your data.",
-//             textVisible: true,
-//             theme: "b",
-//             textonly: false,
-//             html: ""
-//         });
-//         $.ajax({
-//             type: 'POST',
-//             url: $(form).attr('action'),
-//             data: formData
-//         })
-//         .done(function() {
-//             // showNotification("Ok", "Success");
-//             // $( "#data-sent-success" ).popup( "open" )
-//             // hide loader msg
-//             $.mobile.loading('hide');
-//             showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
-//             cleanScanData();
-//             goTo('#home');
-//             // goTo('#datasent');
-//         })
-//         .fail(function() {
-//             showNotification("Something went wrong. Please, try again.", "Error");
-//         });
-//     });
-// });
 
 
 function goTo( id ) {
