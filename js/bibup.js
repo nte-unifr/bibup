@@ -105,29 +105,56 @@ function onDeviceReady() {
 
 
 function sendForm() {
-    var options = new FileUploadOptions();
-    var boundary = "----JIMENEZ";
-    if (captureID == 'capture1') {
-        options.fileKey = "contentSnapshot"; //name of the form element
-        options.fileName = "imagebiblio.jpg"
+    // verify if photos have been taken
+    var elt, elt2;
+    elt = $('#capture1').attr('src')
+    elt2 = $('#capture2').attr('src')
+    basic_img = "images/button_citation_pressed3.png";
+
+    if (elt == basic_img && elt2 == basic_img) {
+        var form = $('#bibupform');
+        var formData = $(form).serialize();
+        $.ajax({
+            type: 'POST',
+            url: $(form).attr('action'),
+            data: formData
+        })
+        .done(function() {
+            // hide loader msg
+            $.mobile.loading('hide');
+            showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
+            cleanScanData();
+            goTo('#home');
+        })
+        .fail(function() {
+            showNotification("Something went wrong. Please, try again.", "Error");
+        });
+
     } else {
-        options.fileKey = "titleSnapshot"; //name of the form element
-        options.fileName = "imagebiblio1.jpg"
+        var options = new FileUploadOptions();
+        var boundary = "----JIMENEZ";
+        if (captureID == 'capture1') {
+            options.fileKey = "contentSnapshot"; //name of the form element
+            options.fileName = "imagebiblio.jpg"
+        } else {
+            options.fileKey = "titleSnapshot"; //name of the form element
+            options.fileName = "imagebiblio1.jpg"
+        }
+
+        var imageURI = document.getElementById(captureID).src;
+        options.mimeType = "image/*";
+
+        options.params = {
+            tag: document.getElementById("tag").value,
+            isbn: document.getElementById("isbn").value,
+            submit: document.getElementById("submit").value,
+            titleSnapshot: "button_citation3.png" //this means that no image was selected for this field
+        }
+
+        options.chunkedMode = false; //to prevent problems uploading to a Nginx server.
+        var ft = new FileTransfer();
+        ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win, fail, options, true);
     }
-
-    var imageURI = document.getElementById(captureID).src;
-    options.mimeType = "image/*";
-
-    options.params = {
-        tag: document.getElementById("tag").value,
-        isbn: document.getElementById("isbn").value,
-        submit: document.getElementById("submit").value,
-        titleSnapshot: "button_citation3.png" //this means that no image was selected for this field
-    }
-
-    options.chunkedMode = false; //to prevent problems uploading to a Nginx server.
-    var ft = new FileTransfer();
-    ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win, fail, options, true);
 }
 function win(r) {
     // alert("Code = " + r.responseCode);
@@ -280,8 +307,14 @@ function cleanScanData() {
     $( '#submit' ).hide();
     $( '#ocr' ).hide();
 
-    $('#titleSnapshot').value= null;
-    $('#contentSnapshot').value= null;
+    // $('#titleSnapshot').value= null;
+    // $('#contentSnapshot').value= null;
+
+    $('#titleSnapshot').attr('filename') = 'button_citation3.png';
+    $('#contentSnapshot').attr('filename') = 'button_citation3.png';
+
+    //TODO: remove
+    alert("filnema after cleaning: " + $('#titleSnapshot').attr('filename'));
 
     $( '#scanbook' ).show();
 }
