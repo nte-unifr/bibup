@@ -155,6 +155,8 @@ function sendForm() {
         var ft = new FileTransfer();
         ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win, fail, options, true);
     }
+
+
 }
 function win(r) {
     // alert("Code = " + r.responseCode);
@@ -276,7 +278,7 @@ function displayData( data ) {
     $( "#book_year" ).html( data.items[0].volumeInfo.publishedDate.split('-')[0] );
     $( "#book_lang" ).html( data.items[0].volumeInfo.language );
 
-    // $( "#book_isbn_type" ).html( data.items[0].volumeInfo.industryIdentifiers[0].type );
+    // $( "#book_isbn_type" ).html( data.items[0].volumeInfo.industryIdentifiers[0].type ); //show isbn_10
     $( "#book_isbn_data" ).html( data.items[0].volumeInfo.industryIdentifiers[1].identifier ); //show isbn_13
 
 
@@ -288,6 +290,7 @@ function displayData( data ) {
     $( "#book" ).show();
     $( "#ocr" ).show();
     $( "#submit" ).removeClass( 'ui-disabled' )
+    $( '#submit' ).show();
     $( "#scanbook" ).hide();
     $( ":mobile-pagecontainer" ).pagecontainer( "change", "#scan" );
 }
@@ -307,14 +310,9 @@ function cleanScanData() {
     $( '#submit' ).hide();
     $( '#ocr' ).hide();
 
-    // $('#titleSnapshot').value= null;
-    // $('#contentSnapshot').value= null;
-
-    $('#titleSnapshot').attr('filename') = 'button_citation3.png';
-    $('#contentSnapshot').attr('filename') = 'button_citation3.png';
-
-    //TODO: remove
-    alert("filnema after cleaning: " + $('#titleSnapshot').attr('filename'));
+    // reinitialize filenames for form input file
+    $('#titleSnapshot').value = 'button_citation3.png';
+    $('#contentSnapshot').value = 'button_citation3.png';
 
     $( '#scanbook' ).show();
 }
