@@ -31,9 +31,11 @@
                     <input name="introtag" id="introtag" placeholder="Choose a tag..." value="" type="text" onChange="setTag(value)" required>
                 </div>
 
-                <div class="ui-block-b right">
+                <div class="ui-block-b">
                     <!-- jquery popup -->
-                    <a href="#tag-info" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline">Info</a>
+                    <p class="right" style="margin-top: 2px;">
+                    <a href="#tag-info" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline mr0">Info</a>
+                    </p>
 
                     <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="tag-info">
                         <div data-role="header" data-theme="a">
@@ -49,7 +51,77 @@
                 </div>
             </div>
 
-            <h1>Reference Scanner</h1>
+
+            <div class="ui-grid-a ui-grid-span">
+                <div class="ui-block-a">
+                    <h1>Reference Scanner</h1>
+                </div>
+                <div class="ui-block-b">
+                    <h1 class="right"><a href="#help-scan" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline mr0">Info</a></h1>
+                </div>
+            </div>
+            <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="help-scan">
+                <div data-role="header" data-theme="a">
+                    <h1>BibUp Scanner Help</h1>
+                </div>
+                <div role="main" class="ui-content">
+                    <div class="center-2">
+                        <p>Recognized barcodes should look like</p>
+                        <a class="sample" style="width: 118px; background-position: -96px" href="http://wikipedia.org/wiki/EAN-13"></a>
+                        <p><a href="http://wikipedia.org/wiki/EAN-13">EAN/UPC<br/>Product Codes</a></p>
+
+                        <p>Also <a href="http://wikipedia.org/wiki/Code_128">Code 128</a> and <a href="http://wikipedia.org/wiki/Code_39">Code 39</a> (not shown)</p>
+                    </div>
+
+                    <hr/>
+
+                    <div class="center-2">
+                        <p>Hints for successful scanning</p>
+                        <p class="c-red">You do not need to click anywhere. All you have to do is to point your phone's or tablet's camera on the barcode.</p>
+                    </div>
+
+                    <div class="ui-grid-a ui-grid-span-2">
+                        <div class="ui-block-a center-2">
+                            <p class="m0"><img src="images/zbar-helpicons-light.png" /></p>
+                        </div>
+
+                        <div class="ui-block-b">
+                            <p>Ensure there is plenty of light.</p>
+                        </div>
+                        <div class="ui-block-a center-2">
+                            <p class="special-font">4"</p>
+                        </div>
+
+                        <div class="ui-block-b">
+                            <p>Distance should be about 3 to 5 inches.</p>
+                        </div>
+                        <div class="ui-block-a center-2">
+                            <p class="m0"><img src="images/zbar-helpicons-shake.png" /></p>
+                        </div>
+
+                        <div class="ui-block-b">
+                            <p>Shake to force the camera to focus.</p>
+                        </div>
+                        <div class="ui-block-a center-2">
+                            <p class="m0"><img src="images/zbar-helpicons-wait.png" /></p>
+                        </div>
+
+                        <div class="ui-block-b">
+                            <p>Wait for the autofocus to finish.</p>
+                        </div>
+                        <div class="ui-block-a center-2">
+                            <p class="m0"><img src="images/zbar-helpicons-still.png" /></p>
+                        </div>
+
+                        <div class="ui-block-b">
+                            <p>Hold still while the barcode is scanned.</p>
+                        </div>
+
+                    </div>
+
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow" data-rel="back">Go back</a>
+                </div>
+            </div>
             <!-- TODO: à cacher avant commit -->
             <a href="#" onClick="testCode()" class="ui-btn ui-corner-all center"><span class="ui-btn-text">Test</span></a>
             <a href="#" onClick="checkConnection()" class="ui-btn ui-corner-all center"><span class="ui-btn-text">Test Connection</span></a>
@@ -117,7 +189,7 @@
                         <h3>Up to 2 images for text recognition:</h3>
                     </div>
                     <div class="ui-block-b">
-                        <div class="help right"><a href="#help" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline">Info</a></div>
+                        <div class="help right"><a href="#help" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline mr0">Info</a></div>
                     </div>
                 </div>
                 <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="help">
@@ -183,7 +255,7 @@
                         <a href="#" onclick="capturePhoto('capture2');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture2" src="images/button_citation_pressed3.png" /></a>
                     </div>
                 </div>
-
+                <br />
 
                 <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
@@ -193,23 +265,8 @@
                     <div style="display:none;">
                         <input type="file" name="contentSnapshot" filename="button_citation3.png" id="contentSnapshot" accept="image/*" style="display:none;" onclick="capturePhoto('capture1');">
                         <input type="file" name="titleSnapshot" filename="button_citation3.png" id="titleSnapshot" accept="image/*" style="display:none;" onclick="capturePhoto('capture2');">
-                        <!--
-                        <input type="file" value="" name="titleSnapshot" id="titleSnapshot" accept="image/*" style="display:none;" onclick="capturePhoto('capture1');">
-                        <input type="file" value="" name="contentSnapshot" id="contentSnapshot" accept="image/*" style="display:none;" onclick="capturePhoto('capture2');">
-                    -->
                     </div>
                 </form>
-                <!--
-                <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="data-sent-success">
-                    <div data-role="header" data-theme="b">
-                        <h1>Reference sent</h1>
-                    </div>
-                    <div role="main" class="ui-content">
-                        <p>The reference has been sent! The book will be available soon at <a href="http://www.unifr.ch/go/bibup">www.unifr.ch/go/bibup</a></p>
-                        <a href="#home" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Ok</a>
-                    </div>
-                </div>-->
-
             </div>
 
         </div>

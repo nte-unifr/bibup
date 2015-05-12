@@ -21,6 +21,15 @@
 
 .font-big { font-size: 18px; }
 
+.c-red { color: red; }
+.special-font {
+    font: bold 56px "Marker Felt";
+    color: #2d4;
+    margin: 0;
+}
+.mr0 { margin-right: 0px; }
+.m0 { margin: 0; }
+
 p.big-msg {
     font-size: 500%;
     text-align: center;
@@ -47,6 +56,12 @@ li.ui-li-divider.ui-bar-inherit {
     text-shadow: 0 1px 0 #fff;
 }
 /* List divider color --end */
+
+/* Barcode scanner help --begin */
+.iconlist { position: relative; clear: both; margin: 4px 0; padding: 1px 0 }
+.icon { width: 64px; height: 64px; overflow: hidden; margin: 12px 16px; padding: 0; background: url("../../images/zbar-helpicons.png") no-repeat; font: bold 56px "Marker Felt"; text-align: center }
+.sample { display: block; height: 96px; overflow: hidden; margin: 12px auto; padding: 0; background: url("../../images/zbar-samples.png") no-repeat; text-align: center}
+/* Barcode scanner help --end */
 
 
 
