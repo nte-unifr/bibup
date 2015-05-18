@@ -18,6 +18,14 @@
     border-radius:  50% !important;
     line-height:    150px;
 }
+.btn-img {
+    height: 90px;
+    width: 50%;
+    background-image: url("../../images/launcher_icon.png");
+    background-repeat: no-repeat;
+    background-position: 50% 70%
+}
+a.ui-btn.ui-corner-all.center.btn-img { padding-top: 20px; }
 
 .font-big { font-size: 18px; }
 
@@ -38,6 +46,8 @@ p.big-msg {
 }
 
 .help { margin-top: 20%; }
+
+.logo { width: 100%; height: auto; }
 
 /*Input validation*/
 input:focus:invalid {

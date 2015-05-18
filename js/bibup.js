@@ -238,6 +238,7 @@ function scanCode() {
         );
     } else {
         showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
+        goTo('#home');
     }
 
 }
