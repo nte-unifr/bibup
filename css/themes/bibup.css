@@ -1,17 +1,21 @@
 /* Prevent jquery mobile to truncate header titles */
 .ui-header .ui-title {
-    margin-right: 10%;
-    margin-left: 10%;
+    margin-right: 1%;
+    margin-left: 1%;
+    font-size: 1.4em;
 }
 
-/* For 3 columns grid */
+/* For 2 columns grid */
 .ui-grid-span .ui-block-a { width: 75%; }
 .ui-grid-span .ui-block-b { width: 25%; }
 /* For 2 columns grid */
-.ui-grid-span-2 .ui-block-a { width: 30%; }
-.ui-grid-span-2 .ui-block-b { width: 70%; }
-.ui-grid-span-2 img { width: 50%; text-align: center;}
+.ui-grid-span-2 .ui-block-a { width: 25%; }
+.ui-grid-span-2 .ui-block-b { width: 75%; }
+.ui-grid-span-2 img { width: 60%; text-align: center;}
+#help-scan .ui-grid-span-2 img { width: 45px; }
 .ui-grid-span-2 img { height: auto; text-align: center;}
+#help .ui-grid-span-2 .ui-block-a p,
+#help .ui-grid-span-2 .ui-block-b p { margin-top: 0px; }
 
 .center { margin: 0 auto; }
 
@@ -33,11 +37,9 @@
 }
 a.ui-btn.ui-corner-all.center.btn-img { padding-top: 20px; }
 
-.font-big { font-size: 18px; }
-
 .c-red { color: red; }
 .special-font {
-    font: bold 56px "Marker Felt";
+    font: bold 40px "Marker Felt";
     color: #2d4;
     margin: 0;
 }
