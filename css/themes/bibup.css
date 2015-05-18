@@ -1,6 +1,6 @@
 /* For 3 columns grid */
-.ui-grid-span .ui-block-a { width: 90%; }
-.ui-grid-span .ui-block-b { width: 10%; }
+.ui-grid-span .ui-block-a { width: 75%; }
+.ui-grid-span .ui-block-b { width: 25%; }
 /* For 2 columns grid */
 .ui-grid-span-2 .ui-block-a { width: 30%; }
 .ui-grid-span-2 .ui-block-b { width: 70%; }
@@ -45,7 +45,7 @@ p.big-msg {
     text-shadow: 0 1px 2px #333;
 }
 
-.help { margin-top: 20%; }
+.help { margin-top: .5em; }
 
 .logo { width: 100%; height: auto; }
 
