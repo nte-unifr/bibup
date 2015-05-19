@@ -252,7 +252,7 @@ function getInfoFromCode( code ) {
     $('#isbn').attr( { value: code });
     $.get( "https://www.googleapis.com/books/v1/volumes?q=isbn:" + code, function( data ) {
         if ( 0 == data.totalItems ) {
-            showNotification("Not a valid ISBN/ISSN number.", "Invalid Field");
+            showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
         }
         displayData( data );
     })

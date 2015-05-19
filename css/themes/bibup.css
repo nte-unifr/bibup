@@ -2,7 +2,8 @@
 .ui-header .ui-title {
     margin-right: 1%;
     margin-left: 1%;
-    font-size: 1.4em;
+    font-size: 1.3em;
+    text-shadow: 0px 1px 0px #059;
 }
 
 /* For 2 columns grid */
@@ -78,7 +79,7 @@ li.ui-li-divider.ui-bar-inherit {
 /* Barcode scanner help --begin */
 .iconlist { position: relative; clear: both; margin: 4px 0; padding: 1px 0 }
 .icon { width: 64px; height: 64px; overflow: hidden; margin: 12px 16px; padding: 0; background: url("../../images/zbar-helpicons.png") no-repeat; font: bold 56px "Marker Felt"; text-align: center }
-.sample { display: block; height: 96px; overflow: hidden; margin: 12px auto; padding: 0; background: url("../../images/zbar-samples.png") no-repeat; text-align: center}
+.sample { display: block; height: 80px; overflow: hidden; margin: 12px auto; padding: 0; background: url("../../images/zbar-samples.png") no-repeat; text-align: center}
 /* Barcode scanner help --end */
 
 
