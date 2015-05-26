@@ -6,6 +6,8 @@
     text-shadow: 0px 1px 0px #059;
 }
 
+.ui-header { margin-top: -1px; }
+
 /* For 2 columns grid */
 .ui-grid-span .ui-block-a { width: 75%; }
 .ui-grid-span .ui-block-b { width: 25%; }
@@ -17,6 +19,8 @@
 .ui-grid-span-2 img { height: auto; text-align: center;}
 #help .ui-grid-span-2 .ui-block-a p,
 #help .ui-grid-span-2 .ui-block-b p { margin-top: 0px; }
+
+.grid-height { height: 50px; }
 
 .center { margin: 0 auto; }
 

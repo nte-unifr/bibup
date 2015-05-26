@@ -12,7 +12,8 @@
 
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
     <style>
-        body, h1, h2, a.ui-btn, input { font-family: 'Titillium Web', Helvetica, Arial, sans-serif;}
+        /*body, h1, h2, a.ui-btn, input { font-family: 'Titillium Web', Helvetica, Arial, sans-serif;}*/
+        body, h1, h2, a.ui-btn, input { font-family: "Helvetica Neue UltraLight", Arial, sans-serif;}
         html { font-size: 80%; }
         /*h1, h2 {text-align: center;}*/
 
@@ -29,7 +30,7 @@
             <h2>Reference Tag</h2>
             <div class="ui-grid-a ui-grid-span">
                 <div class="ui-block-a">
-                    <input name="introtag" id="introtag" placeholder="Choose a tag..." value="" type="text" onChange="setTag(value)" required>
+                    <input name="introtag" id="introtag" placeholder="Choose a tag..." value="" type="text" style="margin: 0;" onChange="setTag(value)" required>
                 </div>
 
                 <div class="ui-block-b">
@@ -46,19 +47,19 @@
                             <p>You will use this tag to filter your references in the list on the Bibup website:</p>
                             <p><a href="http://www.unifr.ch/go/bibup">www.unifr.ch/go/bibup</a></p>
                             <p>Use a tag that is easy for you to remember.</p>
-                            <a href="#" class="ui-btn ui-corner-all ui-shadow" data-rel="back">Ok</a>
+                            <a href="#" class="ui-btn ui-mini ui-corner-all" data-rel="back">Ok</a>
                         </div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="ui-grid-a ui-grid-span">
+            <div class="ui-grid-a ui-grid-span grid-height">
                 <div class="ui-block-a">
                     <h2>Get Reference</h2>
                 </div>
                 <div class="ui-block-b">
-                    <h2 class="right"><a href="#help-scan" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline mr0">Info</a></h2>
+                    <div class="right"><a href="#help-scan" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline mr0">Info</a></div>
                 </div>
             </div>
             <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="help-scan">
@@ -87,7 +88,7 @@
         				<li class="ui-li ui-li-static ui-btn-up-c ui-corner-bottom ui-li-last">Hold still while the barcode is scanned.</li>
         			</ol>
 
-                    <a href="#" class="ui-btn ui-corner-all ui-shadow" data-rel="back">Go back</a>
+                    <a href="#" class="ui-btn ui-mini ui-corner-all" data-rel="back">Go back</a>
                 </div>
             </div>
             <!-- TODO: à cacher avant commit -->
@@ -101,15 +102,16 @@
             </div>
 
 
-            <br /><br />
+            <br />
             <div data-role="collapsible">
                 <h1>Manual ISBN/ISSN</h1>
 
                 <input name="manualisbn" id="manualisbn" placeholder="Insert an ISBN/ISSN number..." type="number" pattern="[0-9]{8,13}" required title="8 to 13 digits" data-clear-btn="true" />
                 <!--
                 <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all" >Send manual ISBN/ISSN</a> <br />-->
-
-                <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all">Send manual ISBN/ISSN</a>
+                <div class="center-2">
+                <a href="#" onClick="manualCode()" class="ui-btn ui-mini ui-btn-inline ui-corner-all">Send manual ISBN/ISSN</a>
+            </div>
             </div>
 
 
@@ -211,7 +213,7 @@
 
                         </div>
 
-                        <a href="#" class="ui-btn ui-corner-all ui-shadow" data-rel="back">Go back</a>
+                        <a href="#" class="ui-btn ui-mini ui-corner-all" data-rel="back">Go back</a>
                     </div>
                 </div>
 
