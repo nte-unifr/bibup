@@ -18,6 +18,8 @@
         Centre NTE, Université de Fribourg.
     </author>
 
+    <content src="index_v2.html" />
+
     <icon src="res/icon.png" />
 
     <gap:platform name="ios" />
@@ -44,4 +46,6 @@
     <gap:plugin name="org.apache.cordova.splashscreen" />
 
     <access origin="*" />
+    <access origin="mailto:*" launch-external="yes"/>
+    <access origin="tel:*" launch-external="yes"/>
 </widget>
