@@ -24,7 +24,7 @@
 
     <div data-role="page" id="home" data-theme="a">
         <div data-role="header">
-            <h1>Home Scanner</h1>
+            <h1>BibUp @ UNIFR</h1>
         </div>
         <div role="main" class="ui-content">
             <h2>Reference Tag</h2>
@@ -36,20 +36,8 @@
                 <div class="ui-block-b">
                     <!-- jquery popup -->
                     <p class="right" style="margin-top: 2px;">
-                    <a href="#tag-info" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline mr0">Info</a>
+                    <a href="#tag-info" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-mini ui-btn-inline mr0">Info</a>
                     </p>
-
-                    <div data-role="popup" data-overlay-theme="a" data-theme="a" data-dismissible="false" id="tag-info">
-                        <div data-role="header" data-theme="a">
-                            <h1>Tag Information</h1>
-                        </div>
-                        <div role="main" class="ui-content">
-                            <p>You will use this tag to filter your references in the list on the Bibup website:</p>
-                            <p><a href="http://www.unifr.ch/go/bibup">www.unifr.ch/go/bibup</a></p>
-                            <p>Use a tag that is easy for you to remember.</p>
-                            <a href="#" class="ui-btn ui-mini ui-corner-all" data-rel="back">Ok</a>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -65,12 +53,12 @@
             <!-- TODO: à cacher avant commit -->
             <div data-role="collapsible" data-collapsed="false">
                 <h3>Barcode scanner</h3>
-                
-                <a href="#" onClick="testCode()" class="ui-btn ui-corner-all center btn-img"><span class="ui-btn-text">Test</span></a>
+
+                <a href="#" onClick="testCode()" class="ui-btn ui-corner-all center btn-img"></a>
 
                 <br />
 
-                <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img"><span class="ui-btn-text">Scan barcode</span></a>
+                <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img"></a>
             </div>
 
 
@@ -103,10 +91,9 @@
 
     <div data-role="page" id="scan" data-theme="a">
         <div data-role="header">
-            <h1>Book informations</h1>
+            <h1>Book information</h1>
         </div>
         <div role="main" class="ui-content">
-            <h2>Book Informations</h2>
             <div id="scanbook">
                 <p class="big-msg">
                     No book scanned
@@ -190,8 +177,7 @@
         <div role="main" class="ui-content">
             <p><img class="logo" src="images/unifr.png" /></p>
             <h3>Centre NTE</h3>
-            Universit&eacute; de Fribourg<br /> Bd. P&eacute;rolles 90<br /> CH-1700 Fribourg<br />
-            <a href="tel:+41263008334" class="ui-btn ui-corner-all ui-icon-phone ui-btn-icon-left">+41 26 300 8334</a>
+            Universit&eacute; de Fribourg<br /> Bd. P&eacute;rolles 90<br /> 1700 Fribourg<br /> Switzerland<br />
             <a href="mailto:nte@unifr.ch" class="ui-btn ui-corner-all ui-icon-mail ui-btn-icon-left">nte@unifr.ch</a>
             <a rel="external" href="http://nte.unifr.ch" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">nte.unifr.ch</a>
         </div>
@@ -209,6 +195,22 @@
 
 
     <!-- Help pages -->
+    <div data-role="page" id="tag-info" data-theme="a">
+        <div data-role="header" data-add-back-btn="true" data-position="fixed">
+            <h1>Help</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h1 class="center-2">Tag Information</h1>
+
+            <div class="center-2">
+                <p>You will use this tag to filter your references in the list on the Bibup website:</p>
+                <p><a href="http://www.unifr.ch/go/bibup">www.unifr.ch/go/bibup</a></p>
+                <p>Use a tag that is easy for you to remember.</p>
+            </div>
+        </div>
+    </div>
+
+
     <div data-role="page" id="help-scanner" data-theme="a">
         <div data-role="header" data-add-back-btn="true" data-position="fixed">
             <h1>Help</h1>
