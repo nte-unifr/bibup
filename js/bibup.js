@@ -88,9 +88,7 @@ function checkConnection() {
 }
 
 
-var pictureSource;   // picture source
-var destinationType; // sets the format of returned value
-var captureID = 'capture1';
+var devicePlatform;  // device platform: iOS or Android
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready",onDeviceReady,false);
@@ -99,8 +97,21 @@ document.addEventListener("deviceready",onDeviceReady,false);
 function onDeviceReady() {
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
-    navigator.splashscreen.hide();
+    devicePlatform = device.platform;
+    initForPlatform(devicePlatform);
     checkConnection();
+}
+
+
+function initForPlatform(dp) {
+    if (dp == 'iOS') {
+        $('.plat_android').remove();
+    } else if (dp == 'Android') {
+        $('.plat_ios').remove();
+    } else {
+        // TODO: adapt here if there is more platform
+        $('.plat_ios').remove();
+    }
 }
 
 
