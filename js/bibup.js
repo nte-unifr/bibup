@@ -88,6 +88,9 @@ function checkConnection() {
 }
 
 
+var pictureSource;   // picture source
+var destinationType; // sets the format of returned value
+var captureID = 'capture1';
 var devicePlatform;  // device platform: iOS or Android
 
 // Wait for device API libraries to load
@@ -263,7 +266,8 @@ function getInfoFromCode( code ) {
     $('#isbn').attr( { value: code });
     $.get( "https://www.googleapis.com/books/v1/volumes?q=isbn:" + code, function( data ) {
         if ( 0 == data.totalItems ) {
-            showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+            // showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+            showNotification("No book found.", "Sorry");
         }
         displayData( data );
     })
@@ -339,7 +343,7 @@ function manualCode() {
             var code = $('#manualisbn').val();
             getInfoFromCode(code);
         } else {
-            showNotification("You must provide an ISBN/ISSN number", "Invalid Field");
+            showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
         }
     } else {
         showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
