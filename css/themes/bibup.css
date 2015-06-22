@@ -62,7 +62,7 @@ p.big-msg {
 
 .help { margin-top: .5em; }
 
-.logo { width: 100%; height: auto; }
+.logo { height: 100px; }
 
 /*Input validation*/
 input:focus:invalid {
