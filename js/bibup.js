@@ -105,6 +105,14 @@ function onDeviceReady() {
     checkConnection();
 }
 
+function openWindowWithPost() {
+    var p = $('#introtag').val();
+    var f = $('#bibform');
+
+    $('#bibform-tag').val(p);
+    alert("forms values");
+    f.submit();
+}
 
 function initForPlatform(dp) {
     if (dp == 'iOS') {

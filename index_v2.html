@@ -209,6 +209,14 @@
                 <p>You will use this tag to filter your references in the list on the Bibup website:</p>
                 <p><a href="#" onclick="window.open('http://www.unifr.ch/go/bibup', '_system');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">www.unifr.ch/go/bibup</a></p>
                 <p>Use a tag that is easy for you to remember.</p>
+
+                <p><a href="#" onclick="openWindowWithPost();" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">Access your references</a></p>
+
+                <form id="bibform" action="http://elearning.unifr.ch/bibup/index.php" method="post" target="_blank" style="display: none;">
+                    <input id="bibform-tag" type="text" name="tag" value="">
+                    <input type="hidden" name="filter" value="Filter">
+                </form>
+
             </div>
         </div>
     </div>
