@@ -6,7 +6,6 @@ $(document).ready(function(){
 
     $('[data-role=footer]').addClass("ui-footer ui-bar-a");
     $('[data-role=navbar]').addClass("ui-navbar ui-mini");
-
 });
 
 // --- Render views
@@ -92,6 +91,7 @@ var pictureSource;   // picture source
 var destinationType; // sets the format of returned value
 var captureID = 'capture1';
 var devicePlatform;  // device platform: iOS or Android
+var db; // access database
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready",onDeviceReady,false);
@@ -103,7 +103,84 @@ function onDeviceReady() {
     devicePlatform = device.platform;
     initForPlatform(devicePlatform);
     checkConnection();
+    db = window.openDatabase("Database", "1.0", "Bibup", 200000);
+    db.transaction(populateDB, errorCB, successCB);
 }
+
+/* ----------- DATABASE /begin -----------*/
+// Populate the database
+    //
+    function populateDB(tx) {
+        tx.executeSql('DROP TABLE IF EXISTS TAG');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS TAG (id integer primary key autoincrement, data)');
+        tx.executeSql('INSERT INTO TAG (data) VALUES ("testna")');
+        tx.executeSql('INSERT INTO TAG (data) VALUES ("testad")');
+    }
+
+    // Query the database
+    //
+    function queryDB(tx) {
+        tx.executeSql('SELECT * FROM TAG', [], querySuccess, errorCB);
+    }
+
+    // Query the tag
+    //
+    function queryTag(tx) {
+        var t = $('#tag').val();
+        tx.executeSql('SELECT * FROM TAG WHERE data = "' +t+ '"', [], queryTagSuccess, errorCB);
+    }
+
+    // Query the insert tag
+    //
+    function insertTag(tx) {
+        var t = $('#tag').val();
+        tx.executeSql('INSERT INTO TAG (data) VALUES ("' +t+ '")', [], querySuccess, errorCB);
+    }
+
+    // Query the success callback
+    //
+    function queryTagSuccess(tx, results) {
+        console.log("Returned rows = " + results.rows.length);
+        if (results.rows.length == 0) {
+            console.log(results.rows.length + ' match found');
+            return true;
+        }
+
+        // this will be true since it was a select statement and so rowsAffected was 0
+        if (!results.rowsAffected) {
+            console.log('No rows affected!');
+            return false;
+        }
+        // for an insert statement, this property will return the ID of the last inserted row
+        console.log("Last inserted row ID = " + results.insertId);
+    }
+
+    // Query the success callback
+    //
+    function querySuccess(tx, results) {
+        console.log("Returned rows = " + results.rows.length);
+        // this will be true since it was a select statement and so rowsAffected was 0
+        if (!results.rowsAffected) {
+            console.log('No rows affected!');
+            return false;
+        }
+        // for an insert statement, this property will return the ID of the last inserted row
+        console.log("Last inserted row ID = " + results.insertId);
+    }
+
+    // Transaction error callback
+    //
+    function errorCB(err) {
+        console.log("Error processing SQL: "+err.code);
+    }
+
+    // Transaction success callback
+    //
+    function successCB() {
+        var db = window.openDatabase("Database", "1.0", "Bibup", 200000);
+        db.transaction(queryDB, errorCB);
+    }
+/* ----------- DATABASE /end -------------*/
 
 function openWindowWithPost() {
     var p = $('#introtag').val();
@@ -361,7 +438,11 @@ function manualCode() {
 
 function setTag( data ) {
     $('#tag').attr( { value: data });
+    db.transaction(queryTag, errorCB, successCB);
+    db.transaction(queryTag, errorCB, function() { if (successCB) { db.transaction(insertTag, errorCB, successCB); } });
+    // db.transaction(insertTag, errorCB, successCB);
 }
+
 
 $(function() {
     var form = $('#bibupform');
