@@ -19,6 +19,12 @@
 .ui-grid-span-2 img { height: auto; text-align: center;}
 #help .ui-grid-span-2 .ui-block-a p,
 #help .ui-grid-span-2 .ui-block-b p { margin-top: 0px; }
+/* Prevent truncated text */
+ol li {
+    white-space: normal !important;
+    word-wrap:break-word;
+    overflow-wrap: break-word;
+}
 
 .grid-height { height: 50px; }
 
