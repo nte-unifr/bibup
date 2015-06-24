@@ -8,6 +8,36 @@ $(document).ready(function(){
     $('[data-role=navbar]').addClass("ui-navbar ui-mini");
 });
 
+// Get current page id
+var activePage = '';
+$( document ).on( "pagecontainershow", function ( event, ui ) {
+    activePage = $.mobile.pageContainer.pagecontainer( "getActivePage" ).attr("id");
+});
+
+// Support for swipe gesture between pages
+$(document).on('swipeleft', function(){
+    if (activePage == 'home') {
+        $.mobile.changePage("#scan", { transition: "slide"});
+    } else if (activePage == 'scan') {
+        $.mobile.changePage("#about", { transition: "slide"});
+    } else if (activePage == 'about') {
+        //do nothing
+    } else {
+        //do nothing
+    }
+});
+$(document).on('swiperight', function(){
+    if (activePage == 'home') {
+        //do nothing
+    } else if (activePage == 'scan') {
+        $.mobile.changePage("#home", { transition: "slide", reverse: true});
+    } else if (activePage == 'about') {
+        $.mobile.changePage("#scan", { transition: "slide", reverse: true});
+    } else {
+        //do nothing
+    }
+});
+
 // --- Render views
 //
 function renderHomeView(event) {
