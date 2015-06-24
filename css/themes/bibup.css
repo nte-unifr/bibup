@@ -14,16 +14,28 @@
 /* For 2 columns grid */
 .ui-grid-span-2 .ui-block-a { width: 25%; }
 .ui-grid-span-2 .ui-block-b { width: 75%; }
-.ui-grid-span-2 img { width: 60%; text-align: center;}
+.ui-grid-span-2 img { height: 60px; width: auto; text-align: center;}
 #help-scan .ui-grid-span-2 img { width: 45px; }
-.ui-grid-span-2 img { height: auto; text-align: center;}
 #help .ui-grid-span-2 .ui-block-a p,
 #help .ui-grid-span-2 .ui-block-b p { margin-top: 0px; }
 /* Prevent truncated text */
-ol li {
+ol li, .ui-listview > li p {
     white-space: normal !important;
     word-wrap:break-word;
     overflow-wrap: break-word;
+}
+
+/* Center thumbnails in listview */
+.ui-listview .ui-li-has-thumb .ui-li-thumb {
+    position: absolute !important;
+    margin-top: -32px !important;
+    top: 50% !important;
+    left: 5px !important;
+    min-width: 5em;
+    min-height: 5em;
+}
+.ui-listview > li {
+    position: relative !important;
 }
 
 .grid-height { height: 50px; }
