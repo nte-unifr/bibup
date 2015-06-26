@@ -374,9 +374,9 @@ function scanCode() {
     }
 }
 
-
-function openBibUp() {
-     var ref = window.open('http://elearning.unifr.ch/bibup', '_blank', 'location=no');
+// Open URL in device browser
+function openUrl( url ) {
+     window.open(url, '_system');
 }
 
 
