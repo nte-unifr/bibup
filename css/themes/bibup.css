@@ -19,13 +19,12 @@
 #help .ui-grid-span-2 .ui-block-a p,
 #help .ui-grid-span-2 .ui-block-b p { margin-top: 0px; }
 /* Prevent truncated text */
-ol li, .ui-listview > li p {
+ol li, .ui-listview > li p, .ui-listview > li {
     white-space: normal !important;
     word-wrap:break-word;
     overflow-wrap: break-word;
 }
 
-/* Center thumbnails in listview */
 .ui-listview .ui-li-has-thumb .ui-li-thumb {
     position: absolute !important;
     margin-top: -32px !important;

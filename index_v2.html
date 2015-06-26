@@ -54,21 +54,21 @@
             <!-- TODO: à cacher avant commit -->
             <div data-role="collapsible" data-collapsed="false">
                 <h3>Barcode scanner</h3>
-
+                <!--
                 <a href="#" onClick="testCode()" class="ui-btn ui-corner-all center btn-img"></a>
 
                 <br />
-
+                -->
                 <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img"></a>
             </div>
 
 
             <br />
             <div data-role="collapsible">
-                <h1>Manual ISBN/ISSN</h1>
+                <h1>Enter ISBN/ISSN</h1>
 
-                <input name="manualisbn" class="plat_ios" id="manualisbn" placeholder="Insert an ISBN/ISSN number..." type="text" pattern="\d*" required title="8 to 13 digits" data-clear-btn="true" />
-                <input name="manualisbn" class="plat_android" id="manualisbn" placeholder="Insert an ISBN/ISSN number..." type="number" value="numeric" required title="8 to 13 digits" data-clear-btn="true" />
+                <input name="manualisbn" class="plat_ios" id="manualisbn" placeholder="12345678 or 1234567890123 (required)" type="text" pattern="\d*" required title="8 to 13 digits" data-clear-btn="true" />
+                <input name="manualisbn" class="plat_android" id="manualisbn" placeholder="12345678 or 1234567890123 (required)" type="number" value="numeric" required title="8 to 13 digits" data-clear-btn="true" />
                 <!--
                 <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all" >Send manual ISBN/ISSN</a> <br />-->
                 <div class="center-2">
@@ -117,7 +117,7 @@
                 <li id="book_lang"></li>
                 <li data-role="list-divider">Publisher</li>
                 <li id="book_publisher"></li>
-                <li data-role="list-divider" id="book_isbn_type">ISBN 13</li>
+                <li data-role="list-divider" id="book_isbn_type">ISBN</li>
                 <li id="book_isbn_data"></li>
             </ul> <br />
 
@@ -181,7 +181,6 @@
             <h3 class="m0">DIT Centre NTE</h3>
             University of Fribourg<br /> Bd Pérolles 90<br /> 1700 Fribourg<br /> Switzerland<br />
             <a href="mailto:nte@unifr.ch" class="ui-btn ui-corner-all ui-icon-mail ui-btn-icon-left">nte@unifr.ch</a>
-            <a rel="external" href="http://nte.unifr.ch" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">nte.unifr.ch</a>
             <a href="#" onclick="window.open('http://nte.unifr.ch', '_system');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">nte.unifr.ch</a>
         </div>
         <div data-role="footer" data-id="f1" data-position="fixed">

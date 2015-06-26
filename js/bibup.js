@@ -43,11 +43,9 @@ $(document).on('swiperight', function(){
 function renderHomeView(event) {
     homeView();
 }
-
 function renderScanView(event) {
     scanView();
 }
-
 function renderAboutView(event) {
     aboutView();
 }
@@ -60,13 +58,11 @@ function homeView(event) {
     $('#home .p-home, #home .p-scan, #home .p-about').removeClass("ui-btn-active");
     $('#home .p-home').addClass("ui-btn-active");
 }
-
 function scanView(event) {
     // active state for navbar
     $('#scan .p-home, #scan .p-scan, #scan .p-about').removeClass("ui-btn-active");
     $('#scan .p-scan').addClass("ui-btn-active");
 }
-
 function aboutView(event) {
     // active state for navbar
     $('#about .p-home, #about .p-scan, #about .p-about').removeClass("ui-btn-active");
@@ -122,6 +118,15 @@ var destinationType; // sets the format of returned value
 var captureID = 'capture1';
 var devicePlatform;  // device platform: iOS or Android
 var db; // access database
+var cleanData = true; // true if no data in Book Info, false otherwise
+var marc_lang = {
+    "eng": "English",
+    "fre": "French",
+    "ger": "German",
+    "ita": "Italian",
+    "gsw": "Swiss german",
+    "spa": "Spanish"
+};
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready",onDeviceReady,false);
@@ -212,14 +217,16 @@ function onDeviceReady() {
     }
 /* ----------- DATABASE /end -------------*/
 
+
 function openWindowWithPost() {
     var p = $('#introtag').val();
     var f = $('#bibform');
 
     $('#bibform-tag').val(p);
-    alert("forms values");
+    console.log("forms values");
     f.submit();
 }
+
 
 function initForPlatform(dp) {
     if (dp == 'iOS') {
@@ -261,7 +268,6 @@ function sendForm() {
 
     } else {
         var options = new FileUploadOptions();
-        var boundary = "----JIMENEZ";
         if (captureID == 'capture1') {
             options.fileKey = "contentSnapshot"; //name of the form element
             options.fileName = "imagebiblio.jpg"
@@ -284,8 +290,6 @@ function sendForm() {
         var ft = new FileTransfer();
         ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win, fail, options, true);
     }
-
-
 }
 function win(r) {
     // alert("Code = " + r.responseCode);
@@ -303,7 +307,6 @@ function fail(error) {
     states[FileTransferError.INVALID_ID_URL_ERR]  = 'Invalid URL.';
     states[FileTransferError.CONNECTION_ERR]      = 'Verify your connection and try again.';
     states[FileTransferError.ABORT_ERR]           = 'Aborting';
-
 
     if (error.code == FileTransferError.CONNECTION_ERR) {
         txt += states[error.code]
@@ -369,7 +372,6 @@ function scanCode() {
         showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
         goTo('#home');
     }
-
 }
 
 
@@ -377,45 +379,101 @@ function openBibUp() {
      var ref = window.open('http://elearning.unifr.ch/bibup', '_blank', 'location=no');
 }
 
+
 function getInfoFromCode( code ) {
     $('#isbn').attr( { value: code });
-    $.get( "https://www.googleapis.com/books/v1/volumes?q=isbn:" + code, function( data ) {
-        if ( 0 == data.totalItems ) {
-            // showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+    var codeType;
+    var x = code.substr(0, 3);
+    console.log(code);
+    console.log(x);
+    if ( (code.length == 10) || ((code.length == 13) && (x == "978")) ) {
+        codeType = "isbn";
+    } else if ( (code.length == 8) || ((code.length == 13) && (x == "977")) ) {
+        codeType = "issn";
+    } else {
+        //TODO: change this error message: show how to write isbn and/or issn
+        console.log("Something went wrong...");
+    }
+    console.log("http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json");
+    $.getJSON( "http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json", function( data ) {
+        console.log(data);
+        if ( data.stat == "unknownId" ) {
             showNotification("No book found.", "Sorry");
+        } else if ( data.stat == "invalidId" ) {
+            showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+        } else if ( data.stat == "ok") {
+            displayData( data, codeType );
         }
-        displayData( data );
     })
-    .fail( function() { showNotification("Verify your network connexion.", "Error"); });
+    .fail( function( error ) { showNotification("Verify your network connexion.", "Error"); });
 }
 
-function displayData( data ) {
-    // reset for previous scan
-    $( "#book_subtitle" ).html('');
-    $( "#book_subtitle" ).hide();
-    $( "#book_cover" ).hide();
 
-    // reset capture
-    $( "#capture1" ).attr( { src: 'images/button_citation_pressed3.png' } );
-    $( "#capture2" ).attr( { src: 'images/button_citation_pressed3.png' } );
-
-    $( "#book_title" ).html( data.items[0].volumeInfo.title );
-    if ( null != data.items[0].volumeInfo.subtitle ) {
-        $( "#book_subtitle" ).html( data.items[0].volumeInfo.subtitle );
-        $( "#book_subtitle" ).show();
+function displayData( data, type ) {
+    if (cleanData == false) {
+        cleanScanData(); // clean Book Info before displaying data
     }
-    $( "#book_author" ).html( data.items[0].volumeInfo.authors.toString() );
-    $( "#book_publisher" ).html( data.items[0].volumeInfo.publisher );
-    $( "#book_year" ).html( data.items[0].volumeInfo.publishedDate.split('-')[0] );
-    $( "#book_lang" ).html( data.items[0].volumeInfo.language );
 
-    // $( "#book_isbn_type" ).html( data.items[0].volumeInfo.industryIdentifiers[0].type ); //show isbn_10
-    $( "#book_isbn_data" ).html( data.items[0].volumeInfo.industryIdentifiers[1].identifier ); //show isbn_13
+    if (type == "isbn") {
+        // Get book thumbnail from Google
+        $.get( "https://www.googleapis.com/books/v1/volumes?q=isbn:" + data.list[0].isbn, function( gdata ) {
+            if ( gdata.totalItems != 0 ) {
+                if ( gdata.items[0].volumeInfo.imageLinks != null ) {
+                    $( "#book_cover" ).attr( { src: gdata.items[0].volumeInfo.imageLinks.thumbnail } );
+                    $( "#book_cover" ).show();
+                }
+            }
+        });
+
+        var sub = data.list[0].title.split(":");
+        if ( sub.length == 2 ) {
+            $( "#book_title" ).html( sub[0].trim() );
+            $( "#book_subtitle" ).html( sub[1].trim() );
+            $( "#book_subtitle" ).show();
+        } else {
+            $( "#book_title" ).html( data.list[0].title );
+        }
+        $( "#book_author" ).html( data.list[0].author );
+        $( "#book_author" ).show();
+        $( "#book_author" ).prev().show();
+
+        $( "#book_publisher" ).html( data.list[0].publisher );
+
+        $( "#book_year" ).html( data.list[0].year );
+        $( "#book_year" ).show();
+        $( "#book_year" ).prev().show();
+
+        if (data.list[0].lang in marc_lang) {
+            $( "#book_lang" ).html( marc_lang[data.list[0].lang] );
+        } else {
+            $( "#book_lang" ).html( data.list[0].lang.toUppercase() );
+        }
+        $( "#book_lang" ).show();
+        $( "#book_lang" ).prev().show();
+
+        $( "#book_isbn_type" ).html( "ISBN" );
+        $( "#book_isbn_data" ).html( data.list[0].isbn );
 
 
-    if ( null != data.items[0].volumeInfo.imageLinks ) {
-        $( "#book_cover" ).attr( { src: data.items[0].volumeInfo.imageLinks.thumbnail } );
-        $( "#book_cover" ).show();
+    } else if (type == "issn") {
+        $( "#book_title" ).html( data.group[0].list[0].title );
+
+        $( "#book_author" ).html('');
+        $( "#book_author" ).hide();
+        $( "#book_author" ).prev().hide();
+
+        $( "#book_publisher" ).html( data.group[0].list[0].publisher );
+
+        $( "#book_year" ).html('');
+        $( "#book_year" ).hide();
+        $( "#book_year" ).prev().hide();
+
+        $( "#book_lang" ).html('');
+        $( "#book_lang" ).hide();
+        $( "#book_lang" ).prev().hide();
+
+        $( "#book_isbn_type" ).html( "ISSN" );
+        $( "#book_isbn_data" ).html( data.group[0].list[0].issn );
     }
 
     $( "#book" ).show();
@@ -423,8 +481,10 @@ function displayData( data ) {
     $( "#submit" ).removeClass( 'ui-disabled' )
     $( '#submit' ).show();
     $( "#scanbook" ).hide();
-    $( ":mobile-pagecontainer" ).pagecontainer( "change", "#scan" );
+    cleanData = false;
+    goTo("#scan");
 }
+
 
 function cleanScanData() {
     $( "#book_subtitle" ).html('');
@@ -446,11 +506,14 @@ function cleanScanData() {
     $('#contentSnapshot').value = 'button_citation3.png';
 
     $( '#scanbook' ).show();
+    cleanData = true;
 }
+
 
 function testCode() {
     getInfoFromCode('1430239034');
 }
+
 
 function manualCode() {
     if ($('#tag').attr('value')) {
@@ -463,8 +526,8 @@ function manualCode() {
     } else {
         showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
     }
-
 }
+
 
 function setTag( data ) {
     $('#tag').attr( { value: data });
@@ -512,6 +575,7 @@ function previewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
 
 function alertDismissed() {
 }
