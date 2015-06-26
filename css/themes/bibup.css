@@ -11,6 +11,7 @@
 /* For 2 columns grid */
 .ui-grid-span .ui-block-a { width: 75%; }
 .ui-grid-span .ui-block-b { width: 25%; }
+.ui-grid-span .help-btn { float: right; }
 /* For 2 columns grid */
 .ui-grid-span-2 .ui-block-a { width: 25%; }
 .ui-grid-span-2 .ui-block-b { width: 75%; }
