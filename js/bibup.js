@@ -81,6 +81,21 @@ function showNotification(message , title){
         alert(title ? (title + ": " + message) : message);
     }
 }
+function showNotification2(message , title, cb){
+    if (navigator.notification) {
+        navigator.notification.alert(message, cb, title, 'OK');
+    } else {
+        alert(title ? (title + ": " + message) : message);
+    }
+}
+function showConfirm(message , title) {
+    navigator.notification.confirm(message, onConfirm, title, ['Yes','Cancel']);
+}
+function onConfirm(buttonIndex) {
+    console.log('You selected button ' + buttonIndex);
+    return buttonIndex;
+}
+
 
 function checkConnection() {
     var networkState = navigator.connection.type;
@@ -127,6 +142,7 @@ var marc_lang = {
     "gsw": "Swiss german",
     "spa": "Spanish"
 };
+var refState = "none"; //none: no ref scanned, not sent: ref scanned but not sent or sent: ref scanned and sent (will immediately set to none...)
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready",onDeviceReady,false);
@@ -295,9 +311,11 @@ function win(r) {
     // alert("Code = " + r.responseCode);
     // alert("Response = " + r.response);
     // alert("Sent = " + r.bytesSent);
+    refState = "sent";
     $.mobile.loading('hide');
     showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
     cleanScanData();
+    refState = "none";
     goTo('#home');
 }
 function fail(error) {
@@ -314,6 +332,8 @@ function fail(error) {
     } else {
         showNotification("Something went wrong. Please, try again.", "Error");
     }
+
+    refState = "not sent";
 }
 
 // Called when a photo is successfully retrieved
@@ -354,20 +374,40 @@ function onFail(message) {
     }, 0);
 }
 
-function scanCode() {
-    if ($('#tag').attr('value')) {
-        cordova.plugins.barcodeScanner.scan( function(result) {
-                if (result.text != '') {
-                    $( "#isbn" ).html( result.text );
-                    getInfoFromCode( result.text );
-                } else { // go back to home page if scan is discarded
-                    goTo('#home');
-                }
-
-            }, function(error) {
-                showNotification("Scanning failed: " + error, "Error");
+function scanCodeSB() {
+    cordova.plugins.barcodeScanner.scan( function(result) {
+            if (result.text != '') {
+                $( "#isbn" ).html( result.text );
+                getInfoFromCode( result.text );
+            } else { // go back to home page if scan is discarded
+                goTo('#home');
             }
-        );
+
+        }, function(error) {
+            showNotification("Scanning failed: " + error, "Error");
+        }
+    );
+}
+
+function scanCode() {
+    console.log("Ref state: " + refState);
+
+    if ($('#tag').attr('value')) {
+        if (refState == "not sent") { //there is a reference that has not been sent yet
+            var message = "You have a reference that has not been submitted to Bibup yet, you will lose this reference if you scan another book. Do you want to continue?";
+            navigator.notification.confirm(message,
+                function(i) {
+                    if (i == 1) {
+                        console.log("Confirm, selected: " + i);
+                        scanCodeSB();
+                    } else {
+                        console.log("Confirm, selected: " + i);
+                        goTo("#home");
+                    }
+                }, "WARNING", ['Yes','No']);
+        } else {
+            scanCodeSB();
+        }
     } else {
         showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
         goTo('#home');
@@ -381,13 +421,15 @@ function openUrl( url ) {
 
 
 function getInfoFromCode( code ) {
-    cleanScanData(); // clean Book Info before getting new data
+    if (cleanData == false) {
+        cleanScanData(); // clean Book Info before getting new data
+    }
     $('#isbn').attr( { value: code });
     var codeType;
     var format = false;
     var x = code.substr(0, 3);
-    console.log(code);
-    console.log(x);
+    console.log("Code: " + code);
+    console.log("Code (0-3): " + x);
     if ( (code.length == 10) || ((code.length == 13) && (x == "978")) ) {
         codeType = "isbn";
         format = true;
@@ -406,9 +448,12 @@ function getInfoFromCode( code ) {
             console.log(data);
             if ( data.stat == "unknownId" ) {
                 showNotification("No book found.", "Sorry");
+                refState = "none";
             } else if ( data.stat == "invalidId" ) {
                 showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+                refState = "none";
             } else if ( data.stat == "ok") {
+                refState = "not sent";
                 displayData( data, codeType );
             }
         })
@@ -416,6 +461,7 @@ function getInfoFromCode( code ) {
     } else {
         //invalid format
         showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+        refState = "none";
     }
 
 }
@@ -499,6 +545,7 @@ function displayData( data, type ) {
 
 
 function cleanScanData() {
+    refState = "none";
     $( "#book_subtitle" ).html('');
     $( "#book_subtitle" ).hide();
     $( "#book_cover" ).hide();
@@ -527,14 +574,33 @@ function testCode() {
 }
 
 
+function manualCodeCB() {
+    if ($('#manualisbn').val()) {
+        var code = $('#manualisbn').val();
+        getInfoFromCode(code);
+    } else {
+        showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+    }
+}
+
 function manualCode() {
     if ($('#tag').attr('value')) {
-        if ($('#manualisbn').val()) {
-            var code = $('#manualisbn').val();
-            getInfoFromCode(code);
+        if (refState == "not sent") { //there is a reference that has not been sent yet
+            var message = "You have a reference that has not been submitted to Bibup yet, you will lose this reference if you search another book. Do you want to continue?";
+            navigator.notification.confirm(message,
+                function(i) {
+                    if (i == 1) {
+                        console.log("Confirm, selected: " + i);
+                        manualCodeCB();
+                    } else {
+                        console.log("Confirm, selected: " + i);
+                        goTo("#home");
+                    }
+                }, "WARNING", ['Yes','No']);
         } else {
-            showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+            manualCodeCB();
         }
+
     } else {
         showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
     }
