@@ -381,31 +381,43 @@ function openUrl( url ) {
 
 
 function getInfoFromCode( code ) {
+    cleanScanData(); // clean Book Info before getting new data
     $('#isbn').attr( { value: code });
     var codeType;
+    var format = false;
     var x = code.substr(0, 3);
     console.log(code);
     console.log(x);
     if ( (code.length == 10) || ((code.length == 13) && (x == "978")) ) {
         codeType = "isbn";
+        format = true;
     } else if ( (code.length == 8) || ((code.length == 13) && (x == "977")) ) {
         codeType = "issn";
+        format = true;
     } else {
-        //TODO: change this error message: show how to write isbn and/or issn
-        console.log("Something went wrong...");
+        console.log("Invalid format detected for isbn/issn.");
+        format = false;
     }
-    console.log("http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json");
-    $.getJSON( "http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json", function( data ) {
-        console.log(data);
-        if ( data.stat == "unknownId" ) {
-            showNotification("No book found.", "Sorry");
-        } else if ( data.stat == "invalidId" ) {
-            showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
-        } else if ( data.stat == "ok") {
-            displayData( data, codeType );
-        }
-    })
-    .fail( function( error ) { showNotification("Verify your network connexion.", "Error"); });
+
+    //valid format
+    if (format == true) {
+        console.log("http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json");
+        $.getJSON( "http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json", function( data ) {
+            console.log(data);
+            if ( data.stat == "unknownId" ) {
+                showNotification("No book found.", "Sorry");
+            } else if ( data.stat == "invalidId" ) {
+                showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+            } else if ( data.stat == "ok") {
+                displayData( data, codeType );
+            }
+        })
+        .fail( function( error ) { showNotification("Verify your network connexion.", "Error"); });
+    } else {
+        //invalid format
+        showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
+    }
+
 }
 
 
