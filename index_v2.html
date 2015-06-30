@@ -6,6 +6,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>BibUp - UniFR</title>
 
+    <script type="text/javascript"  src="js/fastclick/lib/fastclick.js"></script>
+
     <link rel="stylesheet" href="jquerymobile/jquery.mobile-1.4.4.min.css">
     <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
     <link rel="stylesheet" href="css/themes/bibup.css" />
@@ -15,7 +17,7 @@
         /*body, h1, h2, a.ui-btn, input { font-family: 'Titillium Web', Helvetica, Arial, sans-serif;}*/
         body, h1, h2, a.ui-btn, input { font-family: "Helvetica Neue UltraLight", Arial, sans-serif;}
         html { font-size: 80%; }
-        #tag-info p, #help-scanner p, #help-scanner li, #help-recognition p  { font-size: 120%; }
+        #tag-info p, #help-scanner p, #help-scanner li, #help-recognition p, input[type="text"], input[type="number"]   { font-size: 120%; }
         /*h1, h2 {text-align: center;}*/
 
     </style>
@@ -31,7 +33,7 @@
             <h2 class="hmtb">Your Reference Tag</h2>
             <div class="ui-grid-a ui-grid-span">
                 <div class="ui-block-a">
-                    <input name="introtag" id="introtag" placeholder="Enter a tag (required)" value="" type="text" autocorrect="off" autocapitalize="off" onChange="setTag(value);" required>
+                    <input name="introtag" id="introtag" placeholder="Enter a tag (required)" value="" type="text" autocorrect="off" autocapitalize="off" onChange="setTag(value);" oninput="checkValidation(this);" required>
                 </div>
                 <div class="ui-block-b">
                     <a href="#tag-info" class="help-btn ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
@@ -41,7 +43,7 @@
 
             <div class="ui-grid-a ui-grid-span">
                 <div class="ui-block-a">
-                    <h2 class="hmtb">Get Reference</h2>
+                    <h2>Get Reference</h2>
                 </div>
                 <div class="ui-block-b">
                     <a href="#help-scanner" class="help-btn ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
@@ -52,21 +54,20 @@
 
                 <br />
 -->
-            <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img">Scan Barcode</a>
-            <br />
-            <a href="#" onClick="$('.number-collapse').show();" class="ui-btn ui-corner-all center num-collapse">Enter ISBN/ISSN</a>
+            <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img barcode-collapse mb10">Scan Barcode</a>
+            <a href="#" onClick="collapse();" class="ui-btn ui-corner-all center num-collapse mb10">Enter ISBN/ISSN</a>
             <div class="number-collapse" style="display: none;">
                 <div class="ui-grid-a ui-grid-span">
                     <div class="ui-block-a">
-                        <input name="manualisbn" class="plat_ios" id="manualisbn" placeholder="12345678 or 1234567890123 (required)" type="text" pattern="\d*" required title="8 to 13 digits" data-clear-btn="true" />
-                        <input name="manualisbn" class="plat_android" id="manualisbn" placeholder="12345678 or 1234567890123 (required)" type="number" value="numeric" required title="8 to 13 digits" data-clear-btn="true" />
+                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_ios" id="manualisbn" placeholder="12345678 or 1234567890123 (required)" type="text" pattern="\d*" required title="8 to 13 digits" data-clear-btn="true" />
+                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_android" id="manualisbn" placeholder="12345678 or 1234567890123 (required)" type="number" value="numeric" required title="8 to 13 digits" data-clear-btn="true" />
                     </div>
                     <div class="ui-block-b">
                         <a href="#help-isbn" class="help-btn ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
                     </div>
                 </div>
                 <div class="center-2">
-                    <a href="#" onClick="manualCode()" class="ui-btn ui-mini ui-btn-inline ui-corner-all">Search</a>
+                    <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-search">Search</a>
                 </div>
             </div>
 
@@ -146,7 +147,7 @@
                 <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
-                    <input type="submit" value="Submit" id="submit" class="ui-disabled" />
+                    <input type="submit" value="Submit" id="submit" data-icon="check" class="ui-disabled" />
 
                     <div style="display:none;">
                         <input type="file" name="contentSnapshot" filename="button_citation3.png" id="contentSnapshot" accept="image/*" style="display:none;" onclick="capturePhoto('capture1');">
@@ -331,6 +332,7 @@
 <script type="text/javascript" src="jquerymobile/jquery.mobile-1.4.4.min.js"></script>
 <script type="text/javascript"  src="js/jquery.form.js"></script>
 <script type="text/javascript"  src="js/bibup.js"></script>
+
 
 
 </body>

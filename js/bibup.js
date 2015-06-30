@@ -1,3 +1,7 @@
+window.addEventListener('load', function() {
+    new FastClick(document.body);
+}, false);
+
 $(document).ready(function(){
     homeView();
     $('.p-home').on('tap', renderHomeView);
@@ -7,6 +11,35 @@ $(document).ready(function(){
     $('[data-role=footer]').addClass("ui-footer ui-bar-a");
     $('[data-role=navbar]').addClass("ui-navbar ui-mini");
 });
+
+$(document).on('pagebeforeshow', function(){
+    $(".ui-btn").on('touchstart' ,function(){
+        $(this).css("background-color","#189fda");
+    }).on('touchend', function(){
+        $(this).css("background-color","#24ace7");
+    }).on("touchcancel", function() {
+        $(this).css("background-color","#24ace7");
+     });
+});
+
+function checkValidation(input) {
+    var isValid = input.checkValidity();
+    var isLengthValid = null;
+    if (input.name == "manualisbn") {
+        //check that the length is validity
+        if (input.value.length == 8 || input.value.length == 10 || input.value.length == 13) {
+            isLengthValid = true;
+        } else {
+            isLengthValid = false;
+        }
+    }
+    console.log("validity: " + isValid);
+    if ((isValid == false && isLengthValid == null) || (isValid == false && isLengthValid == false) || (isValid == true && isLengthValid == false)) {
+        $(input).parent().css("box-shadow","0 0 2px red");
+    } else {
+        $(input).parent().css("box-shadow","none");
+    }
+}
 
 // Get current page id
 var activePage = '';
@@ -252,6 +285,17 @@ function initForPlatform(dp) {
     } else {
         // TODO: adapt here if there is more platform
         $('.plat_ios').remove();
+    }
+}
+
+
+function collapse() {
+    if ($('.barcode-collapse').is(":visible") && $('.number-collapse').is(":hidden")) {
+        $('.barcode-collapse').hide("slow");
+        $('.number-collapse').show("slow");
+    } else {
+        $('.barcode-collapse').show("slow");
+        $('.number-collapse').hide("slow");
     }
 }
 

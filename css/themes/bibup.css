@@ -62,6 +62,9 @@ ol li, .ui-listview > li p, .ui-listview > li {
 .num-collapse {
     height: 30px;
     width: 50%;
+    padding-top: 20px;
+    padding-right: 28px;
+    padding-left: 28px;
 }
 a.ui-btn.ui-corner-all.center.btn-img, .num-collaps { padding-top: 20px; padding-left: 40px; }
 
@@ -74,6 +77,7 @@ a.ui-btn.ui-corner-all.center.btn-img, .num-collaps { padding-top: 20px; padding
 .mr0 { margin-right: 0px; }
 .m0 { margin: 0; }
 .hmtb { margin-top: 0px; margin-bottom: 0px; }
+.mb10 { margin-bottom: 10px;}
 
 p.big-msg {
     font-size: 500%;
@@ -88,14 +92,7 @@ p.big-msg {
 
 .logo { height: 100px; }
 
-/*Input validation*/
-input:focus:invalid {
-    border:1px solid red;
-}
-/*input:required:valid {
-    border:1px solid green;
-}*/
-
+.ui-input-text { margin-left: 2px; }
 
 /* List divider color --begin */
 li.ui-li-divider.ui-bar-inherit.ui-first-child,
@@ -135,10 +132,20 @@ li.ui-li-divider.ui-bar-inherit {
     text-shadow: 0  1px  0  #f3f3f3;
 }
 
-.ui-page-theme-a .ui-btn:hover, html .ui-bar-a .ui-btn:hover, html .ui-body-a .ui-btn:hover, html body .ui-group-theme-a .ui-btn:hover, html head+body .ui-btn.ui-btn-a:hover {
+/*.ui-page-theme-a .ui-btn:hover, html .ui-bar-a .ui-btn:hover, html .ui-body-a .ui-btn:hover, html body .ui-group-theme-a .ui-btn:hover, html head+body .ui-btn.ui-btn-a:hover {
     background-color: #ededed;
     border-color: #ddd;
     color: #333;
     text-shadow: 0 1px 0 #f3f3f3;
+}*/
+
+.ui-page-theme-a .ui-btn:hover, html .ui-bar-a .ui-btn:hover, html .ui-body-a .ui-btn:hover, html body .ui-group-theme-a .ui-btn:hover, html head + body .ui-btn.ui-btn-a:hover {
+    background-color: #189fda;
+    border-color: #3388cc;
+    color: #ffffff;
+    text-shadow: 0  1px  0  #005599;
+}
+.ui-page-theme-a .ui-btn:focus, html .ui-bar-a .ui-btn:focus, html .ui-body-a .ui-btn:focus, html body .ui-group-theme-a .ui-btn:focus, html head + body .ui-btn.ui-btn-a:focus, .ui-page-theme-a .ui-focus, html .ui-bar-a .ui-focus, html .ui-body-a .ui-focus, html body .ui-group-theme-a .ui-focus, html head + body .ui-btn-a.ui-focus, html head + body .ui-body-a.ui-focus {
+    box-shadow: none;
 }
 /* Blue theme --/end */
