@@ -13,7 +13,7 @@ $(document).ready(function(){
 });
 
 $(document).on('pagebeforeshow', function(){
-    $(".ui-btn").on('touchstart' ,function(){
+    $(".ui-btn:not(.ui-icon-delete)").on('touchstart' ,function(){
         $(this).css("background-color","#189fda");
     }).on('touchend', function(){
         $(this).css("background-color","#24ace7");
