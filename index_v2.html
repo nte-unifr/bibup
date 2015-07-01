@@ -142,7 +142,8 @@
                 </div>
                 <br />
 
-                <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
+                <!--<form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">-->
+                <form id="bibupform" name="send" action="http://diufvm14.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
                     <input type="submit" value="Submit" id="submit" data-icon="check" class="ui-disabled" />
@@ -203,7 +204,9 @@
                 <p><a href="#" onclick="openUrl('http://www.unifr.ch/go/bibup');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">www.unifr.ch/go/bibup</a></p>
                 <p>Use a tag that is easy for you to remember.</p>
 
-                <p><a href="#" onclick="openWindowWithPost();" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">Access your references</a></p>
+                <!--
+                <p><a href="#" onclick="openWindowWithPost();" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">Access your references</a></p>-->
+                <p><a href="#" onclick="openUrl('http://diufvm14.unifr.ch/bibup/index.php?tag='+$('#introtag').val()+'&filter=Filter');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">Access your references</a></p>
 
                 <form id="bibform" action="http://elearning.unifr.ch/bibup/index.php" method="post" target="_blank" style="display: none;">
                     <input id="bibform-tag" type="text" name="tag" value="">
