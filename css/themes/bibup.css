@@ -92,7 +92,8 @@ p.big-msg {
 
 .logo { height: 100px; }
 
-.ui-input-text { margin-left: 2px; }
+.ui-input-text { margin-left: 2px; } /* to prevent shadow to be cut */
+textarea.ui-input-text { margin-left: 0px; }
 
 /* List divider color --begin */
 li.ui-li-divider.ui-bar-inherit.ui-first-child,

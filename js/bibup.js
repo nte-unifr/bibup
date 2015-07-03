@@ -176,6 +176,7 @@ var marc_lang = {
     "spa": "Spanish"
 };
 var refState = "none"; //none: no ref scanned, not sent: ref scanned but not sent or sent: ref scanned and sent (will immediately set to none...)
+var uniqid = null; //unique id from bibup db server
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready",onDeviceReady,false);
@@ -303,8 +304,8 @@ function collapse() {
 function sendForm() {
     // verify if photos have been taken
     var elt, elt2;
-    elt = $('#capture1').attr('src')
-    elt2 = $('#capture2').attr('src')
+    elt = $('#capture1').attr('src');
+    elt2 = $('#capture2').attr('src');
     basic_img = "images/button_citation_pressed3.png";
 
     if (elt == basic_img && elt2 == basic_img) {
@@ -326,35 +327,101 @@ function sendForm() {
             showNotification("Something went wrong. Please, try again.", "Error");
         });
 
-    } else {
-        var options = new FileUploadOptions();
-        if (captureID == 'capture1') {
-            options.fileKey = "contentSnapshot"; //name of the form element
-            options.fileName = "imagebiblio.jpg"
-        } else {
-            options.fileKey = "titleSnapshot"; //name of the form element
-            options.fileName = "imagebiblio1.jpg"
-        }
+    } else if (elt != basic_img && elt2 == basic_img) { //only first image to upload
 
-        var imageURI = document.getElementById(captureID).src;
-        options.mimeType = "image/*";
+        console.log("uploading 1st image");
+        uploadImage1(false);
 
-        options.params = {
-            tag: document.getElementById("tag").value,
-            isbn: document.getElementById("isbn").value,
-            submit: document.getElementById("submit").value,
-            titleSnapshot: "button_citation3.png" //this means that no image was selected for this field
-        }
+    } else if (elt == basic_img && elt2 != basic_img) { //only first image to upload
 
-        options.chunkedMode = false; //to prevent problems uploading to a Nginx server.
-        var ft = new FileTransfer();
-        ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win, fail, options, true);
+        console.log("uploading 2nd image");
+        uploadImage2(uniqid);
+
+    } else { //both images to upload
+
+        console.log("uploading both images");
+        uploadImage1(true);
+
     }
 }
-function win(r) {
+
+function uploadImage1(both) {
+    var options = new FileUploadOptions();
+    options.fileKey = "contentSnapshot"; //name of the form element
+    options.fileName = "imagebiblio.jpg";
+
+    var imageURI = document.getElementById("capture1").src;
+    options.mimeType = "image/*";
+
+    options.params = {
+        tag: document.getElementById("tag").value,
+        isbn: document.getElementById("isbn").value,
+        submit: document.getElementById("submit").value,
+        titleSnapshot: "button_citation3.png", //this means that no image was selected for this field
+        note: document.getElementById("note").value
+    }
+
+    options.chunkedMode = false; //to prevent problems uploading to a Nginx server.
+    var ft = new FileTransfer();
+    if (both) {
+        ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win1, fail, options, true); //upload both images
+    } else {
+        ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win2, fail, options, true); //upload only 1st image
+    }
+
+}
+
+function uploadImage2(id) {
+    var options = new FileUploadOptions();
+    options.fileKey = "titleSnapshot"; //name of the form element
+    options.fileName = "imagebiblio1.jpg";
+
+    var imageURI = document.getElementById("capture2").src;
+    options.mimeType = "image/*";
+
+    console.log("uid in 2nd upload: " + id);
+    options.params = {
+        tag: document.getElementById("tag").value,
+        isbn: document.getElementById("isbn").value,
+        submit: document.getElementById("submit").value,
+        contentSnapshot: "button_citation3.png", //this means that no image was selected for this field
+        uid: id,
+        note: document.getElementById("note").value
+    }
+
+    options.chunkedMode = false; //to prevent problems uploading to a Nginx server.
+    var ft = new FileTransfer();
+    ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win2, fail, options, true);
+}
+
+function win1(r) {
+    console.log("---");
+    console.log("win");
+    if (r.response.substr(0,1) == "#") { //it's ok, get the id now
+        var response = r.response.split("##");
+        uniqid = response[response.length - 1];
+        console.log("uid: " + uniqid);
+        console.log("uploading 2nd image");
+        uploadImage2(uniqid);
+    } else {
+        console.log("problem: " + r.response);
+    }
+}
+
+function win2(r) {
+    console.log("---");
+    console.log("win2");
+    if (r.response.substr(0,1) == "#") { //it's ok, get the id now
+        var response = r.response.split("##");
+        uniqid = response[response.length - 1];
+        console.log("uid: " + uniqid);
+    } else {
+        console.log("problem: " + r.response);
+    }
     // alert("Code = " + r.responseCode);
     // alert("Response = " + r.response);
     // alert("Sent = " + r.bytesSent);
+    uniqid = null;
     refState = "sent";
     $.mobile.loading('hide');
     showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");

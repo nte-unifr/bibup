@@ -15,7 +15,7 @@
         /*body, h1, h2, a.ui-btn, input { font-family: 'Titillium Web', Helvetica, Arial, sans-serif;}*/
         body, h1, h2, a.ui-btn, input { font-family: "Helvetica Neue UltraLight", Arial, sans-serif;}
         html { font-size: 80%; }
-        #tag-info p, #help-scanner p, #help-scanner li, #help-recognition p, input[type="text"], input[type="number"]   { font-size: 120%; }
+        #tag-info p, #help-scanner p, #help-scanner li, #help-recognition p, input[type="text"], input[type="number"], textarea   { font-size: 120%; }
         /*h1, h2 {text-align: center;}*/
 
     </style>
@@ -128,10 +128,10 @@
 
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
-                        <p class="center-2">Block text</p>
+                        <p class="center-2">Image 1</p>
                     </div>
                     <div class="ui-block-b">
-                        <p class="center-2">Title</p>
+                        <p class="center-2">Image 2</p>
                     </div>
                     <div class="ui-block-a">
                         <a href="#" onclick="capturePhoto('capture1');"><img style="width:120px;height:120px; display: block; margin: 0 auto;" id="capture1" src="images/button_citation_pressed3.png" /></a>
@@ -146,6 +146,7 @@
                 <form id="bibupform" name="send" action="http://diufvm14.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
+                    <textarea rows="2" name="note" id="note" class="ui-input-text ui-corner-all ui-shadow-inset" placeholder="Page number or other information (optional)"></textarea>
                     <input type="submit" value="Submit" id="submit" data-icon="check" class="ui-disabled" />
 
                     <div style="display:none;">
@@ -203,7 +204,6 @@
                 <p>You will use this tag to filter your references in the list on the Bibup website:</p>
                 <p><a href="#" onclick="openUrl('http://www.unifr.ch/go/bibup');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">www.unifr.ch/go/bibup</a></p>
                 <p>Use a tag that is easy for you to remember.</p>
-
                 <!--
                 <p><a href="#" onclick="openWindowWithPost();" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">Access your references</a></p>-->
                 <p><a href="#" onclick="openUrl('http://diufvm14.unifr.ch/bibup/index.php?tag='+$('#introtag').val()+'&filter=Filter');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">Access your references</a></p>
