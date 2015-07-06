@@ -266,6 +266,7 @@ function onDeviceReady() {
         var t1 = $('#isbn').val(),
             t2 = $('#tag').val(),
             t3 = $('#book_note').html();
+            $('#book_note').html(''); // clean div
         console.log("inserFiche data (isbn, tag, note): " + t1 + ", " + t2 + ", " + t3);
         tx.executeSql('INSERT INTO fiche (isbn, tag, note) VALUES ( ?, ?, ? )', [ t1, t2, t3 ], querySuccess, errorCB);
     }
@@ -715,7 +716,7 @@ function cleanScanData() {
     // clean note field
     $('#note').val('');
     $('#note').html('');
-    $('#book_note').html('');
+    // book_note is cleaned after sucess of insetion in DB (see insertFiche)
 
     $( '#scanbook' ).show();
     cleanData = true;
