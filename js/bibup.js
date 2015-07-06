@@ -2,6 +2,7 @@ window.addEventListener('load', function() {
     new FastClick(document.body);
 }, false);
 
+
 $(document).ready(function(){
     homeView();
     $('.p-home').on('tap', renderHomeView);
@@ -178,6 +179,7 @@ var marc_lang = {
 var refState = "none"; //none: no ref scanned, not sent: ref scanned but not sent or sent: ref scanned and sent (will immediately set to none...)
 var uniqid = null; //unique id from bibup db server
 
+
 // Wait for device API libraries to load
 document.addEventListener("deviceready",onDeviceReady,false);
 
@@ -196,48 +198,79 @@ function onDeviceReady() {
 // Populate the database
     //
     function populateDB(tx) {
-        tx.executeSql('DROP TABLE IF EXISTS TAG');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS TAG (id integer primary key autoincrement, data)');
-        tx.executeSql('INSERT INTO TAG (data) VALUES ("testna")');
-        tx.executeSql('INSERT INTO TAG (data) VALUES ("testad")');
+        tx.executeSql('DROP TABLE IF EXISTS tag');
+        tx.executeSql('DROP TABLE IF EXISTS fiche');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), tag VARCHAR(50), note VARCHAR(255))');
+        tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
+        tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
     }
 
     // Query the database
     //
     function queryDB(tx) {
-        tx.executeSql('SELECT * FROM TAG', [], querySuccess, errorCB);
+        tx.executeSql('SELECT * FROM tag', [], querySuccess, errorCB);
     }
 
-    // Query the tag
+    // Query the database
     //
-    function queryTag(tx) {
-        var t = $('#tag').val();
-        tx.executeSql('SELECT * FROM TAG WHERE data = "' +t+ '"', [], queryTagSuccess, errorCB);
+    function getFiches(tx) {
+        tx.executeSql('SELECT * FROM fiche', [],
+        function(tx, results) {
+
+            for (var i=0; i<results.rows.length; i++) {
+                // Each row is a standard JavaScript array indexed by
+                // column names.
+                var row = results.rows.item(i);
+                console.log(row['id'] + " // " + row['isbn'] + " // " + row['tag'] + " // " + row['note']);
+            }
+        }, errorCB);
     }
 
     // Query the insert tag
     //
     function insertTag(tx) {
         var t = $('#tag').val();
-        tx.executeSql('INSERT INTO TAG (data) VALUES ("' +t+ '")', [], querySuccess, errorCB);
+        tx.executeSql('SELECT * FROM tag WHERE name = "' +t+ '"', [],
+            function(tx, result) {
+                if (result.rows.length != 0) {
+                    console.log(result.rows.length + ' match found');
+                    return false;
+                }
+                console.log(result.rows.length + ' match found');
+                tx.executeSql('INSERT INTO tag (name) VALUES ( ? )', [ t ], querySuccess, errorCB);
+            },
+            errorCB);
     }
 
-    // Query the success callback
+    // Query the insert fiche
     //
-    function queryTagSuccess(tx, results) {
-        console.log("Returned rows = " + results.rows.length);
-        if (results.rows.length == 0) {
-            console.log(results.rows.length + ' match found');
-            return true;
-        }
-
-        // this will be true since it was a select statement and so rowsAffected was 0
-        if (!results.rowsAffected) {
-            console.log('No rows affected!');
-            return false;
-        }
-        // for an insert statement, this property will return the ID of the last inserted row
-        console.log("Last inserted row ID = " + results.insertId);
+    function insertFiche2(tx) {
+        var t = $('#tag').val();
+        tx.executeSql('SELECT id FROM tag WHERE name = "' +t+ '"', [],
+            function(tx, result) {
+                if (result.rows.length != 0) {
+                    console.log(result.rows.length + ' match found');
+                    return false;
+                }
+                console.log(result.rows.length + ' match found');
+                var t1 = $('#isbn').val(),
+                    t2 = results.rows.item(0),
+                    t3 = $('#note').val();
+                    console.log("inserFiche data (isbn, tag, note): " + t1 + ", " + t2 + ", " + t3);
+                    tx.executeSql('INSERT INTO fiche (isbn, tag_id, note) VALUES ( ?, ?, ? )', [ t1, t2, t3 ], querySuccess, errorCB);
+            },
+            errorCB);
+    }
+    function insertFiche(tx) {
+        var t1 = $('#isbn').val(),
+            t2 = $('#tag').val(),
+            t3 = $('#book_note').html();
+        console.log("inserFiche data (isbn, tag, note): " + t1 + ", " + t2 + ", " + t3);
+        tx.executeSql('INSERT INTO fiche (isbn, tag, note) VALUES ( ?, ?, ? )', [ t1, t2, t3 ], querySuccess, errorCB);
+    }
+    function showFiches() {
+        db.transaction(getFiches, errorCB, successCB);
     }
 
     // Query the success callback
@@ -255,15 +288,14 @@ function onDeviceReady() {
 
     // Transaction error callback
     //
-    function errorCB(err) {
-        console.log("Error processing SQL: "+err.code);
+    function errorCB(error) {
+        console.log('Error: '+error.message+' (Code '+error.code+')');
     }
 
     // Transaction success callback
     //
     function successCB() {
-        var db = window.openDatabase("Database", "1.0", "Bibup", 200000);
-        db.transaction(queryDB, errorCB);
+        console.log("Success.");
     }
 /* ----------- DATABASE /end -------------*/
 
@@ -307,6 +339,8 @@ function sendForm() {
     elt = $('#capture1').attr('src');
     elt2 = $('#capture2').attr('src');
     basic_img = "images/button_citation_pressed3.png";
+    var book_note = $('#note').val();
+    $('#book_note').html(book_note);
 
     if (elt == basic_img && elt2 == basic_img) {
         var form = $('#bibupform');
@@ -319,6 +353,7 @@ function sendForm() {
         .done(function() {
             // hide loader msg
             $.mobile.loading('hide');
+            db.transaction(insertFiche, errorCB, successCB);
             showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
             cleanScanData();
             goTo('#home');
@@ -424,6 +459,7 @@ function win2(r) {
     uniqid = null;
     refState = "sent";
     $.mobile.loading('hide');
+    db.transaction(insertFiche, errorCB, successCB);
     showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
     cleanScanData();
     refState = "none";
@@ -678,7 +714,8 @@ function cleanScanData() {
 
     // clean note field
     $('#note').val('');
-    $( "#note" ).html('');
+    $('#note').html('');
+    $('#book_note').html('');
 
     $( '#scanbook' ).show();
     cleanData = true;
@@ -725,9 +762,7 @@ function manualCode() {
 
 function setTag( data ) {
     $('#tag').attr( { value: data });
-    db.transaction(queryTag, errorCB, successCB);
-    db.transaction(queryTag, errorCB, function() { if (successCB) { db.transaction(insertTag, errorCB, successCB); } });
-    // db.transaction(insertTag, errorCB, successCB);
+    db.transaction(insertTag, errorCB, successCB);
 }
 
 

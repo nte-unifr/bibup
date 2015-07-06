@@ -19,6 +19,12 @@
         /*h1, h2 {text-align: center;}*/
 
     </style>
+
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="jquerymobile/jquery.mobile-1.4.4.min.js"></script>
+    <script type="text/javascript"  src="js/jquery.form.js"></script>
+    <script type="text/javascript"  src="js/bibup.js"></script>
 </head>
 
 <body>
@@ -54,6 +60,7 @@
 -->
             <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img barcode-collapse mb10">Scan Barcode</a>
             <a href="#" onClick="collapse();" class="ui-btn ui-corner-all center num-collapse mb10">Enter ISBN/ISSN</a>
+            <a href="#" onClick="showFiches();" class="ui-btn ui-corner-all center mb10">Show books</a>
             <div class="number-collapse" style="display: none;">
                 <div class="ui-grid-a ui-grid-span">
                     <div class="ui-block-a">
@@ -154,6 +161,8 @@
                         <input type="file" name="titleSnapshot" filename="button_citation3.png" id="titleSnapshot" accept="image/*" style="display:none;" onclick="capturePhoto('capture2');">
                     </div>
                 </form>
+
+                <div id="book_note" style="display: none;"></div>
             </div>
 
         </div>
@@ -326,15 +335,6 @@
             </ol>
         </div>
     </div>
-
-
-<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
-<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="jquerymobile/jquery.mobile-1.4.4.min.js"></script>
-<script type="text/javascript"  src="js/jquery.form.js"></script>
-<script type="text/javascript"  src="js/bibup.js"></script>
-
-
 
 </body>
 </html>
