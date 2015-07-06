@@ -1,6 +1,6 @@
-// window.addEventListener('load', function() {
-//     new FastClick(document.body);
-// }, false);
+window.addEventListener('load', function() {
+    new FastClick(document.body);
+}, false);
 
 $(document).ready(function(){
     homeView();
