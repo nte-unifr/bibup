@@ -476,12 +476,13 @@ function capturePhoto( elt ) {
     destinationType: destinationType.FILE_URI });
 }
 
-// Called if something bad happens.
+// Called if something bad happens (also called if we cancel the capture!)
 //
 function onFail(message) {
     //direct call to alert can cause problems on iOS
     setTimeout(function() {
-        showNotification("Failed because: " + message, "Error");
+        // showNotification("Failed because: " + message, "Error");
+        console.log("Failed because: " + message);
     }, 0);
 }
 
@@ -675,6 +676,10 @@ function cleanScanData() {
     $('#titleSnapshot').value = 'button_citation3.png';
     $('#contentSnapshot').value = 'button_citation3.png';
 
+    // clean note field
+    $('#note').val('');
+    $( "#note" ).html('');
+
     $( '#scanbook' ).show();
     cleanData = true;
 }
@@ -763,27 +768,4 @@ function previewImage(input) {
         };
         reader.readAsDataURL(input.files[0]);
     }
-}
-
-
-function alertDismissed() {
-}
-
-
-// Show native pop up
-function tagInfo() {
-    var msg = "You will use this tag to filter your references later in the list on the Bibup website: http://www.unifr.ch/go/bibup. Use a tag that is easy for you to remember.";
-    var title = "Tag Informaiton";
-    showNotification(msg, title);
-}
-
-
-function popupTest() {
-    msg = 'You will use this tag to filter your references in the list on the Bibup website: <br /><a href="http://www.unifr.ch/go/bibup">http://www.unifr.ch/go/bibup</a>';
-    navigator.notification.alert(
-        msg,
-        alertDismissed,
-        'Popup Test',
-        'Ok'
-    );
 }
