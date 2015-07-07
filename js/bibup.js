@@ -201,7 +201,7 @@ function onDeviceReady() {
         tx.executeSql('DROP TABLE IF EXISTS tag');
         tx.executeSql('DROP TABLE IF EXISTS fiche');
         tx.executeSql('CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), tag VARCHAR(50), note VARCHAR(255))');
+        tx.executeSql("CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), title VARCHAR(250), author VARCHAR(100), tag VARCHAR(50), note VARCHAR(255), datecreated TIMESTAMP DEFAULT (datetime('now','localtime')))");
         tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
         tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
     }
@@ -215,15 +215,27 @@ function onDeviceReady() {
     // Query the database
     //
     function getFiches(tx) {
-        tx.executeSql('SELECT * FROM fiche', [],
+        var q = '';
+        if ($('#my_books li').length == 0) {
+            q = 'SELECT * FROM fiche ORDER BY id ASC';
+        } else {
+            var lastID = $('#my_books li:last-child').attr("data-ficheid");
+            console.log("Last ID: " + lastID);
+            q = 'SELECT * FROM fiche WHERE id > ' +lastID+ ' ORDER BY id ASC';
+        }
+        tx.executeSql(q, [],
         function(tx, results) {
 
             for (var i=0; i<results.rows.length; i++) {
                 // Each row is a standard JavaScript array indexed by
                 // column names.
                 var row = results.rows.item(i);
-                console.log(row['id'] + " // " + row['isbn'] + " // " + row['tag'] + " // " + row['note']);
+                console.log(row.id + " // " + row.isbn + " // " + row.title + " // " + row.author + " // " + row.datecreated + " // " + row.tag + " // " + row.note);
+                $('#my_books').append('<li data-ficheid="' +row.id+ '"><a href="#"><p>' +row.title+ ', '+row.author+'</p></a></li>');
             }
+
+            $("#my_books").listview('refresh'); //refresh content
+            $('#my_books').show();
         }, errorCB);
     }
 
@@ -262,7 +274,7 @@ function onDeviceReady() {
             },
             errorCB);
     }
-    function insertFiche(tx) {
+    function insertFiche3(tx) {
         var t1 = $('#isbn').val(),
             t2 = $('#tag').val(),
             t3 = $('#book_note').html();
@@ -270,6 +282,33 @@ function onDeviceReady() {
         console.log("inserFiche data (isbn, tag, note): " + t1 + ", " + t2 + ", " + t3);
         tx.executeSql('INSERT INTO fiche (isbn, tag, note) VALUES ( ?, ?, ? )', [ t1, t2, t3 ], querySuccess, errorCB);
     }
+    function insertFiche(success, error) {
+        db.transaction( function(tx) {
+            var t_isbn = $('#isbn').val(),
+                t_tag = $('#tag').val(),
+                t_note = $('#book_note').html(),
+                t_title = $('#book_title').html(),
+                t_author = $('#book_author').html();
+                $('#book_note').html(''); // clean div
+            console.log("insertFiche data (isbn, tag, title, author, note): " + t_isbn + " // " + t_tag + " // " + t_title + " // " + t_author + " // " + t_note);
+            tx.executeSql('INSERT INTO fiche (isbn, tag, title, author, note) VALUES ( ?, ?, ?, ?, ? )', [ t_isbn, t_tag, t_title, t_author, t_note ],
+            function() {
+                if (success) {
+                    showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
+                    cleanScanData();
+                    goTo('#home');
+                }
+            },
+            function() {
+                if (error) {
+                    console.log("Error occured during fiche insertion.");
+                }
+            });
+        });
+    }
+    var insertOk = function() { console.log("insert OK."); };
+    var insertNotOk = function() { console.log("insert not OK."); };
+
     function showFiches() {
         db.transaction(getFiches, errorCB, successCB);
     }
@@ -354,10 +393,10 @@ function sendForm() {
         .done(function() {
             // hide loader msg
             $.mobile.loading('hide');
-            db.transaction(insertFiche, errorCB, successCB);
-            showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
-            cleanScanData();
-            goTo('#home');
+            insertFiche(insertOk, insertNotOk);
+            // showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
+            // cleanScanData();
+            // goTo('#home');
         })
         .fail(function() {
             showNotification("Something went wrong. Please, try again.", "Error");
@@ -460,11 +499,12 @@ function win2(r) {
     uniqid = null;
     refState = "sent";
     $.mobile.loading('hide');
-    db.transaction(insertFiche, errorCB, successCB);
-    showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
-    cleanScanData();
-    refState = "none";
-    goTo('#home');
+    insertFiche(insertOk, insertNotOk);
+    // db.transaction(insertFiche, errorCB, successCB);
+    // showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
+    // cleanScanData();
+    // refState = "none";
+    // goTo('#home');
 }
 function fail(error) {
     var states = {};
@@ -716,7 +756,7 @@ function cleanScanData() {
     // clean note field
     $('#note').val('');
     $('#note').html('');
-    // book_note is cleaned after sucess of insetion in DB (see insertFiche)
+    $('#book_note').html('');
 
     $( '#scanbook' ).show();
     cleanData = true;
@@ -758,6 +798,11 @@ function manualCode() {
     } else {
         showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
     }
+}
+
+function showReference( code ) {
+    // TODO: display data for reference stored on device
+
 }
 
 

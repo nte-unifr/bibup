@@ -24,6 +24,7 @@
     <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="jquerymobile/jquery.mobile-1.4.4.min.js"></script>
     <script type="text/javascript"  src="js/jquery.form.js"></script>
+    <script type="text/javascript"  src="js/fastclick/lib/fastclick.js"></script>
     <script type="text/javascript"  src="js/bibup.js"></script>
 </head>
 
@@ -97,6 +98,10 @@
             <h1>Book information</h1>
         </div>
         <div role="main" class="ui-content">
+
+            <ul data-role="listview" id="my_books" style="display: none;">
+            </ul>
+
             <div id="scanbook">
                 <p class="big-msg">
                     No book scanned
@@ -198,6 +203,37 @@
             </div><!-- /navbar -->
         </div>
     </div>
+
+
+
+
+    <!-- Page showing information about stored references on device -->
+    <div data-role="page" id="reference" data-theme="a">
+        <div data-role="header" data-add-back-btn="true" data-position="fixed">
+            <h1>My Reference</h1>
+        </div>
+        <div role="main" class="ui-content">
+
+            <img src="" alt="" id="rbook_cover" style="display: none; display: block; margin: 0 auto; margin-bottom: 10%;" />
+
+            <ul data-role="listview" id="rbook" style="display: none;">
+                <li data-role="list-divider">Title</li>
+                <li id="rbook_title"></li>
+                <li id="rbook_subtitle" style="display: none; font-style: italic;"></li>
+                <li data-role="list-divider">Author(s)</li>
+                <li id="rbook_author"></li>
+                <li data-role="list-divider">Year</li>
+                <li id="rbook_year"></li>
+                <li data-role="list-divider">Language</li>
+                <li id="rbook_lang"></li>
+                <li data-role="list-divider">Publisher</li>
+                <li id="rbook_publisher"></li>
+                <li data-role="list-divider" id="book_isbn_type">ISBN</li>
+                <li id="rbook_isbn_data"></li>
+            </ul>
+        </div>
+    </div>
+
 
 
 
