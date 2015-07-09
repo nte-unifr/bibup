@@ -6,7 +6,8 @@ window.addEventListener('load', function() {
 $(document).ready(function(){
     homeView();
     $('.p-home').on('tap', renderHomeView);
-    $('.p-scan').on('tap', renderScanView);
+    //$('.p-scan').on('tap', renderScanView);
+    $('.p-book_list').on('tap', renderBookListView);
     $('.p-about').on('tap', renderAboutView);
 
     $('[data-role=footer]').addClass("ui-footer ui-bar-a");
@@ -51,8 +52,8 @@ $( document ).on( "pagecontainershow", function ( event, ui ) {
 // Support for swipe gesture between pages
 $(document).on('swipeleft', function(){
     if (activePage == 'home') {
-        $.mobile.changePage("#scan", { transition: "slide"});
-    } else if (activePage == 'scan') {
+        $.mobile.changePage("#book_list", { transition: "slide"});
+    } else if (activePage == 'book_list') {
         $.mobile.changePage("#about", { transition: "slide"});
     } else if (activePage == 'about') {
         //do nothing
@@ -63,10 +64,10 @@ $(document).on('swipeleft', function(){
 $(document).on('swiperight', function(){
     if (activePage == 'home') {
         //do nothing
-    } else if (activePage == 'scan') {
+    } else if (activePage == 'book_list') {
         $.mobile.changePage("#home", { transition: "slide", reverse: true});
     } else if (activePage == 'about') {
-        $.mobile.changePage("#scan", { transition: "slide", reverse: true});
+        $.mobile.changePage("#book_list", { transition: "slide", reverse: true});
     } else {
         //do nothing
     }
@@ -77,8 +78,8 @@ $(document).on('swiperight', function(){
 function renderHomeView(event) {
     homeView();
 }
-function renderScanView(event) {
-    scanView();
+function renderBookListView(event) {
+    bookListView();
 }
 function renderAboutView(event) {
     aboutView();
@@ -89,17 +90,17 @@ function renderAboutView(event) {
 //
 function homeView(event) {
     // active state for navbar
-    $('#home .p-home, #home .p-scan, #home .p-about').removeClass("ui-btn-active");
+    $('#home .p-home, #home .p-book_list, #home .p-about').removeClass("ui-btn-active");
     $('#home .p-home').addClass("ui-btn-active");
 }
-function scanView(event) {
+function bookListView(event) {
     // active state for navbar
-    $('#scan .p-home, #scan .p-scan, #scan .p-about').removeClass("ui-btn-active");
-    $('#scan .p-scan').addClass("ui-btn-active");
+    $('#scan .p-home, #book_list .p-book_list, #book_list .p-about').removeClass("ui-btn-active");
+    $('#scan .p-book_list').addClass("ui-btn-active");
 }
 function aboutView(event) {
     // active state for navbar
-    $('#about .p-home, #about .p-scan, #about .p-about').removeClass("ui-btn-active");
+    $('#about .p-home, #about .p-book_list, #about .p-about').removeClass("ui-btn-active");
     $('#about .p-about').addClass("ui-btn-active");
 }
 
@@ -167,7 +168,6 @@ var destinationType; // sets the format of returned value
 var captureID = 'capture1';
 var devicePlatform;  // device platform: iOS or Android
 var db; // access database
-var cleanData = true; // true if no data in Book Info, false otherwise
 var marc_lang = {
     "eng": "English",
     "fre": "French",
@@ -204,6 +204,7 @@ function onDeviceReady() {
         tx.executeSql("CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), title VARCHAR(250), author VARCHAR(100), tag VARCHAR(50), note VARCHAR(255), datecreated TIMESTAMP DEFAULT (datetime('now','localtime')))");
         tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
         tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
+        tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("9781565921320", "Using csh and tcshh", "Paul DuBois.", "testna", "test note for csh and tcsh")');
     }
 
     // Query the database
@@ -216,28 +217,53 @@ function onDeviceReady() {
     //
     function getFiches(tx) {
         var q = '';
+        var list_empty = true;
         if ($('#my_books li').length == 0) {
-            q = 'SELECT * FROM fiche ORDER BY id ASC';
+            q = 'SELECT * FROM fiche ORDER BY id DESC';
+            list_empty = true;
         } else {
-            var lastID = $('#my_books li:last-child').attr("data-ficheid");
+            var lastID = $('#my_books li:first-child').attr("data-ficheid");
             console.log("Last ID: " + lastID);
             q = 'SELECT * FROM fiche WHERE id > ' +lastID+ ' ORDER BY id ASC';
+            list_empty = false;
         }
         tx.executeSql(q, [],
         function(tx, results) {
 
             for (var i=0; i<results.rows.length; i++) {
-                // Each row is a standard JavaScript array indexed by
-                // column names.
+                // Each row is a standard JavaScript array indexed by column names.
                 var row = results.rows.item(i);
                 console.log(row.id + " // " + row.isbn + " // " + row.title + " // " + row.author + " // " + row.datecreated + " // " + row.tag + " // " + row.note);
-                $('#my_books').append('<li data-ficheid="' +row.id+ '"><a href="#"><p>' +row.title+ ', '+row.author+'</p></a></li>');
+                var elt = '<li data-ficheid="' +row.id+ '"><a href="#" onclick="showBookInfo(' + row.id + ', ' + row.isbn + ');"><p>' +row.title+ ', '+row.author+'</p></a></li>';
+                if (list_empty == true) {
+                    $('#my_books').append(elt);
+                } else {
+                    $('#my_books').prepend(elt);
+                }
+
             }
 
             $("#my_books").listview('refresh'); //refresh content
             $('#my_books').show();
         }, errorCB);
     }
+
+
+    function getNoteFromFiche(id) {
+        db.transaction( function(tx) {
+            var query = 'SELECT note FROM fiche WHERE id = ' + id;
+            tx.executeSql(query, [],
+            function(tx, results) {
+
+                for (var i=0; i<results.rows.length; i++) {
+                    // Each row is a standard JavaScript array indexed by column names.
+                    var row = results.rows.item(i);
+                    $('#book_info [data-book="note"]').html( row.note );
+                }
+            }, errorCB);
+        });
+    }
+
 
     // Query the insert tag
     //
@@ -257,45 +283,20 @@ function onDeviceReady() {
 
     // Query the insert fiche
     //
-    function insertFiche2(tx) {
-        var t = $('#tag').val();
-        tx.executeSql('SELECT id FROM tag WHERE name = "' +t+ '"', [],
-            function(tx, result) {
-                if (result.rows.length != 0) {
-                    console.log(result.rows.length + ' match found');
-                    return false;
-                }
-                console.log(result.rows.length + ' match found');
-                var t1 = $('#isbn').val(),
-                    t2 = results.rows.item(0),
-                    t3 = $('#note').val();
-                    console.log("inserFiche data (isbn, tag, note): " + t1 + ", " + t2 + ", " + t3);
-                    tx.executeSql('INSERT INTO fiche (isbn, tag_id, note) VALUES ( ?, ?, ? )', [ t1, t2, t3 ], querySuccess, errorCB);
-            },
-            errorCB);
-    }
-    function insertFiche3(tx) {
-        var t1 = $('#isbn').val(),
-            t2 = $('#tag').val(),
-            t3 = $('#book_note').html();
-            $('#book_note').html(''); // clean div
-        console.log("inserFiche data (isbn, tag, note): " + t1 + ", " + t2 + ", " + t3);
-        tx.executeSql('INSERT INTO fiche (isbn, tag, note) VALUES ( ?, ?, ? )', [ t1, t2, t3 ], querySuccess, errorCB);
-    }
     function insertFiche(success, error) {
         db.transaction( function(tx) {
             var t_isbn = $('#isbn').val(),
                 t_tag = $('#tag').val(),
                 t_note = $('#book_note').html(),
-                t_title = $('#book_title').html(),
-                t_author = $('#book_author').html();
+                t_title = $('#scan [data-book="title"]').html(),
+                t_author = $('#scan [data-book="author"]').html();
                 $('#book_note').html(''); // clean div
             console.log("insertFiche data (isbn, tag, title, author, note): " + t_isbn + " // " + t_tag + " // " + t_title + " // " + t_author + " // " + t_note);
             tx.executeSql('INSERT INTO fiche (isbn, tag, title, author, note) VALUES ( ?, ?, ?, ?, ? )', [ t_isbn, t_tag, t_title, t_author, t_note ],
             function() {
                 if (success) {
                     showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
-                    cleanScanData();
+                    cleanScanData('#scan');
                     goTo('#home');
                 }
             },
@@ -567,7 +568,7 @@ function scanCodeSB() {
     cordova.plugins.barcodeScanner.scan( function(result) {
             if (result.text != '') {
                 $( "#isbn" ).html( result.text );
-                getInfoFromCode( result.text );
+                getInfoFromCode( result.text, '#scan' );
             } else { // go back to home page if scan is discarded
                 goTo('#home');
             }
@@ -609,9 +610,16 @@ function openUrl( url ) {
 }
 
 
-function getInfoFromCode( code ) {
+function showBookInfo( id, isbn ) {
+    getNoteFromFiche(id);
+    getInfoFromCode(isbn.toString(), '#book_info');
+}
+
+
+function getInfoFromCode( code, page ) {
+    var cleanData = $( page ).data("clean");
     if (cleanData == false) {
-        cleanScanData(); // clean Book Info before getting new data
+        cleanScanData( page ); // clean Book Info before getting new data
     }
     $('#isbn').attr( { value: code });
     var codeType;
@@ -620,6 +628,7 @@ function getInfoFromCode( code ) {
     console.log("Code: " + code);
     console.log("Code (0-3): " + x);
     if ( (code.length == 10) || ((code.length == 13) && (x == "978")) ) {
+        console.log("isbn ok");
         codeType = "isbn";
         format = true;
     } else if ( (code.length == 8) || ((code.length == 13) && (x == "977")) ) {
@@ -632,6 +641,7 @@ function getInfoFromCode( code ) {
 
     //valid format
     if (format == true) {
+        console.log("format checked: OK");
         console.log("http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json");
         $.getJSON( "http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json", function( data ) {
             console.log(data);
@@ -643,7 +653,7 @@ function getInfoFromCode( code ) {
                 refState = "none";
             } else if ( data.stat == "ok") {
                 refState = "not sent";
-                displayData( data, codeType );
+                displayData( data, codeType, page );
             }
         })
         .fail( function( error ) { showNotification("Verify your network connexion.", "Error"); });
@@ -656,9 +666,11 @@ function getInfoFromCode( code ) {
 }
 
 
-function displayData( data, type ) {
+function displayData( data, type, page ) {
+    console.log("displayData");
+    var cleanData = $( page ).data("clean");
     if (cleanData == false) {
-        cleanScanData(); // clean Book Info before displaying data
+        cleanScanData( page ); // clean Book Info before displaying data
     }
 
     if (type == "isbn") {
@@ -666,112 +678,125 @@ function displayData( data, type ) {
         $.get( "https://www.googleapis.com/books/v1/volumes?q=isbn:" + data.list[0].isbn, function( gdata ) {
             if ( gdata.totalItems != 0 ) {
                 if ( gdata.items[0].volumeInfo.imageLinks != null ) {
-                    $( "#book_cover" ).attr( { src: gdata.items[0].volumeInfo.imageLinks.thumbnail } );
-                    $( "#book_cover" ).show();
+                    $( page + ' [data-book="cover"]' ).attr( { src: gdata.items[0].volumeInfo.imageLinks.thumbnail } );
+                    $( page + ' [data-book="cover"]' ).show();
                 }
             }
         });
 
         var sub = data.list[0].title.split(":");
         if ( sub.length == 2 ) {
-            $( "#book_title" ).html( sub[0].trim() );
-            $( "#book_subtitle" ).html( sub[1].trim() );
-            $( "#book_subtitle" ).show();
+            $( page + ' [data-book="title"]' ).html( sub[0].trim() );
+            $( page + ' [data-book="subtitle"]' ).html( sub[1].trim() );
+            $( page + ' [data-book="subtitle"]' ).show();
         } else {
-            $( "#book_title" ).html( data.list[0].title );
+            $( page + ' [data-book="title"]' ).html( data.list[0].title );
         }
-        $( "#book_author" ).html( data.list[0].author );
-        $( "#book_author" ).show();
-        $( "#book_author" ).prev().show();
+        $( page + ' [data-book="author"]' ).html( data.list[0].author );
+        $( page + ' [data-book="author"]' ).show();
+        $( page + ' [data-book="author"]' ).prev().show();
 
-        $( "#book_publisher" ).html( data.list[0].publisher );
+        $( page + ' [data-book="publisher"]' ).html( data.list[0].publisher );
 
-        $( "#book_year" ).html( data.list[0].year );
-        $( "#book_year" ).show();
-        $( "#book_year" ).prev().show();
+        $( page + ' [data-book="year"]' ).html( data.list[0].year );
+        $( page + ' [data-book="year"]' ).show();
+        $( page + ' [data-book="year"]' ).prev().show();
 
         if (data.list[0].lang in marc_lang) {
-            $( "#book_lang" ).html( marc_lang[data.list[0].lang] );
+            $( page + ' [data-book="lang"]' ).html( marc_lang[data.list[0].lang] );
         } else {
-            $( "#book_lang" ).html( data.list[0].lang.toUppercase() );
+            $( page + ' [data-book="lang"]' ).html( data.list[0].lang.toUppercase() );
         }
-        $( "#book_lang" ).show();
-        $( "#book_lang" ).prev().show();
+        $( page + ' [data-book="lang"]' ).show();
+        $( page + ' [data-book="lang"]' ).prev().show();
 
-        $( "#book_isbn_type" ).html( "ISBN" );
-        $( "#book_isbn_data" ).html( data.list[0].isbn );
+        $( page + ' [data-book="isbn_type"]' ).html( "ISBN" );
+        $( page + ' [data-book="isbn_data"]' ).html( data.list[0].isbn );
 
 
     } else if (type == "issn") {
-        $( "#book_title" ).html( data.group[0].list[0].title );
+        $( page + ' [data-book="title"]' ).html( data.group[0].list[0].title );
 
-        $( "#book_author" ).html('');
-        $( "#book_author" ).hide();
-        $( "#book_author" ).prev().hide();
+        $( page + ' [data-book="author"]' ).html('');
+        $( page + ' [data-book="author"]' ).hide();
+        $( page + ' [data-book="author"]' ).prev().hide();
 
-        $( "#book_publisher" ).html( data.group[0].list[0].publisher );
+        $( page + ' [data-book="publisher"]' ).html( data.group[0].list[0].publisher );
 
-        $( "#book_year" ).html('');
-        $( "#book_year" ).hide();
-        $( "#book_year" ).prev().hide();
+        $( page + ' [data-book="year"]' ).html('');
+        $( page + ' [data-book="year"]' ).hide();
+        $( page + ' [data-book="year"]' ).prev().hide();
 
-        $( "#book_lang" ).html('');
-        $( "#book_lang" ).hide();
-        $( "#book_lang" ).prev().hide();
+        $( page + ' [data-book="lang"]' ).html('');
+        $( page + ' [data-book="lang"]' ).hide();
+        $( page + ' [data-book="lang"]' ).prev().hide();
 
-        $( "#book_isbn_type" ).html( "ISSN" );
-        $( "#book_isbn_data" ).html( data.group[0].list[0].issn );
+        $( page + ' [data-book="isbn_type"]' ).html( "ISSN" );
+        $( page + ' [data-book="isbn_data"]' ).html( data.group[0].list[0].issn );
     }
 
-    $( "#book" ).show();
-    $( "#ocr" ).show();
-    $( "#submit" ).removeClass( 'ui-disabled' )
-    $( '#submit' ).show();
-    $( "#scanbook" ).hide();
-    cleanData = false;
-    goTo("#scan");
+    if (page == '#scan') {
+        $( "#book" ).show();
+        $( "#ocr" ).show();
+        $( "#submit" ).removeClass( 'ui-disabled' )
+        $( '#submit' ).show();
+        $( "#scanbook" ).hide();
+    }
+
+    $( page ).data("clean", false);
+    goTo(page);
 }
 
 
-function cleanScanData() {
+function cleanScanData( page ) {
     refState = "none";
-    $( "#book_subtitle" ).html('');
-    $( "#book_subtitle" ).hide();
-    $( "#book_cover" ).hide();
-    $( "#book" ).hide();
+    $( page + ' [data-book="title"]' ).html('');
+    $( page + ' [data-book="subtitle"]' ).html('');
+    $( page + ' [data-book="subtitle"]' ).hide();
+    $( page + ' [data-book="author"]' ).html('');
+    $( page + ' [data-book="publisher"]' ).html('');
+    $( page + ' [data-book="year"]' ).html('');
+    $( page + ' [data-book="lang"]' ).html('');
+    $( page + ' [data-book="isbn_data"]' ).html('');
+    $( page + ' [data-book="cover"]' ).hide();
 
-    // reset capture
-    $( "#capture1" ).attr( { src: 'images/button_citation_pressed3.png' } );
-    $( "#capture2" ).attr( { src: 'images/button_citation_pressed3.png' } );
+    if (page == '#scan') {
+        $( "#book" ).hide();
 
-    // disable submit
-    $( '#submit' ).addClass('ui-disabled');
-    $( '#submit' ).hide();
-    $( '#ocr' ).hide();
+        // reset capture
+        $( "#capture1" ).attr( { src: 'images/button_citation_pressed3.png' } );
+        $( "#capture2" ).attr( { src: 'images/button_citation_pressed3.png' } );
 
-    // reinitialize filenames for form input file
-    $('#titleSnapshot').value = 'button_citation3.png';
-    $('#contentSnapshot').value = 'button_citation3.png';
+        // disable submit
+        $( '#submit' ).addClass('ui-disabled');
+        $( '#submit' ).hide();
+        $( '#ocr' ).hide();
 
-    // clean note field
-    $('#note').val('');
-    $('#note').html('');
-    $('#book_note').html('');
+        // reinitialize filenames for form input file
+        $('#titleSnapshot').value = 'button_citation3.png';
+        $('#contentSnapshot').value = 'button_citation3.png';
 
-    $( '#scanbook' ).show();
-    cleanData = true;
+        // clean note field
+        $('#note').val('');
+        $('#note').html('');
+        $('#book_note').html('');
+
+        $( '#scanbook' ).show();
+    }
+
+    $( page ).data("clean", true);
 }
 
 
-function testCode() {
-    getInfoFromCode('1430239034');
-}
+// function testCode() {
+//     getInfoFromCode('1430239034');
+// }
 
 
 function manualCodeCB() {
     if ($('#manualisbn').val()) {
         var code = $('#manualisbn').val();
-        getInfoFromCode(code);
+        getInfoFromCode(code, '#scan');
     } else {
         showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
     }
@@ -798,11 +823,6 @@ function manualCode() {
     } else {
         showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
     }
-}
-
-function showReference( code ) {
-    // TODO: display data for reference stored on device
-
 }
 
 

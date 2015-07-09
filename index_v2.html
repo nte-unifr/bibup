@@ -84,7 +84,8 @@
             <div data-role="navbar">
                 <ul>
                     <li><a href="#home" class="p-home ui-state-persist" data-icon="home">Home</a></li>
-                    <li><a href="#scan" data-icon="eye" class="p-scan" data-transition="slide">Book Info</a></li>
+                    <!--<li><a href="#scan" data-icon="eye" class="p-scan" data-transition="slide">Book Info</a></li>-->
+                    <li><a href="#book_list" data-icon="eye" class="p-book_list" data-transition="slide">Book List</a></li>
                     <li><a href="#about" data-icon="info" class="p-about" data-transition="slide">About</a></li>
                 </ul>
             </div><!-- /navbar -->
@@ -94,13 +95,12 @@
 
 
     <div data-role="page" id="scan" data-theme="a">
-        <div data-role="header">
-            <h1>Book information</h1>
+        <div data-role="header" data-add-back-btn="true" data-position="fixed">
+            <h1>Result</h1>
         </div>
         <div role="main" class="ui-content">
-
-            <ul data-role="listview" id="my_books" style="display: none;">
-            </ul>
+            <div data-clean="true" style="display: none;"></div>
+            <div data-refstate="none" style="display: none;"></div>
 
             <div id="scanbook">
                 <p class="big-msg">
@@ -109,22 +109,22 @@
                 <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all">Scan barcode</a>
             </div>
 
-            <img src="" alt="" id="book_cover" style="display: none; display: block; margin: 0 auto; margin-bottom: 10%;" />
+            <img src="" alt="" data-book="cover" style="display: none; display: block; margin: 0 auto; margin-bottom: 10%;" />
 
             <ul data-role="listview" id="book" style="display: none;">
                 <li data-role="list-divider">Title</li>
-                <li id="book_title"></li>
-                <li id="book_subtitle" style="display: none; font-style: italic;"></li>
+                <li data-book="title"></li>
+                <li data-book="subtitle" style="display: none; font-style: italic;"></li>
                 <li data-role="list-divider">Author(s)</li>
-                <li id="book_author"></li>
+                <li data-book="author"></li>
                 <li data-role="list-divider">Year</li>
-                <li id="book_year"></li>
+                <li data-book="year"></li>
                 <li data-role="list-divider">Language</li>
-                <li id="book_lang"></li>
+                <li data-book="lang"></li>
                 <li data-role="list-divider">Publisher</li>
-                <li id="book_publisher"></li>
-                <li data-role="list-divider" id="book_isbn_type">ISBN</li>
-                <li id="book_isbn_data"></li>
+                <li data-book="publisher"></li>
+                <li data-role="list-divider" data-book="isbn_type">ISBN</li>
+                <li data-book="isbn_data"></li>
             </ul> <br />
 
             <div id="ocr" style="display: none;">
@@ -171,14 +171,63 @@
             </div>
 
         </div>
+    </div>
+
+    <!-- Page showing information book list stored on device -->
+    <div data-role="page" id="book_list" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>Book List</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <div id="no-book-list">
+                <p class="big-msg">
+                    No book
+                </p>
+            </div>
+            <ul data-role="listview" id="my_books">
+            </ul>
+
+            <a href="#book_info" class="ui-btn ui-corner-all">Book Info</a>
+        </div>
         <div data-role="footer" data-id="f1" data-position="fixed">
             <div data-role="navbar">
                 <ul>
                     <li><a href="#home" data-icon="home" class="p-home" data-transition="slide" data-direction="reverse">Home</a></li>
-                    <li><a href="#scan" class="p-scan ui-state-persist" data-icon="eye">Book Info</a></li>
+                    <!--<li><a href="#scan" class="p-scan ui-state-persist" data-icon="eye">Book Info</a></li>-->
+                    <li><a href="#book_list" class="p-book_list ui-state-persist" data-icon="eye">Book List</a></li>
                     <li><a href="#about" data-icon="info" class="p-about" data-transition="slide">About</a></li>
                 </ul>
             </div><!-- /navbar -->
+        </div>
+    </div>
+
+    <!-- Page showing information about stored references on device -->
+    <div data-role="page" id="book_info" data-theme="a">
+        <div data-role="header" data-add-back-btn="true" data-position="fixed">
+            <h1>Book Information</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <div data-clean="true" style="display: none;"></div>
+
+            <img src="" alt="" data-book="cover" style="display: none; display: block; margin: 0 auto; margin-bottom: 10%;" />
+
+            <ul data-role="listview">
+                <li data-role="list-divider">Title</li>
+                <li data-book="title"></li>
+                <li data-book="subtitle" style="display: none; font-style: italic;"></li>
+                <li data-role="list-divider">Author(s)</li>
+                <li data-book="author"></li>
+                <li data-role="list-divider">Year</li>
+                <li data-book="year"></li>
+                <li data-role="list-divider">Language</li>
+                <li data-book="lang"></li>
+                <li data-role="list-divider">Publisher</li>
+                <li data-book="publisher"></li>
+                <li data-role="list-divider" data-book="isbn_type">ISBN</li>
+                <li data-book="isbn_data"></li>
+                <li data-role="list-divider">Note</li>
+                <li data-book="note"></li>
+            </ul>
         </div>
     </div>
 
@@ -197,7 +246,8 @@
             <div data-role="navbar">
                 <ul>
                     <li><a href="#home" data-icon="home" class="p-home" data-transition="slide" data-direction="reverse">Home</a></li>
-                    <li><a href="#scan" data-icon="eye" class="p-scan" data-transition="slide" data-direction="reverse">Book Info</a></li>
+                    <!--<li><a href="#scan" data-icon="eye" class="p-scan" data-transition="slide" data-direction="reverse">Book Info</a></li>-->
+                    <li><a href="#book_list" class="p-book_list" data-transition="slide" data-direction="reverse" data-icon="eye">Book List</a></li>
                     <li><a href="#about" class="p-about ui-state-persist" data-icon="info">About</a></li>
                 </ul>
             </div><!-- /navbar -->
@@ -207,32 +257,7 @@
 
 
 
-    <!-- Page showing information about stored references on device -->
-    <div data-role="page" id="reference" data-theme="a">
-        <div data-role="header" data-add-back-btn="true" data-position="fixed">
-            <h1>My Reference</h1>
-        </div>
-        <div role="main" class="ui-content">
 
-            <img src="" alt="" id="rbook_cover" style="display: none; display: block; margin: 0 auto; margin-bottom: 10%;" />
-
-            <ul data-role="listview" id="rbook" style="display: none;">
-                <li data-role="list-divider">Title</li>
-                <li id="rbook_title"></li>
-                <li id="rbook_subtitle" style="display: none; font-style: italic;"></li>
-                <li data-role="list-divider">Author(s)</li>
-                <li id="rbook_author"></li>
-                <li data-role="list-divider">Year</li>
-                <li id="rbook_year"></li>
-                <li data-role="list-divider">Language</li>
-                <li id="rbook_lang"></li>
-                <li data-role="list-divider">Publisher</li>
-                <li id="rbook_publisher"></li>
-                <li data-role="list-divider" id="book_isbn_type">ISBN</li>
-                <li id="rbook_isbn_data"></li>
-            </ul>
-        </div>
-    </div>
 
 
 
