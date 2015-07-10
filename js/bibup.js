@@ -176,7 +176,6 @@ var marc_lang = {
     "gsw": "Swiss german",
     "spa": "Spanish"
 };
-var refState = "none"; //none: no ref scanned, not sent: ref scanned but not sent or sent: ref scanned and sent (will immediately set to none...)
 var uniqid = null; //unique id from bibup db server
 
 
@@ -395,9 +394,6 @@ function sendForm() {
             // hide loader msg
             $.mobile.loading('hide');
             insertFiche(insertOk, insertNotOk);
-            // showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
-            // cleanScanData();
-            // goTo('#home');
         })
         .fail(function() {
             showNotification("Something went wrong. Please, try again.", "Error");
@@ -498,14 +494,9 @@ function win2(r) {
     // alert("Response = " + r.response);
     // alert("Sent = " + r.bytesSent);
     uniqid = null;
-    refState = "sent";
+    $('[data-refstate]').data("refstate", "sent");
     $.mobile.loading('hide');
     insertFiche(insertOk, insertNotOk);
-    // db.transaction(insertFiche, errorCB, successCB);
-    // showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
-    // cleanScanData();
-    // refState = "none";
-    // goTo('#home');
 }
 function fail(error) {
     var states = {};
@@ -522,7 +513,7 @@ function fail(error) {
         showNotification("Something went wrong. Please, try again.", "Error");
     }
 
-    refState = "not sent";
+    $('#scan').data("refstate", "not sent");
 }
 
 // Called when a photo is successfully retrieved
@@ -580,10 +571,9 @@ function scanCodeSB() {
 }
 
 function scanCode() {
-    console.log("Ref state: " + refState);
-
+    var refstate = $('[data-refstate]').data("refstate");
     if ($('#tag').attr('value')) {
-        if (refState == "not sent") { //there is a reference that has not been sent yet
+        if (refstate == "not sent") { //there is a reference that has not been sent yet
             var message = "You have a reference that has not been submitted to Bibup yet, you will lose this reference if you scan another book. Do you want to continue?";
             navigator.notification.confirm(message,
                 function(i) {
@@ -592,7 +582,7 @@ function scanCode() {
                         scanCodeSB();
                     } else {
                         console.log("Confirm, selected: " + i);
-                        goTo("#home");
+                        goTo("#scan");
                     }
                 }, "WARNING", ['Yes','No']);
         } else {
@@ -612,12 +602,13 @@ function openUrl( url ) {
 
 function showBookInfo( id, isbn ) {
     getNoteFromFiche(id);
+    console.log("isbn in showbook: " + isbn.toString());
     getInfoFromCode(isbn.toString(), '#book_info');
 }
 
 
 function getInfoFromCode( code, page ) {
-    var cleanData = $( page ).data("clean");
+    var cleanData = $( page + ' [data-clean]' ).data("clean");
     if (cleanData == false) {
         cleanScanData( page ); // clean Book Info before getting new data
     }
@@ -628,7 +619,6 @@ function getInfoFromCode( code, page ) {
     console.log("Code: " + code);
     console.log("Code (0-3): " + x);
     if ( (code.length == 10) || ((code.length == 13) && (x == "978")) ) {
-        console.log("isbn ok");
         codeType = "isbn";
         format = true;
     } else if ( (code.length == 8) || ((code.length == 13) && (x == "977")) ) {
@@ -641,18 +631,16 @@ function getInfoFromCode( code, page ) {
 
     //valid format
     if (format == true) {
-        console.log("format checked: OK");
-        console.log("http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json");
         $.getJSON( "http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json", function( data ) {
-            console.log(data);
+            console.log("WC status: " + data.stat);
             if ( data.stat == "unknownId" ) {
                 showNotification("No book found.", "Sorry");
-                refState = "none";
+                if (page == '#scan') { $('[data-refstate]').data("refstate", "none"); }
             } else if ( data.stat == "invalidId" ) {
                 showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
-                refState = "none";
+                if (page == '#scan') { $('[data-refstate]').data("refstate", "none"); }
             } else if ( data.stat == "ok") {
-                refState = "not sent";
+                if (page == '#scan') { $('[data-refstate]').data("refstate", "not sent"); }
                 displayData( data, codeType, page );
             }
         })
@@ -660,15 +648,14 @@ function getInfoFromCode( code, page ) {
     } else {
         //invalid format
         showNotification("Please, enter a valid ISBN/ISSN. A valid ISBN/ISSN contains either 8, 10 or 13 digits.", "Invalid Field");
-        refState = "none";
+        $('[data-refstate]').data("refstate", "none");
     }
 
 }
 
 
 function displayData( data, type, page ) {
-    console.log("displayData");
-    var cleanData = $( page ).data("clean");
+    var cleanData = $( page + ' [data-clean]' ).data("clean");
     if (cleanData == false) {
         cleanScanData( page ); // clean Book Info before displaying data
     }
@@ -743,13 +730,13 @@ function displayData( data, type, page ) {
         $( "#scanbook" ).hide();
     }
 
-    $( page ).data("clean", false);
+    $( page + ' [data-clean]' ).data("clean", false);
     goTo(page);
 }
 
 
 function cleanScanData( page ) {
-    refState = "none";
+    $('[data-refstate]').data("refstate", "none");
     $( page + ' [data-book="title"]' ).html('');
     $( page + ' [data-book="subtitle"]' ).html('');
     $( page + ' [data-book="subtitle"]' ).hide();
@@ -784,7 +771,7 @@ function cleanScanData( page ) {
         $( '#scanbook' ).show();
     }
 
-    $( page ).data("clean", true);
+    $( page + ' [data-clean]' ).data("clean", true);
 }
 
 
@@ -803,8 +790,10 @@ function manualCodeCB() {
 }
 
 function manualCode() {
+    var refstate = $('[data-refstate]').data("refstate");
+
     if ($('#tag').attr('value')) {
-        if (refState == "not sent") { //there is a reference that has not been sent yet
+        if (refstate == "not sent") { //there is a reference that has not been sent yet
             var message = "You have a reference that has not been submitted to Bibup yet, you will lose this reference if you search another book. Do you want to continue?";
             navigator.notification.confirm(message,
                 function(i) {

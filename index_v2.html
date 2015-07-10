@@ -61,7 +61,6 @@
 -->
             <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img barcode-collapse mb10">Scan Barcode</a>
             <a href="#" onClick="collapse();" class="ui-btn ui-corner-all center num-collapse mb10">Enter ISBN/ISSN</a>
-            <a href="#" onClick="showFiches();" class="ui-btn ui-corner-all center mb10">Show books</a>
             <div class="number-collapse" style="display: none;">
                 <div class="ui-grid-a ui-grid-span">
                     <div class="ui-block-a">
@@ -177,6 +176,7 @@
     <div data-role="page" id="book_list" data-theme="a">
         <div data-role="header" data-position="fixed">
             <h1>Book List</h1>
+            <a href="#" onclick="showFiches();" data-icon="refresh" class="ui-btn-right" data-iconpos="notext"></a>
         </div>
         <div role="main" class="ui-content">
             <div id="no-book-list">
@@ -186,8 +186,6 @@
             </div>
             <ul data-role="listview" id="my_books">
             </ul>
-
-            <a href="#book_info" class="ui-btn ui-corner-all">Book Info</a>
         </div>
         <div data-role="footer" data-id="f1" data-position="fixed">
             <div data-role="navbar">
