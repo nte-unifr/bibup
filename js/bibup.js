@@ -204,6 +204,7 @@ function onDeviceReady() {
         tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
         tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
         tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("9781565921320", "Using csh and tcshh", "Paul DuBois.", "testna", "test note for csh and tcsh")');
+        tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("0596006527", "Essential ActionScript 2.0", "someone", "testna", "test note for actionscript")');
     }
 
     // Query the database
@@ -218,12 +219,12 @@ function onDeviceReady() {
         var q = '';
         var list_empty = true;
         if ($('#my_books li').length == 0) {
-            q = 'SELECT * FROM fiche ORDER BY id DESC';
+            q = 'SELECT id, title, isbn, author, LENGTH(isbn) as isbn_len FROM fiche ORDER BY id DESC';
             list_empty = true;
         } else {
             var lastID = $('#my_books li:first-child').attr("data-ficheid");
             console.log("Last ID: " + lastID);
-            q = 'SELECT * FROM fiche WHERE id > ' +lastID+ ' ORDER BY id ASC';
+            q = 'SELECT id, title, isbn, author, LENGTH(isbn) as isbn_len FROM fiche WHERE id > ' +lastID+ ' ORDER BY id ASC';
             list_empty = false;
         }
         tx.executeSql(q, [],
@@ -232,8 +233,8 @@ function onDeviceReady() {
             for (var i=0; i<results.rows.length; i++) {
                 // Each row is a standard JavaScript array indexed by column names.
                 var row = results.rows.item(i);
-                console.log(row.id + " // " + row.isbn + " // " + row.title + " // " + row.author + " // " + row.datecreated + " // " + row.tag + " // " + row.note);
-                var elt = '<li data-ficheid="' +row.id+ '"><a href="#" onclick="showBookInfo(' + row.id + ', ' + row.isbn + ');"><p>' +row.title+ ', '+row.author+'</p></a></li>';
+                console.log(row.id + " // " + row.isbn + " ("+ row.isbn_len +") // " + row.title + " // " + row.author);
+                var elt = '<li data-ficheid="' +row.id+ '"><a href="#" onclick="showBookInfo(' + row.id + ', \'' + row.isbn + '\');"><p>' +row.title+ ', '+row.author+'</p></a></li>';
                 if (list_empty == true) {
                     $('#my_books').append(elt);
                 } else {
@@ -602,7 +603,6 @@ function openUrl( url ) {
 
 function showBookInfo( id, isbn ) {
     getNoteFromFiche(id);
-    console.log("isbn in showbook: " + isbn.toString());
     getInfoFromCode(isbn.toString(), '#book_info');
 }
 
