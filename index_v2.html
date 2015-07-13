@@ -175,14 +175,16 @@
     <!-- Page showing information book list stored on device -->
     <div data-role="page" id="book_list" data-theme="a">
         <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#" onclick="showFiches();" data-icon="refresh" class="ui-btn-left" data-iconpos="notext"></a>
             <h1>Book List</h1>
-            <a href="#" onclick="showFiches();" data-icon="refresh" class="ui-btn-right" data-iconpos="notext"></a>
+            <a href="#" onclick="deleteFichesLayout();" data-icon="gear" class="ui-btn-right" data-iconpos="notext"></a>
         </div>
         <div role="main" class="ui-content">
             <div id="no-book-list">
                 <p class="big-msg">
                     No book
                 </p>
+                <h2 class="hmtb" style="display:none;">Your references:</h2>
             </div>
             <ul data-role="listview" id="my_books">
             </ul>

@@ -24,6 +24,7 @@ $(document).on('pagebeforeshow', function(){
      });
 });
 
+
 function checkValidation(input) {
     var isValid = input.checkValidity();
     var isLengthValid = null;
@@ -221,11 +222,15 @@ function onDeviceReady() {
         if ($('#my_books li').length == 0) {
             q = 'SELECT id, title, isbn, author, LENGTH(isbn) as isbn_len FROM fiche ORDER BY id DESC';
             list_empty = true;
+            $('#no-book-list .big-msg').show();
+            $('#no-book-list h2').hide();
         } else {
             var lastID = $('#my_books li:first-child').attr("data-ficheid");
             console.log("Last ID: " + lastID);
             q = 'SELECT id, title, isbn, author, LENGTH(isbn) as isbn_len FROM fiche WHERE id > ' +lastID+ ' ORDER BY id ASC';
             list_empty = false;
+            $('#no-book-list .big-msg').hide();
+            $('#no-book-list h2').show();
         }
         tx.executeSql(q, [],
         function(tx, results) {
@@ -237,6 +242,8 @@ function onDeviceReady() {
                 var elt = '<li data-ficheid="' +row.id+ '"><a href="#" onclick="showBookInfo(' + row.id + ', \'' + row.isbn + '\');"><p>' +row.title+ ', '+row.author+'</p></a></li>';
                 if (list_empty == true) {
                     $('#my_books').append(elt);
+                    $('#no-book-list .big-msg').hide();
+                    $('#no-book-list h2').show();
                 } else {
                     $('#my_books').prepend(elt);
                 }
@@ -246,6 +253,14 @@ function onDeviceReady() {
             $("#my_books").listview('refresh'); //refresh content
             $('#my_books').show();
         }, errorCB);
+    }
+
+    function deleteFiche(id) {
+        console.log("fiche deleted");
+        db.transaction( function(tx) {
+            var query = 'DELETE FROM fiche WHERE id = ' + id;
+            tx.executeSql(query, [], successCB, errorCB);
+        });
     }
 
 
@@ -297,6 +312,7 @@ function onDeviceReady() {
                 if (success) {
                     showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
                     cleanScanData('#scan');
+                    showFiches();
                     goTo('#home');
                 }
             },
@@ -859,3 +875,28 @@ function previewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+
+function deleteFichesLayout() {
+    console.log("in delete");
+    $('#no-book-list').hide();
+    // $('#book_list .ui-listview').hide();
+    $('#my_books li').each( function(index) {
+        if ($("a", this).hasClass("ui-icon-delete")) {
+            $("a", this).addClass("ui-icon-carat-r").removeClass("ui-icon-delete");
+        } else {
+            $("a", this).addClass("ui-icon-delete").removeClass("ui-icon-carat-r");
+        }
+
+    });
+    $("#my_books").listview('refresh');
+}
+
+$('#my_books li').click(function( event ) {
+    if ($("a", this).hasClass("ui-icon-delete")) {
+        event.preventDefault();
+        console.log("deleting " + $(this).data("ficheid"));
+        deleteFiche($(this).data("ficheid"));
+    }
+    return false;
+});
