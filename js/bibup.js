@@ -192,8 +192,8 @@ var uniqid = null; //unique id from bibup db server
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready",onDeviceReady,false);
-db = window.openDatabase("Database", "1.0", "Bibup", 200000);
-db.transaction(populateDB, errorCB, successCB);
+// db = window.openDatabase("Database", "1.0", "Bibup", 200000);
+// db.transaction(populateDB, errorCB, successCB);
 
 // device APIs are available
 function onDeviceReady() {
@@ -577,8 +577,13 @@ function testUpload() {
 function capturePhoto( elt ) {
   captureID = elt;
   // Take picture using device camera and retrieve image as base64-encoded string
-  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
-    destinationType: destinationType.FILE_URI });
+  if (devicePlatform == 'Android') {
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+        destinationType: destinationType.FILE_URI, correctOrientation: true });
+  } else {
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+        destinationType: destinationType.FILE_URI });
+  }
 }
 
 // Called if something bad happens (also called if we cancel the capture!)
