@@ -38,7 +38,7 @@
             <h2 class="hmtb">Your Reference Tag</h2>
             <div class="ui-grid-a ui-grid-span">
                 <div class="ui-block-a">
-                    <input name="introtag" id="introtag" placeholder="Enter a tag (required)" value="" type="text" autocorrect="off" autocapitalize="off" onChange="setTag(value);" oninput="checkValidation(this);" required>
+                    <input name="introtag" id="introtag" placeholder="Enter a tag (required)" value="" type="text" autocorrect="off" autocapitalize="off" data-clear-btn="true" onChange="setTag(value);" oninput="checkValidation(this);" required>
                 </div>
                 <div class="ui-block-b">
                     <a href="#tag-info" class="help-btn ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
@@ -60,7 +60,7 @@
                 <br />
 -->
             <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img barcode-collapse mb10">Scan Barcode</a>
-            <a href="#" onClick="collapse();" class="ui-btn ui-corner-all center num-collapse mb10">Enter ISBN/ISSN</a>
+            <a href="#" onClick="collapse(this);" class="ui-btn ui-corner-all center num-collapse mb10">Enter ISBN/ISSN</a>
             <div class="number-collapse" style="display: none;">
                 <div class="ui-grid-a ui-grid-span">
                     <div class="ui-block-a">
@@ -157,7 +157,7 @@
                 <form id="bibupform" name="send" action="http://diufvm14.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
-                    <textarea rows="2" name="note" id="note" class="ui-input-text ui-corner-all ui-shadow-inset" placeholder="Page number or other information (optional)"></textarea>
+                    <textarea rows="2" name="note" id="note" data-clear-btn="true" class="ui-input-text ui-corner-all ui-shadow-inset" placeholder="Page number or other information (optional)"></textarea>
                     <input type="submit" value="Submit" id="submit" data-icon="check" class="ui-disabled" />
 
                     <div style="display:none;">
@@ -184,7 +184,7 @@
                 <p class="big-msg">
                     No book
                 </p>
-                <h2 class="hmtb" style="display:none;">Your references:</h2>
+                <h2 class="hmtb" style="display:none; margin-bottom: 25px;">Your references:</h2>
             </div>
             <ul data-role="listview" id="my_books">
             </ul>

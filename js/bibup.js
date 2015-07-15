@@ -12,6 +12,16 @@ $(document).ready(function(){
 
     $('[data-role=footer]').addClass("ui-footer ui-bar-a");
     $('[data-role=navbar]').addClass("ui-navbar ui-mini");
+
+    $('#my_books').on('click', 'a', function() {
+        if ($(this).hasClass("ui-icon-delete")) {
+            console.log("deleting " + $(this).parent().data("ficheid"));
+            deleteFiche($(this).parent().data("ficheid"));
+        } else {
+            showBookInfo($(this).parent().data("ficheid"), $(this).parent().attr("data-ficheisbn"));
+        }
+        return false;
+    });
 });
 
 $(document).on('pagebeforeshow', function(){
@@ -182,6 +192,8 @@ var uniqid = null; //unique id from bibup db server
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready",onDeviceReady,false);
+db = window.openDatabase("Database", "1.0", "Bibup", 200000);
+db.transaction(populateDB, errorCB, successCB);
 
 // device APIs are available
 function onDeviceReady() {
@@ -239,7 +251,7 @@ function onDeviceReady() {
                 // Each row is a standard JavaScript array indexed by column names.
                 var row = results.rows.item(i);
                 console.log(row.id + " // " + row.isbn + " ("+ row.isbn_len +") // " + row.title + " // " + row.author);
-                var elt = '<li data-ficheid="' +row.id+ '"><a href="#" onclick="showBookInfo(' + row.id + ', \'' + row.isbn + '\');"><p>' +row.title+ ', '+row.author+'</p></a></li>';
+                var elt = '<li data-ficheid="' +row.id+ '" data-ficheisbn="' + row.isbn + '"><a href="#"><p>' +row.title+ ', '+row.author+'</p></a></li>';
                 if (list_empty == true) {
                     $('#my_books').append(elt);
                     $('#no-book-list .big-msg').hide();
@@ -256,10 +268,15 @@ function onDeviceReady() {
     }
 
     function deleteFiche(id) {
-        console.log("fiche deleted");
         db.transaction( function(tx) {
             var query = 'DELETE FROM fiche WHERE id = ' + id;
-            tx.executeSql(query, [], successCB, errorCB);
+            tx.executeSql(query, [], function() {
+                $('#my_books li[data-ficheid="'+ id +'"]').remove();
+                if ($('#my_books li').length == 0) {
+                    showFiches();
+                }
+                console.log("ficheid " +id+ " deleted");
+            }, errorCB);
         });
     }
 
@@ -379,13 +396,15 @@ function initForPlatform(dp) {
 }
 
 
-function collapse() {
+function collapse(elt) {
     if ($('.barcode-collapse').is(":visible") && $('.number-collapse').is(":hidden")) {
         $('.barcode-collapse').hide("slow");
         $('.number-collapse').show("slow");
+        $(elt).html("Show all options");
     } else {
         $('.barcode-collapse').show("slow");
         $('.number-collapse').hide("slow");
+        $(elt).html("Enter ISBN/ISSN");
     }
 }
 
@@ -878,9 +897,7 @@ function previewImage(input) {
 
 
 function deleteFichesLayout() {
-    console.log("in delete");
-    $('#no-book-list').hide();
-    // $('#book_list .ui-listview').hide();
+    console.log("in deleteFicheLayout");
     $('#my_books li').each( function(index) {
         if ($("a", this).hasClass("ui-icon-delete")) {
             $("a", this).addClass("ui-icon-carat-r").removeClass("ui-icon-delete");
@@ -891,12 +908,3 @@ function deleteFichesLayout() {
     });
     $("#my_books").listview('refresh');
 }
-
-$('#my_books li').click(function( event ) {
-    if ($("a", this).hasClass("ui-icon-delete")) {
-        event.preventDefault();
-        console.log("deleting " + $(this).data("ficheid"));
-        deleteFiche($(this).data("ficheid"));
-    }
-    return false;
-});
