@@ -3,6 +3,7 @@ window.addEventListener('load', function() {
 }, false);
 
 
+// $(document).bind('pageinit', function(){
 $(document).ready(function(){
     homeView();
     $('.p-home').on('tap', renderHomeView);
@@ -204,6 +205,7 @@ function onDeviceReady() {
     checkConnection();
     db = window.openDatabase("Database", "1.0", "Bibup", 200000);
     db.transaction(populateDB, errorCB, successCB);
+    checkFirstLaunch();
 }
 
 /* ----------- DATABASE /begin -----------*/
@@ -212,18 +214,47 @@ function onDeviceReady() {
     function populateDB(tx) {
         tx.executeSql('DROP TABLE IF EXISTS tag');
         tx.executeSql('DROP TABLE IF EXISTS fiche');
+        tx.executeSql('DROP TABLE IF EXISTS config');
         tx.executeSql('CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))');
         tx.executeSql("CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), title VARCHAR(250), author VARCHAR(100), tag VARCHAR(50), note VARCHAR(255), datecreated TIMESTAMP DEFAULT (datetime('now','localtime')))");
+        tx.executeSql('CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY AUTOINCREMENT, first_launch INTEGER(1))');
         tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
         tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
         tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("9781565921320", "Using csh and tcshh", "Paul DuBois.", "testna", "test note for csh and tcsh")');
         tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("0596006527", "Essential ActionScript 2.0", "someone", "testna", "test note for actionscript")');
+        tx.executeSql('INSERT INTO config (first_launch) VALUES (0)');
     }
 
     // Query the database
     //
     function queryDB(tx) {
         tx.executeSql('SELECT * FROM tag', [], querySuccess, errorCB);
+    }
+
+    function updateFirstLaunch() {
+        console.log("update config");
+        db.transaction( function(tx) {
+            var query = 'UPDATE config SET first_launch = 1 WHERE id = 1';
+            tx.executeSql(query, [], successCB, errorCB);
+        });
+    }
+
+    function checkFirstLaunch() {
+        db.transaction( function(tx) {
+            var query = 'SELECT first_launch FROM config WHERE id = 1';
+            tx.executeSql(query, [], function(tx, result) {
+                var row = result.rows.item(0);
+                if (row.first_launch == 0) {
+                    //show page introduction to bibup
+                    console.log("intro page");
+                    goTo( "#first-intro" );
+                } else {
+                    //show homepage
+                    console.log("home page");
+                    goTo( "#home" );
+                }
+            }, errorCB);
+        });
     }
 
     // Query the database
@@ -298,15 +329,23 @@ function onDeviceReady() {
 
     function getNoteFromFiche(id) {
         db.transaction( function(tx) {
-            var query = 'SELECT note FROM fiche WHERE id = ' + id;
+            var query = 'SELECT note, tag FROM fiche WHERE id = ' + id;
             tx.executeSql(query, [],
             function(tx, results) {
-
-                for (var i=0; i<results.rows.length; i++) {
-                    // Each row is a standard JavaScript array indexed by column names.
-                    var row = results.rows.item(i);
+                var row = results.rows.item(0);
+                if (row.note != '') {
+                    $('#book_info [data-book="note"]').show();
+                    $('#book_info [data-book="note"]').prev().show();
                     $('#book_info [data-book="note"]').html( row.note );
+
+                } else {
+                    $('#book_info [data-book="note"]').hide();
+                    $('#book_info [data-book="note"]').prev().hide();
                 }
+
+                $('#book_info [data-book="tag"]').html( '<a href="#" onclick="openUrl(\'http://diufvm14.unifr.ch/bibup/index.php?tag='+row.tag+'&filter=Filter\');">' + row.tag + '</a>' );
+                $("#book_info ul").listview('refresh');
+
             }, errorCB);
         });
     }
