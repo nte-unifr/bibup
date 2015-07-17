@@ -273,9 +273,24 @@ function onDeviceReady() {
             tx.executeSql(query, [], function() {
                 $('#my_books li[data-ficheid="'+ id +'"]').remove();
                 if ($('#my_books li').length == 0) {
+                    $("#edit").trigger("click");
                     showFiches();
                 }
                 console.log("ficheid " +id+ " deleted");
+            }, errorCB);
+        });
+    }
+
+    function deleteAllFiches() {
+        db.transaction( function(tx) {
+            var query = 'DELETE FROM fiche';
+            tx.executeSql(query, [], function() {
+                $('#my_books li').each( function(index) {
+                    $(this).remove();
+                });
+                console.log("all fiches deleted");
+                $('#edit').trigger("click");
+                showFiches();
             }, errorCB);
         });
     }
@@ -901,15 +916,30 @@ function previewImage(input) {
 }
 
 
-function deleteFichesLayout() {
+function deleteFichesLayout( elt ) {
     console.log("in deleteFicheLayout");
-    $('#my_books li').each( function(index) {
-        if ($("a", this).hasClass("ui-icon-delete")) {
-            $("a", this).addClass("ui-icon-carat-r").removeClass("ui-icon-delete");
-        } else {
-            $("a", this).addClass("ui-icon-delete").removeClass("ui-icon-carat-r");
-        }
+    // change button
+    if ( $(elt).data("mode") == "icon" ) {
+        $(elt).buttonMarkup( { icon: "" }, false );
+        $(elt).data("mode", "btn");
+    } else {
+        $(elt).buttonMarkup( { icon: "gear", iconpos: "notext" }, false );
+        $(elt).data("mode", "icon");
+    }
 
-    });
+    if ($('#my_books li').length == 0) {
+        $("#no-book-list button").hide();
+    } else {
+        $('#my_books li').each( function(index) {
+            if ($("a", this).hasClass("ui-icon-delete")) {
+                $("a", this).addClass("ui-icon-carat-r").removeClass("ui-icon-delete");
+                $("#no-book-list button").hide();
+            } else {
+                $("a", this).addClass("ui-icon-delete").removeClass("ui-icon-carat-r");
+                $("#no-book-list button").show();
+            }
+
+        });
+    }
     $("#my_books").listview('refresh');
 }
