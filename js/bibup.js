@@ -1,29 +1,60 @@
+var pictureSource;   // picture source
+var destinationType; // sets the format of returned value
+var captureID = 'capture1';
+var devicePlatform;  // device platform: iOS or Android
+var db; // access database
+var marc_lang = {
+    "eng": "English",
+    "fre": "French",
+    "ger": "German",
+    "ita": "Italian",
+    "gsw": "Swiss german",
+    "spa": "Spanish"
+};
+var uniqid = null; //unique id from bibup db server
+
+
+// Wait for device API libraries to load
+document.addEventListener("deviceready",onDeviceReady,false);
+// Uncoment the 2 following lines for development in browser only!
+// db = window.openDatabase("Database", "1.0", "Bibup", 200000);
+// db.transaction(populateDB, errorCB, successCB);
+
+// device APIs are available
+function onDeviceReady() {
+    pictureSource=navigator.camera.PictureSourceType;
+    destinationType=navigator.camera.DestinationType;
+    devicePlatform = device.platform;
+    initForPlatform(devicePlatform);
+    checkConnection();
+    db = window.openDatabase("Database", "1.0", "Bibup", 200000);
+    db.transaction(populateDB, errorCB, successCB);
+
+    checkFirstLaunch();
+}
+
 window.addEventListener('load', function() {
     new FastClick(document.body);
 }, false);
 
-
-// $(document).bind('pageinit', function(){
-$(document).ready(function(){
-    homeView();
-    $('.p-home').on('tap', renderHomeView);
-    //$('.p-scan').on('tap', renderScanView);
-    $('.p-book_list').on('tap', renderBookListView);
-    $('.p-about').on('tap', renderAboutView);
-
-    $('[data-role=footer]').addClass("ui-footer ui-bar-a");
-    $('[data-role=navbar]').addClass("ui-navbar ui-mini");
-
-    $('#my_books').on('click', 'a', function() {
+$(document).on('pagebeforeshow', '#book_list', function(){
+    $('#my_books').off('click', 'a').on('click', 'a', function() {
         if ($(this).hasClass("ui-icon-delete")) {
             console.log("deleting " + $(this).parent().data("ficheid"));
             deleteFiche($(this).parent().data("ficheid"));
         } else {
+            console.log("book clicked " + $(this).parent().data("ficheid"));
             showBookInfo($(this).parent().data("ficheid"), $(this).parent().attr("data-ficheisbn"));
         }
         return false;
     });
 });
+
+$('.p-home').on('tap', renderHomeView);
+$('.p-book_list').on('tap', renderBookListView);
+$('.p-about').on('tap', renderAboutView);
+
+
 
 $(document).on('pagebeforeshow', function(){
     $(".ui-btn:not(.ui-icon-delete)").on('touchstart' ,function(){
@@ -35,6 +66,11 @@ $(document).on('pagebeforeshow', function(){
      });
 });
 
+
+function initBody() {
+    $('[data-role=footer]').addClass("ui-footer ui-bar-a");
+    $('[data-role=navbar]').addClass("ui-navbar ui-mini");
+}
 
 function checkValidation(input) {
     var isValid = input.checkValidity();
@@ -128,13 +164,6 @@ function showNotification(message , title){
         alert(title ? (title + ": " + message) : message);
     }
 }
-function showNotification2(message , title, cb){
-    if (navigator.notification) {
-        navigator.notification.alert(message, cb, title, 'OK');
-    } else {
-        alert(title ? (title + ": " + message) : message);
-    }
-}
 function showConfirm(message , title) {
     navigator.notification.confirm(message, onConfirm, title, ['Yes','Cancel']);
 }
@@ -175,38 +204,9 @@ function checkConnection() {
 }
 
 
-var pictureSource;   // picture source
-var destinationType; // sets the format of returned value
-var captureID = 'capture1';
-var devicePlatform;  // device platform: iOS or Android
-var db; // access database
-var marc_lang = {
-    "eng": "English",
-    "fre": "French",
-    "ger": "German",
-    "ita": "Italian",
-    "gsw": "Swiss german",
-    "spa": "Spanish"
-};
-var uniqid = null; //unique id from bibup db server
 
 
-// Wait for device API libraries to load
-document.addEventListener("deviceready",onDeviceReady,false);
-// db = window.openDatabase("Database", "1.0", "Bibup", 200000);
-// db.transaction(populateDB, errorCB, successCB);
 
-// device APIs are available
-function onDeviceReady() {
-    pictureSource=navigator.camera.PictureSourceType;
-    destinationType=navigator.camera.DestinationType;
-    devicePlatform = device.platform;
-    initForPlatform(devicePlatform);
-    checkConnection();
-    db = window.openDatabase("Database", "1.0", "Bibup", 200000);
-    db.transaction(populateDB, errorCB, successCB);
-    checkFirstLaunch();
-}
 
 /* ----------- DATABASE /begin -----------*/
 // Populate the database
@@ -381,7 +381,7 @@ function onDeviceReady() {
             tx.executeSql('INSERT INTO fiche (isbn, tag, title, author, note) VALUES ( ?, ?, ?, ?, ? )', [ t_isbn, t_tag, t_title, t_author, t_note ],
             function() {
                 if (success) {
-                    showNotification("The reference has been sent! The book will be available soon at www.unifr.ch/go/bibup", "Reference sent");
+                    showNotification("The reference has been sent! The book will be available soon at http://elearning.unifr.ch/bibup", "Reference sent");
                     cleanScanData('#scan');
                     showFiches();
                     goTo('#home');
@@ -669,7 +669,7 @@ function scanCode() {
     var refstate = $('[data-refstate]').data("refstate");
     if ($('#tag').attr('value')) {
         if (refstate == "not sent") { //there is a reference that has not been sent yet
-            var message = "You have a reference that has not been submitted to Bibup yet, you will lose this reference if you scan another book. Do you want to continue?";
+            var message = "You have a reference that has not been submitted to BibUp yet, you will lose this reference if you scan another book. Do you want to continue?";
             navigator.notification.confirm(message,
                 function(i) {
                     if (i == 1) {
@@ -684,7 +684,7 @@ function scanCode() {
             scanCodeSB();
         }
     } else {
-        showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
+        showNotification("You have to give a tag to later be able to find your references on: http://elearning.unifr.ch/bibup", "Tag is mandatory");
         goTo('#home');
     }
 }
@@ -888,7 +888,7 @@ function manualCode() {
 
     if ($('#tag').attr('value')) {
         if (refstate == "not sent") { //there is a reference that has not been sent yet
-            var message = "You have a reference that has not been submitted to Bibup yet, you will lose this reference if you search another book. Do you want to continue?";
+            var message = "You have a reference that has not been submitted to BibUp yet, you will lose this reference if you search another book. Do you want to continue?";
             navigator.notification.confirm(message,
                 function(i) {
                     if (i == 1) {
@@ -904,7 +904,7 @@ function manualCode() {
         }
 
     } else {
-        showNotification("You have to give a tag to later be able to find your references on: www.unifr.ch/go/bibup", "Tag is mandatory");
+        showNotification("You have to give a tag to later be able to find your references on: http://elearning.unifr.ch/bibup", "Tag is mandatory");
     }
 }
 

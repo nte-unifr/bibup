@@ -15,7 +15,7 @@
         /*body, h1, h2, a.ui-btn, input { font-family: 'Titillium Web', Helvetica, Arial, sans-serif;}*/
         body, h1, h2, a.ui-btn, input { font-family: "Helvetica Neue UltraLight", Arial, sans-serif;}
         html { font-size: 80%; }
-        #tag-info p, #help-scanner p, #help-scanner li, #help-recognition p, input[type="text"], input[type="number"], textarea   { font-size: 120%; }
+        #first-intro p, #tag-info p, #help-scanner p, #help-scanner li, #help-recognition p, input[type="text"], input[type="number"], textarea   { font-size: 120%; }
         /*h1, h2 {text-align: center;}*/
 
     </style>
@@ -28,7 +28,9 @@
     <script type="text/javascript"  src="js/bibup.js"></script>
 </head>
 
-<body>
+<body onload="initBody();">
+
+    <div data-role="page" id="loading"></div>
 
     <div data-role="page" id="home" data-theme="a">
         <div data-role="header" data-tap-toggle="false">
@@ -64,8 +66,8 @@
             <div class="number-collapse" style="display: none;">
                 <div class="ui-grid-a ui-grid-span">
                     <div class="ui-block-a">
-                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_ios" id="manualisbn" placeholder="12345678 or 1234567890123 (required)" type="text" pattern="\d*" required title="8 to 13 digits" data-clear-btn="true" />
-                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_android" id="manualisbn" placeholder="12345678 or 1234567890123 (required)" type="number" value="numeric" required title="8 to 13 digits" data-clear-btn="true" />
+                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_ios" id="manualisbn" placeholder="12345678 (required)" type="text" pattern="\d*" required title="8 to 13 digits" data-clear-btn="true" />
+                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_android" id="manualisbn" placeholder="12345678 (required)" type="number" value="numeric" required title="8 to 13 digits" data-clear-btn="true" />
                     </div>
                     <div class="ui-block-b">
                         <a href="#help-isbn" class="help-btn ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
@@ -241,7 +243,7 @@
         <div role="main" class="ui-content">
             <p><img class="logo" src="images/unifr.png" /></p>
             <h3 class="m0">DIT Centre NTE</h3>
-            University of Fribourg<br /> Bd Pérolles 90<br /> 1700 Fribourg<br /> Switzerland<br />
+            <p style="margin-top: 0px;">University of Fribourg<br /> Bd Pérolles 90<br /> 1700 Fribourg<br /> Switzerland</p>
             <a href="mailto:nte@unifr.ch" class="ui-btn ui-corner-all ui-icon-mail ui-btn-icon-left">nte@unifr.ch</a>
             <a href="#" onclick="openUrl('http://nte.unifr.ch');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">nte.unifr.ch</a>
         </div>
@@ -249,7 +251,6 @@
             <div data-role="navbar">
                 <ul>
                     <li><a href="#home" data-icon="home" class="p-home" data-transition="slide" data-direction="reverse">Home</a></li>
-                    <!--<li><a href="#scan" data-icon="eye" class="p-scan" data-transition="slide" data-direction="reverse">Book Info</a></li>-->
                     <li><a href="#book_list" class="p-book_list" data-transition="slide" data-direction="reverse" data-icon="eye">Book List</a></li>
                     <li><a href="#about" class="p-about ui-state-persist" data-icon="info">About</a></li>
                 </ul>
@@ -274,17 +275,16 @@
             <h2 class="center-2">Tag Information</h2>
 
             <div class="center-2">
-                <p>You will use this tag to filter your references in the list on the Bibup website:</p>
-                <p><a href="#" onclick="openUrl('http://www.unifr.ch/go/bibup');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">www.unifr.ch/go/bibup</a></p>
+                <p>You will use this tag to filter your references in the list on the BibUp website:</p>
+                <p><a href="#" onclick="openUrl('http://elearning.unifr.ch/bibup');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">elearning.unifr.ch/bibup</a></p>
                 <p>Use a tag that is easy for you to remember.</p>
-                <!--
-                <p><a href="#" onclick="openWindowWithPost();" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">Access your references</a></p>-->
                 <p><a href="#" onclick="openUrl('http://diufvm14.unifr.ch/bibup/index.php?tag='+$('#introtag').val()+'&filter=Filter');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left">Access your references</a></p>
 
-                <form id="bibform" action="http://elearning.unifr.ch/bibup/index.php" method="post" target="_blank" style="display: none;">
-                    <input id="bibform-tag" type="text" name="tag" value="">
-                    <input type="hidden" name="filter" value="Filter">
-                </form>
+                <p>For more information, please have a look at our tutorial and/or our FAQ:</p>
+                <p class="center-2">
+                    <a href="#" onclick="openUrl('http://elearning.unifr.ch/bibup/tuto/index.php');" data-mini="true" data-inline="true" data-icon="action" data-role="button">Tutorial</a>
+                    <a href="#" onclick="openUrl('http://elearning.unifr.ch/bibup/faq.php');" data-mini="true" data-inline="true" data-icon="action" data-role="button">FAQ</a>
+                </p>
 
             </div>
         </div>
@@ -296,7 +296,7 @@
             <h1>Help</h1>
         </div>
         <div role="main" class="ui-content">
-            <h2 class="center-2">Bibup Scanner Help</h2>
+            <h2 class="center-2">BibUp Scanner Help</h2>
 
             <div class="center-2">
                 <p>Recognized barcodes should look like</p>
@@ -327,7 +327,7 @@
             <h1>Help</h1>
         </div>
         <div role="main" class="ui-content">
-            <h2 class="center-2">Bibup OCR Help</h2>
+            <h2 class="center-2">BibUp OCR Help</h2>
 
 
             <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
@@ -367,7 +367,7 @@
                         <div class="ui-btn-inner ui-li">
                             <div class="ui-btn-text">
                                     <img src="images/logo_ref_url.png" class="ui-li-thumb">
-    					            <p class="ui-li-desc">Go to <a href="#" onclick="openUrl('http://www.unifr.ch/go/bibup');">www.unifr.ch/go/bibup</a> and filter with the tag you provided to see your references.</p>
+    					            <p class="ui-li-desc">Go to <a href="#" onclick="openUrl('http://elearning.unifr.ch/bibup');">elearning.unifr.ch/bibup</a> and filter with the tag you provided to see your references.</p>
 					        </div>
                         </div>
                     </li>
@@ -410,10 +410,21 @@
             <h1>BibUp @ UNIFR</h1>
         </div>
         <div role="main" class="ui-content">
+
+            <p><img class="logo" src="images/unifr.png" /></p>
+
             <h2>Welcome to BibUp!</h2>
-            <p>BibUp allows you to easily create bibliographic references by scanning books barcodes and extracts of text. The references, including the OCRed text, can be viewed on a Bibup web page and collected using the Zotero plugin for Firefox.</p>
+            <p>BibUp allows you to easily create bibliographic references by scanning books barcodes and extracts of text. The references, including the OCRed text, can be viewed on the BibUp website (http://elearning.unifr.ch/bibup) and collected using the Zotero plugin for Firefox.</p>
+
+            <p>For more information, please have a look at our tutorial and/or our FAQ:</p>
+            <p class="center-2">
+                <a href="#" onclick="openUrl('http://elearning.unifr.ch/bibup/tuto/index.php');" data-mini="true" data-inline="true" data-icon="action" data-role="button">Tutorial</a>
+                <a href="#" onclick="openUrl('http://elearning.unifr.ch/bibup/faq.php');" data-mini="true" data-inline="true" data-icon="action" data-role="button">FAQ</a>
+            </p>
 
             <p>This application is brought to you by the <strong>Center NTE</strong> from the University of Fribourg.</p>
+
+
 
             <a href="#home" onclick="updateFirstLaunch();" data-role="button">Start now</a>
         </div>

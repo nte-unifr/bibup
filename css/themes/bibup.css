@@ -3,7 +3,7 @@
     margin-right: 1%;
     margin-left: 1%;
     font-size: 1.3em;
-    text-shadow: 0px 1px 0px #059;
+    text-shadow: 0px 1px 0px #1D90C2;
 }
 
 .ui-header { margin-top: -1px; }
@@ -36,6 +36,14 @@ ol li, .ui-listview > li p, .ui-listview > li {
 }
 .ui-listview > li {
     position: relative !important;
+}
+.ui-listview>li p {
+    font-size: .85em;
+}
+
+#book_info li[data-book="tag"] a {
+    font-weight: normal;
+    font-size: 100%;
 }
 
 .grid-height { height: 50px; }
@@ -136,14 +144,14 @@ li.ui-li-divider.ui-bar-inherit {
 .ui-bar-a, .ui-page-theme-a .ui-bar-inherit, html .ui-bar-a .ui-bar-inherit, html .ui-body-a .ui-bar-inherit, html body .ui-group-theme-a .ui-bar-inherit {
     background-color: #24ace7;
     color: #ffffff;
-    text-shadow: 0 1px 0 #808080;
+    text-shadow: 0 1px 0 #1D90C2;
     font-weight: bold;
 }
 .ui-page-theme-a .ui-btn, html .ui-bar-a .ui-btn, html .ui-body-a .ui-btn, html body .ui-group-theme-a .ui-btn, html head + body .ui-btn.ui-btn-a, .ui-page-theme-a .ui-btn:visited, html .ui-bar-a .ui-btn:visited, html .ui-body-a .ui-btn:visited, html body .ui-group-theme-a .ui-btn:visited, html head + body .ui-btn.ui-btn-a:visited {
     background-color: #24ace7;
     border-color: #3388cc;
     color: #ffffff;
-    text-shadow: 0  1px  0  #005599;
+    text-shadow: 0  1px  0  #1D90C2;
 }
 
 .ui-page-theme-a .ui-btn.ui-btn-active, html .ui-bar-a .ui-btn.ui-btn-active, html .ui-body-a .ui-btn.ui-btn-active, html body .ui-group-theme-a .ui-btn.ui-btn-active, html head+body .ui-btn.ui-btn-a.ui-btn-active, .ui-page-theme-a .ui-checkbox-on:after, html .ui-bar-a .ui-checkbox-on:after, html .ui-body-a .ui-checkbox-on:after, html body .ui-group-theme-a .ui-checkbox-on:after, .ui-btn.ui-checkbox-on.ui-btn-a:after, .ui-page-theme-a .ui-flipswitch-active, html .ui-bar-a .ui-flipswitch-active, html .ui-body-a .ui-flipswitch-active, html body .ui-group-theme-a .ui-flipswitch-active, html body .ui-flipswitch.ui-bar-a.ui-flipswitch-active, .ui-page-theme-a .ui-slider-track .ui-btn-active, html .ui-bar-a .ui-slider-track .ui-btn-active, html .ui-body-a .ui-slider-track .ui-btn-active, html body .ui-group-theme-a .ui-slider-track .ui-btn-active, html body div.ui-slider-track.ui-body-a .ui-btn-active {
@@ -164,7 +172,7 @@ li.ui-li-divider.ui-bar-inherit {
     background-color: #189fda;
     border-color: #3388cc;
     color: #ffffff;
-    text-shadow: 0  1px  0  #005599;
+    text-shadow: 0  1px  0  #1D90C2;
 }
 .ui-page-theme-a .ui-btn:focus, html .ui-bar-a .ui-btn:focus, html .ui-body-a .ui-btn:focus, html body .ui-group-theme-a .ui-btn:focus, html head + body .ui-btn.ui-btn-a:focus, .ui-page-theme-a .ui-focus, html .ui-bar-a .ui-focus, html .ui-body-a .ui-focus, html body .ui-group-theme-a .ui-focus, html head + body .ui-btn-a.ui-focus, html head + body .ui-body-a.ui-focus {
     box-shadow: none;
