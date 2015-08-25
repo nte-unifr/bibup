@@ -214,15 +214,15 @@ function checkConnection() {
     function populateDB(tx) {
         tx.executeSql('DROP TABLE IF EXISTS tag');
         tx.executeSql('DROP TABLE IF EXISTS fiche');
-        tx.executeSql('DROP TABLE IF EXISTS config');
+        // tx.executeSql('DROP TABLE IF EXISTS config');
         tx.executeSql('CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))');
         tx.executeSql("CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), title VARCHAR(250), author VARCHAR(100), tag VARCHAR(50), note VARCHAR(255), datecreated TIMESTAMP DEFAULT (datetime('now','localtime')))");
-        tx.executeSql('CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY AUTOINCREMENT, first_launch INTEGER(1))');
+        // tx.executeSql('CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY AUTOINCREMENT, first_launch INTEGER(1))');
         // tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
         // tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
         // tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("9781565921320", "Using csh and tcshh", "Paul DuBois.", "testna", "test note for csh and tcsh")');
         // tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("0596006527", "Essential ActionScript 2.0", "someone", "testna", "test note for actionscript")');
-        tx.executeSql('INSERT INTO config (first_launch) VALUES (0)');
+        // tx.executeSql('INSERT INTO config (first_launch) VALUES (0)');
     }
 
     // Query the database
@@ -233,28 +233,26 @@ function checkConnection() {
 
     function updateFirstLaunch() {
         console.log("update config");
-        db.transaction( function(tx) {
-            var query = 'UPDATE config SET first_launch = 1 WHERE id = 1';
-            tx.executeSql(query, [], successCB, errorCB);
-        });
+        window.localStorage.setItem("first_launch", 1);
     }
 
     function checkFirstLaunch() {
-        db.transaction( function(tx) {
-            var query = 'SELECT first_launch FROM config WHERE id = 1';
-            tx.executeSql(query, [], function(tx, result) {
-                var row = result.rows.item(0);
-                if (row.first_launch == 0) {
-                    //show page introduction to bibup
-                    console.log("intro page");
-                    goTo( "#first-intro" );
-                } else {
-                    //show homepage
-                    console.log("home page");
-                    goTo( "#home" );
-                }
-            }, errorCB);
-        });
+        var value = window.localStorage.getItem("first_launch");
+        if (value == null) {
+            window.localStorage.setItem("first_launch", 0);
+            //show page introduction to bibup
+            console.log("intro page");
+            goTo( "#first-intro" );
+        } else if (parseInt(value) == 0) {
+            //show page introduction to bibup
+            console.log("intro page");
+            goTo( "#first-intro" );
+        } else {
+            //show homepage
+            console.log("home page");
+            goTo( "#home" );
+        }
+
     }
 
     // Query the database
