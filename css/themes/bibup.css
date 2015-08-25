@@ -46,6 +46,24 @@ ol li, .ui-listview > li p, .ui-listview > li {
     font-size: 100%;
 }
 
+.brand {
+    margin-bottom: 10px;
+}
+.brand p {
+    position: relative;
+    right: 0px;
+    text-align: right;
+    margin: 0;
+    top: -15px;
+}
+.brand p img {
+    height: 30px;
+    width: auto;
+    position: relative;
+    right: 0px;
+    top: 10px;
+}
+
 .grid-height { height: 50px; }
 
 .center { margin: 0 auto; }

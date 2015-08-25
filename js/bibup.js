@@ -16,9 +16,10 @@ var uniqid = null; //unique id from bibup db server
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready",onDeviceReady,false);
-// Uncoment the 2 following lines for development in browser only!
+// Uncoment the 3 following lines for development in browser only!
 // db = window.openDatabase("Database", "1.0", "Bibup", 200000);
 // db.transaction(populateDB, errorCB, successCB);
+// checkFirstLaunch();
 
 // device APIs are available
 function onDeviceReady() {
