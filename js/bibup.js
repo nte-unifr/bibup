@@ -218,10 +218,10 @@ function checkConnection() {
         tx.executeSql('CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))');
         tx.executeSql("CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), title VARCHAR(250), author VARCHAR(100), tag VARCHAR(50), note VARCHAR(255), datecreated TIMESTAMP DEFAULT (datetime('now','localtime')))");
         tx.executeSql('CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY AUTOINCREMENT, first_launch INTEGER(1))');
-        tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
-        tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
-        tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("9781565921320", "Using csh and tcshh", "Paul DuBois.", "testna", "test note for csh and tcsh")');
-        tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("0596006527", "Essential ActionScript 2.0", "someone", "testna", "test note for actionscript")');
+        // tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
+        // tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
+        // tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("9781565921320", "Using csh and tcshh", "Paul DuBois.", "testna", "test note for csh and tcsh")');
+        // tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("0596006527", "Essential ActionScript 2.0", "someone", "testna", "test note for actionscript")');
         tx.executeSql('INSERT INTO config (first_launch) VALUES (0)');
     }
 
@@ -452,12 +452,12 @@ function initForPlatform(dp) {
 
 function collapse(elt) {
     if ($('.barcode-collapse').is(":visible") && $('.number-collapse').is(":hidden")) {
-        $('.barcode-collapse').hide("slow");
-        $('.number-collapse').show("slow");
+        $('.barcode-collapse').hide(250);
+        $('.number-collapse').show(250);
         $(elt).html("Show all options");
     } else {
-        $('.barcode-collapse').show("slow");
-        $('.number-collapse').hide("slow");
+        $('.barcode-collapse').show(250);
+        $('.number-collapse').hide(250);
         $(elt).html("Enter ISBN/ISSN");
     }
 }
