@@ -12,6 +12,7 @@ var marc_lang = {
     "spa": "Spanish"
 };
 var uniqid = null; //unique id from bibup db server
+var img_num = 0; //number of images to upload
 
 
 // Wait for device API libraries to load
@@ -217,7 +218,7 @@ function checkConnection() {
         tx.executeSql('DROP TABLE IF EXISTS fiche');
         // tx.executeSql('DROP TABLE IF EXISTS config');
         tx.executeSql('CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))');
-        tx.executeSql("CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), title VARCHAR(250), author VARCHAR(100), tag VARCHAR(50), note VARCHAR(255), datecreated TIMESTAMP DEFAULT (datetime('now','localtime')))");
+        tx.executeSql("CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), title VARCHAR(250), author VARCHAR(100), tag VARCHAR(50), note VARCHAR(255), datecreated TIMESTAMP DEFAULT (datetime('now','localtime')), image INTEGER(1))");
         // tx.executeSql('CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY AUTOINCREMENT, first_launch INTEGER(1))');
         // tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
         // tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
@@ -328,7 +329,7 @@ function checkConnection() {
 
     function getNoteFromFiche(id) {
         db.transaction( function(tx) {
-            var query = 'SELECT note, tag FROM fiche WHERE id = ' + id;
+            var query = 'SELECT note, tag, image FROM fiche WHERE id = ' + id;
             tx.executeSql(query, [],
             function(tx, results) {
                 var row = results.rows.item(0);
@@ -343,7 +344,12 @@ function checkConnection() {
                 }
 
                 $('#book_info [data-book="tag"]').html( '<a href="#" onclick="openUrl(\'http://diufvm14.unifr.ch/bibup/index.php?tag='+row.tag+'&filter=Filter\');">' + row.tag + '</a>' );
+
+                var img_plural = row.image > 1 ? 'images' : 'image';
+                $('#book_info [data-book="image"]').html( row.image + ' ' +img_plural+ ' uploaded' );
+
                 $("#book_info ul").listview('refresh');
+
 
             }, errorCB);
         });
@@ -376,8 +382,8 @@ function checkConnection() {
                 t_title = $('#scan [data-book="title"]').html(),
                 t_author = $('#scan [data-book="author"]').html();
                 $('#book_note').html(''); // clean div
-            console.log("insertFiche data (isbn, tag, title, author, note): " + t_isbn + " // " + t_tag + " // " + t_title + " // " + t_author + " // " + t_note);
-            tx.executeSql('INSERT INTO fiche (isbn, tag, title, author, note) VALUES ( ?, ?, ?, ?, ? )', [ t_isbn, t_tag, t_title, t_author, t_note ],
+            console.log("insertFiche data (isbn, tag, title, author, note, num): " + t_isbn + " // " + t_tag + " // " + t_title + " // " + t_author + " // " + t_note + " // " + img_num);
+            tx.executeSql('INSERT INTO fiche (isbn, tag, title, author, note, image) VALUES ( ?, ?, ?, ?, ?, ? )', [ t_isbn, t_tag, t_title, t_author, t_note, img_num ],
             function() {
                 if (success) {
                     showNotification("The reference has been sent! The book will be available soon at http://elearning.unifr.ch/bibup", "Reference sent");
@@ -474,6 +480,7 @@ function sendForm() {
     if (elt == basic_img && elt2 == basic_img) {
         var form = $('#bibupform');
         var formData = $(form).serialize();
+        img_num = 0;
         $.ajax({
             type: 'POST',
             url: $(form).attr('action'),
@@ -491,16 +498,19 @@ function sendForm() {
     } else if (elt != basic_img && elt2 == basic_img) { //only first image to upload
 
         console.log("uploading 1st image");
+        img_num = 1;
         uploadImage1(false);
 
     } else if (elt == basic_img && elt2 != basic_img) { //only first image to upload
 
         console.log("uploading 2nd image");
+        img_num = 1;
         uploadImage2(uniqid);
 
     } else { //both images to upload
 
         console.log("uploading both images");
+        img_num = 2;
         uploadImage1(true);
 
     }
@@ -820,7 +830,6 @@ function displayData( data, type, page ) {
         $( "#ocr" ).show();
         $( "#submit" ).removeClass( 'ui-disabled' )
         $( '#submit' ).show();
-        $( "#scanbook" ).hide();
     }
 
     $( page + ' [data-clean]' ).data("clean", false);
@@ -839,6 +848,7 @@ function cleanScanData( page ) {
     $( page + ' [data-book="lang"]' ).html('');
     $( page + ' [data-book="isbn_data"]' ).html('');
     $( page + ' [data-book="cover"]' ).hide();
+    img_num = 0;
 
     if (page == '#scan') {
         $( "#book" ).hide();
@@ -860,8 +870,6 @@ function cleanScanData( page ) {
         $('#note').val('');
         $('#note').html('');
         $('#book_note').html('');
-
-        $( '#scanbook' ).show();
     }
 
     $( page + ' [data-clean]' ).data("clean", true);

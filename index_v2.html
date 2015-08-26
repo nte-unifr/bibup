@@ -61,7 +61,7 @@
 
                 <br />
 -->
-            <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img barcode-collapse mb10">Scan Barcode</a>
+            <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img barcode-collapse mb10 mt-10">Scan Barcode</a>
             <a href="#" onClick="collapse(this);" class="ui-btn ui-corner-all center num-collapse mb10">Enter ISBN/ISSN</a>
             <div class="number-collapse" style="display: none;">
                 <div class="ui-grid-a ui-grid-span">
@@ -73,8 +73,8 @@
                         <a href="#help-isbn" class="help-btn ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
                     </div>
                 </div>
-                <div class="center-2">
-                    <a href="#" onClick="manualCode()" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-search">Search</a>
+                <div>
+                    <a href="#" onClick="manualCode()" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-btn-icon-left ui-icon-search">Search</a>
                 </div>
             </div>
         </div>
@@ -99,13 +99,6 @@
         <div role="main" class="ui-content">
             <div data-clean="true" style="display: none;"></div>
             <div data-refstate="none" style="display: none;"></div>
-
-            <div id="scanbook">
-                <p class="big-msg">
-                    No book scanned
-                </p>
-                <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all">Scan barcode</a>
-            </div>
 
             <img src="" alt="" data-book="cover" style="display: none; display: block; margin: 0 auto; margin-bottom: 10%;" />
 
@@ -226,6 +219,8 @@
                 <li data-book="isbn_data"></li>
                 <li data-role="list-divider">Note</li>
                 <li data-book="note"></li>
+                <li data-role="list-divider">Images</li>
+                <li data-book="image"></li>
                 <li data-role="list-divider">Tag</li>
                 <li data-book="tag" data-icon="action"></li>
             </ul>
@@ -423,6 +418,38 @@
 
 
             <a href="#home" onclick="updateFirstLaunch();" data-role="button">Start now</a>
+        </div>
+    </div>
+
+
+    <div data-role="page" id="manual-isbn" data-theme="a">
+        <div data-role="header" data-tap-toggle="false">
+            <h1>BibUp @ UNIFR</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h2 class="hmtb">Enter ISBN/ISSN</h2>
+                <div class="ui-grid-a ui-grid-span">
+                    <div class="ui-block-a">
+                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_ios" id="manualisbn" placeholder="12345678 (required)" type="text" pattern="\d*" required title="8 to 13 digits" data-clear-btn="true" />
+                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_android" id="manualisbn" placeholder="12345678 (required)" type="number" value="numeric" required title="8 to 13 digits" data-clear-btn="true" />
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#help-isbn" class="help-btn ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
+                    </div>
+                </div>
+                <div>
+                    <a href="#" onClick="manualCode()" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-btn-icon-left ui-icon-search">Search</a>
+                </div>
+        </div>
+        <div data-role="footer" data-id="f1" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" class="p-home ui-state-persist" data-icon="home">Home</a></li>
+                    <!--<li><a href="#scan" data-icon="eye" class="p-scan" data-transition="slide">Book Info</a></li>-->
+                    <li><a href="#book_list" data-icon="eye" class="p-book_list" data-transition="slide">Book Sent</a></li>
+                    <li><a href="#about" data-icon="info" class="p-about" data-transition="slide">About</a></li>
+                </ul>
+            </div><!-- /navbar -->
         </div>
     </div>
 
