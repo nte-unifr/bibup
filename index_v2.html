@@ -83,7 +83,7 @@
                 <ul>
                     <li><a href="#home" class="p-home ui-state-persist" data-icon="home">Home</a></li>
                     <!--<li><a href="#scan" data-icon="eye" class="p-scan" data-transition="slide">Book Info</a></li>-->
-                    <li><a href="#book_list" data-icon="eye" class="p-book_list" data-transition="slide">Book List</a></li>
+                    <li><a href="#book_list" data-icon="eye" class="p-book_list" data-transition="slide">Book Sent</a></li>
                     <li><a href="#about" data-icon="info" class="p-about" data-transition="slide">About</a></li>
                 </ul>
             </div><!-- /navbar -->
@@ -157,7 +157,7 @@
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
                     <textarea rows="2" name="note" id="note" data-clear-btn="true" class="ui-input-text ui-corner-all ui-shadow-inset" placeholder="Page number or other information (optional)"></textarea>
-                    <input type="submit" value="Submit" id="submit" data-icon="check" class="ui-disabled" />
+                    <input type="submit" value="Send" id="submit" data-icon="check" class="ui-disabled" />
 
                     <div style="display:none;">
                         <input type="file" name="contentSnapshot" filename="button_citation3.png" id="contentSnapshot" accept="image/*" style="display:none;" onclick="capturePhoto('capture1');">
@@ -174,7 +174,7 @@
     <!-- Page showing information book list stored on device -->
     <div data-role="page" id="book_list" data-theme="a">
         <div data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Book List</h1>
+            <h1>Book Sent</h1>
             <a href="#" onclick="deleteFichesLayout(this);" data-icon="edit" class="ui-btn-right" data-iconpos="notext" data-mode="icon" id="edit">Done</a>
         </div>
         <div role="main" class="ui-content">
@@ -193,7 +193,7 @@
                 <ul>
                     <li><a href="#home" data-icon="home" class="p-home" data-transition="slide" data-direction="reverse">Home</a></li>
                     <!--<li><a href="#scan" class="p-scan ui-state-persist" data-icon="eye">Book Info</a></li>-->
-                    <li><a href="#book_list" class="p-book_list ui-state-persist" data-icon="eye">Book List</a></li>
+                    <li><a href="#book_list" class="p-book_list ui-state-persist" data-icon="eye">Book Sent</a></li>
                     <li><a href="#about" data-icon="info" class="p-about" data-transition="slide">About</a></li>
                 </ul>
             </div><!-- /navbar -->
@@ -247,7 +247,7 @@
             <div data-role="navbar">
                 <ul>
                     <li><a href="#home" data-icon="home" class="p-home" data-transition="slide" data-direction="reverse">Home</a></li>
-                    <li><a href="#book_list" class="p-book_list" data-transition="slide" data-direction="reverse" data-icon="eye">Book List</a></li>
+                    <li><a href="#book_list" class="p-book_list" data-transition="slide" data-direction="reverse" data-icon="eye">Book Sent</a></li>
                     <li><a href="#about" class="p-about ui-state-persist" data-icon="info">About</a></li>
                 </ul>
             </div><!-- /navbar -->
