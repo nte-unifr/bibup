@@ -895,7 +895,7 @@ function manualCode() {
                         manualCodeCB();
                     } else {
                         console.log("Confirm, selected: " + i);
-                        goTo("#home");
+                        goTo("#scan");
                     }
                 }, "WARNING", ['Yes','No']);
         } else {
