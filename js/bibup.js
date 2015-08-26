@@ -961,7 +961,7 @@ function deleteFichesLayout( elt ) {
         $(elt).buttonMarkup( { icon: "" }, false );
         $(elt).data("mode", "btn");
     } else {
-        $(elt).buttonMarkup( { icon: "gear", iconpos: "notext" }, false );
+        $(elt).buttonMarkup( { icon: "edit", iconpos: "notext" }, false );
         $(elt).data("mode", "icon");
     }
 
