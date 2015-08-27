@@ -315,17 +315,28 @@ function checkConnection() {
     }
 
     function deleteAllFiches() {
-        db.transaction( function(tx) {
-            var query = 'DELETE FROM fiche';
-            tx.executeSql(query, [], function() {
-                $('#my_books li').each( function(index) {
-                    $(this).remove();
-                });
-                console.log("all fiches deleted");
-                $('#edit').trigger("click");
-                showFiches();
-            }, errorCB);
-        });
+        var message = "All references below will be deleted from this device, but they will still remain on http://elearning.unifr.ch/bibup. Do you want to continue?";
+        navigator.notification.confirm(message,
+            function(i) {
+                if (i == 1) {
+                    console.log("Confirm, selected: " + i);
+                    db.transaction( function(tx) {
+                        var query = 'DELETE FROM fiche';
+                        tx.executeSql(query, [], function() {
+                            $('#my_books li').each( function(index) {
+                                $(this).remove();
+                            });
+                            console.log("all fiches deleted");
+                            $('#edit').trigger("click");
+                            showFiches();
+                        }, errorCB);
+                    });
+                } else {
+                    console.log("Confirm, selected: " + i);
+                }
+            }, "WARNING", ['Yes','No']);
+
+
     }
 
 
@@ -957,24 +968,15 @@ function deleteFichesLayout( elt ) {
     if ( $(elt).data("mode") == "icon" ) {
         $(elt).buttonMarkup( { icon: "" }, false );
         $(elt).data("mode", "btn");
+        if ($('#my_books li').length == 0) {
+            $("#no-book-list button").hide();
+        } else {
+            $("#no-book-list button").show();
+        }
     } else {
         $(elt).buttonMarkup( { icon: "edit", iconpos: "notext" }, false );
         $(elt).data("mode", "icon");
-    }
-
-    if ($('#my_books li').length == 0) {
         $("#no-book-list button").hide();
-    } else {
-        $('#my_books li').each( function(index) {
-            if ($("a", this).hasClass("ui-icon-delete")) {
-                $("a", this).addClass("ui-icon-carat-r").removeClass("ui-icon-delete");
-                $("#no-book-list button").hide();
-            } else {
-                $("a", this).addClass("ui-icon-delete").removeClass("ui-icon-carat-r");
-                $("#no-book-list button").show();
-            }
-
-        });
     }
     $("#my_books").listview('refresh');
 }
