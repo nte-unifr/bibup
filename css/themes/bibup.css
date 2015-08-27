@@ -11,7 +11,12 @@
 /* For 2 columns grid */
 .ui-grid-span .ui-block-a { width: 75%; }
 .ui-grid-span .ui-block-b { width: 25%; }
-.ui-grid-span .help-btn { float: right; }
+.ui-grid-span .help-btn {
+    float: right;
+    background-color: #fff;
+    border-color: #fff;
+    box-shadow: none;
+}
 /* For 2 columns grid */
 .ui-grid-span-2 .ui-block-a { width: 25%; }
 .ui-grid-span-2 .ui-block-b { width: 75%; }
@@ -99,6 +104,14 @@ p.big-msg {
 
 .help { margin-top: .5em; }
 
+.ui-icon-help:after {
+	background-image: url("../../jquerymobile/images/icons-png/help-qmark2.png");
+}
+/* Fallback */
+.ui-nosvg .ui-icon-help:after {
+	background-image: url("../../jquerymobile/images/icons-png/help-qmark2.png");
+}
+
 .logo { height: 100px; }
 
 .ui-input-text { margin-left: 2px; } /* to prevent shadow to be cut */
@@ -159,3 +172,9 @@ li.ui-li-divider.ui-bar-inherit {
     box-shadow: none;
 }
 /* Blue theme --/end */
+.help-btn, .ui-page-theme-a .ui-grid-span .ui-btn {
+    float: right;
+    background-color: #fff;
+    border-color: #fff;
+    box-shadow: none;
+}
