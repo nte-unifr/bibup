@@ -72,6 +72,8 @@ $(document).on('pagebeforeshow', function(){
 function initBody() {
     $('[data-role=footer]').addClass("ui-footer ui-bar-a");
     $('[data-role=navbar]').addClass("ui-navbar ui-mini");
+    $('#manual-isbn [data-role=navbar]').removeClass("ui-mini");
+    $('#manual-isbn .ui-navbar li a').css("font-size", "16.5px");
 }
 
 function checkValidation(input) {
@@ -451,19 +453,6 @@ function initForPlatform(dp) {
     } else {
         // TODO: adapt here if there is more platform
         $('.plat_ios').remove();
-    }
-}
-
-
-function collapse(elt) {
-    if ($('.barcode-collapse').is(":visible") && $('.number-collapse').is(":hidden")) {
-        $('.barcode-collapse').hide(250);
-        $('.number-collapse').show(250);
-        $(elt).html("Show all options");
-    } else {
-        $('.barcode-collapse').show(250);
-        $('.number-collapse').hide(250);
-        $(elt).html("Enter ISBN/ISSN");
     }
 }
 

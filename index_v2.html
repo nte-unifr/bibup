@@ -62,21 +62,7 @@
                 <br />
 -->
             <a href="#" onClick="scanCode()" class="ui-btn ui-corner-all center btn-img barcode-collapse mb10 mt-10">Scan Barcode</a>
-            <a href="#" onClick="collapse(this);" class="ui-btn ui-corner-all center num-collapse mb10">Enter ISBN/ISSN</a>
-            <div class="number-collapse" style="display: none;">
-                <div class="ui-grid-a ui-grid-span">
-                    <div class="ui-block-a">
-                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_ios" id="manualisbn" placeholder="12345678 (required)" type="text" pattern="\d*" required title="8 to 13 digits" data-clear-btn="true" />
-                        <input oninput="checkValidation(this);" name="manualisbn" class="plat_android" id="manualisbn" placeholder="12345678 (required)" type="number" value="numeric" required title="8 to 13 digits" data-clear-btn="true" />
-                    </div>
-                    <div class="ui-block-b">
-                        <a href="#help-isbn" class="help-btn ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext">Info</a>
-                    </div>
-                </div>
-                <div>
-                    <a href="#" onClick="manualCode()" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-btn-icon-left ui-icon-search">Search</a>
-                </div>
-            </div>
+            <a href="#" onClick="goTo('#manual-isbn');" class="ui-btn ui-corner-all center num-collapse mb10">Enter ISBN/ISSN</a>
         </div>
         <div data-role="footer" data-id="f1" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar">
@@ -444,10 +430,7 @@
         <div data-role="footer" data-id="f1" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar">
                 <ul>
-                    <li><a href="#home" class="p-home ui-state-persist" data-icon="home">Home</a></li>
-                    <!--<li><a href="#scan" data-icon="eye" class="p-scan" data-transition="slide">Book Info</a></li>-->
-                    <li><a href="#book_list" data-icon="eye" class="p-book_list" data-transition="slide">Book Sent</a></li>
-                    <li><a href="#about" data-icon="info" class="p-about" data-transition="slide">About</a></li>
+                    <li><a href="#home">Cancel</a></li>
                 </ul>
             </div><!-- /navbar -->
         </div>
