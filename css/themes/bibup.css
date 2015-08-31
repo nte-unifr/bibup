@@ -89,9 +89,10 @@ a.ui-btn.ui-corner-all.center.btn-img, .num-collaps { padding-top: 20px; padding
 }
 .mr0 { margin-right: 0px; }
 .m0 { margin: 0; }
-.hmtb { margin-top: 0px; margin-bottom: 0px; }
+.hmtb { margin-top: 0px; margin-bottom: 0px; padding-bottom: 10px;}
 .mb10 { margin-bottom: 10px;}
 .mt-10 { margin-top: -10px;}
+.pb10 { padding-bottom: 10px; }
 
 p.big-msg {
     font-size: 500%;
@@ -104,12 +105,19 @@ p.big-msg {
 
 .help { margin-top: .5em; }
 
+.barcode-collapse, .num-collapse {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .ui-icon-help:after {
-	background-image: url("../../jquerymobile/images/icons-png/help-qmark2.png");
+	background-image: url("../../jquerymobile/images/icons-svg/help-qmark4.svg");
+    background-size: 14px 14px;
 }
 /* Fallback */
 .ui-nosvg .ui-icon-help:after {
-	background-image: url("../../jquerymobile/images/icons-png/help-qmark2.png");
+	background-image: url("../../jquerymobile/images/icons-png/help-qmark4.png");
+    background-size: 14px 14px;
 }
 
 .logo { height: 100px; }
@@ -174,7 +182,24 @@ li.ui-li-divider.ui-bar-inherit {
 /* Blue theme --/end */
 .help-btn, .ui-page-theme-a .ui-grid-span .ui-btn {
     float: right;
-    background-color: #fff;
-    border-color: #fff;
-    box-shadow: none;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
+.help-btn-special {
+    margin-right: 5px;
+    margin-left: -33px;
+}
+
+.alert-btn {
+    background-color: #e7244b !important;
+    border-color: #ac1331 !important;
+    text-shadow: 0px 1px 0px #ac1331 !important;
+}
+
+.btn-max, .ui-input-btn {
+    max-width: 450px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+.ui-input-btn { max-width: 400px !important; }

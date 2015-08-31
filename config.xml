@@ -29,6 +29,7 @@
     <preference name="StatusBarBackgroundColor" value="#24ace7" /> <!-- only if StatusBarOverlaysWebView is false -->
     <preference name="StatusBarStyle" value="lightcontent" /> <!-- default, lightcontent, blacktranslucent, blackopaque -->
     <preference name="DisallowOverscroll" value="true" />
+    <preference name="Orientation" value="default" />
 
 
     <gap:plugin name="org.apache.cordova.inappbrowser" />
