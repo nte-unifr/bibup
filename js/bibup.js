@@ -31,6 +31,8 @@ function onDeviceReady() {
     checkConnection();
     db = window.openDatabase("Database", "1.0", "Bibup", 200000);
     db.transaction(populateDB, errorCB, successCB);
+    if (devicePlatform == 'Android')
+        window.plugins.orientationchanger.lockOrientation('sensor');
 
     checkFirstLaunch();
 }

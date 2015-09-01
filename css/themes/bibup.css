@@ -203,3 +203,10 @@ li.ui-li-divider.ui-bar-inherit {
     margin-right: auto !important;
 }
 .ui-input-btn { max-width: 400px !important; }
+.ui-input-text { width: 50%; margin-left: auto; margin-right: auto; padding-right: 55px; }
+/*.ui-input-text input { width: 90%; }*/
+#note {
+    max-width: 458px;
+    margin-left: auto;
+    margin-right: auto;
+}
