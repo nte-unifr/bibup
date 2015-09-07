@@ -35,6 +35,7 @@ function onDeviceReady() {
         window.plugins.orientationchanger.lockOrientation('sensor');
 
     checkFirstLaunch();
+    showFiches();
 }
 
 window.addEventListener('load', function() {
@@ -149,8 +150,8 @@ function homeView(event) {
 }
 function bookListView(event) {
     // active state for navbar
-    $('#scan .p-home, #book_list .p-book_list, #book_list .p-about').removeClass("ui-btn-active");
-    $('#scan .p-book_list').addClass("ui-btn-active");
+    $('#book_list .p-home, #book_list .p-book_list, #book_list .p-about').removeClass("ui-btn-active");
+    $('#book_list .p-book_list').addClass("ui-btn-active");
 }
 function aboutView(event) {
     // active state for navbar
@@ -218,12 +219,10 @@ function checkConnection() {
 // Populate the database
     //
     function populateDB(tx) {
-        tx.executeSql('DROP TABLE IF EXISTS tag');
-        tx.executeSql('DROP TABLE IF EXISTS fiche');
-        // tx.executeSql('DROP TABLE IF EXISTS config');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))');
+        // tx.executeSql('DROP TABLE IF EXISTS tag');
+        // tx.executeSql('DROP TABLE IF EXISTS fiche');
+        // tx.executeSql('CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))');
         tx.executeSql("CREATE TABLE IF NOT EXISTS fiche (id INTEGER PRIMARY KEY AUTOINCREMENT, isbn VARCHAR(13), title VARCHAR(250), author VARCHAR(100), tag VARCHAR(50), note VARCHAR(255), datecreated TIMESTAMP DEFAULT (datetime('now','localtime')), image INTEGER(1))");
-        // tx.executeSql('CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY AUTOINCREMENT, first_launch INTEGER(1))');
         // tx.executeSql('INSERT INTO tag (name) VALUES ("testna")');
         // tx.executeSql('INSERT INTO tag (name) VALUES ("testad")');
         // tx.executeSql('INSERT INTO fiche (isbn, title, author, tag, note) VALUES ("9781565921320", "Using csh and tcshh", "Paul DuBois.", "testna", "test note for csh and tcsh")');
@@ -281,24 +280,28 @@ function checkConnection() {
         }
         tx.executeSql(q, [],
         function(tx, results) {
+            if (results.rows.length != 0) {
+                for (var i=0; i<results.rows.length; i++) {
+                    // Each row is a standard JavaScript array indexed by column names.
+                    var row = results.rows.item(i);
+                    console.log(row.id + " // " + row.isbn + " ("+ row.isbn_len +") // " + row.title + " // " + row.author);
+                    var elt = '<li data-ficheid="' +row.id+ '" data-ficheisbn="' + row.isbn + '"><a href="#"><p>' +row.title+ ', '+row.author+'</p></a></li>';
+                    if (list_empty == true) {
+                        $('#my_books').append(elt);
+                        $('#no-book-list .big-msg').hide();
+                        $('#no-book-list h2').show();
+                    } else {
+                        $('#my_books').prepend(elt);
+                    }
 
-            for (var i=0; i<results.rows.length; i++) {
-                // Each row is a standard JavaScript array indexed by column names.
-                var row = results.rows.item(i);
-                console.log(row.id + " // " + row.isbn + " ("+ row.isbn_len +") // " + row.title + " // " + row.author);
-                var elt = '<li data-ficheid="' +row.id+ '" data-ficheisbn="' + row.isbn + '"><a href="#"><p>' +row.title+ ', '+row.author+'</p></a></li>';
-                if (list_empty == true) {
-                    $('#my_books').append(elt);
-                    $('#no-book-list .big-msg').hide();
-                    $('#no-book-list h2').show();
-                } else {
-                    $('#my_books').prepend(elt);
                 }
 
+                $("#my_books").listview('refresh'); //refresh content
+                $('#my_books').show();
+            } else {
+                return false;
             }
 
-            $("#my_books").listview('refresh'); //refresh content
-            $('#my_books').show();
         }, errorCB);
     }
 
@@ -920,7 +923,7 @@ function manualCode() {
 
 function setTag( data ) {
     $('#tag').attr( { value: data });
-    db.transaction(insertTag, errorCB, successCB);
+    // db.transaction(insertTag, errorCB, successCB);
 }
 
 
