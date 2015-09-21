@@ -361,7 +361,7 @@ function checkConnection() {
                     $('#book_info [data-book="note"]').prev().hide();
                 }
 
-                $('#book_info [data-book="tag"]').html( '<a href="#" onclick="openUrl(\'http://diufvm14.unifr.ch/bibup/index.php?tag='+row.tag+'&filter=Filter\');">' + row.tag + '</a>' );
+                $('#book_info [data-book="tag"]').html( '<a href="#" onclick="openUrl(\'http://elearning.unifr.ch/bibup/index.php?tag='+row.tag+'&filter=Filter\');">' + row.tag + '</a>' );
 
                 var img_plural = row.image > 1 ? 'images' : 'image';
                 $('#book_info [data-book="image"]').html( row.image + ' ' +img_plural+ ' uploaded' );

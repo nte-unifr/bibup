@@ -37,7 +37,7 @@
             <h1>BibUp @ UNIFR</h1>
         </div>
         <div role="main" class="ui-content">
-            <h2 class="hmtb center-2">Your Reference Tag</h2>
+            <h2 class="hmtb center-2">Your Tag</h2>
             <a href="#tag-info" class="help-btn help-btn-special ui-btn ui-shadow ui-corner-all ui-icon-help ui-btn-icon-notext">Info</a>
             <input name="introtag" id="introtag" placeholder="Enter a tag (required)" value="" type="text" autocorrect="off" autocapitalize="off" data-clear-btn="true" onChange="setTag(value);" oninput="checkValidation(this);" required>
 
@@ -116,7 +116,7 @@
                 <br />
 
                 <!--<form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">-->
-                <form id="bibupform" name="send" action="http://diufvm14.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
+                <form id="bibupform" name="send" action="http://elearning.unifr.ch/bibup/addfiche.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="tag" id="tag" value="" />
                     <input type="hidden" name="isbn" id="isbn" value="" />
                     <textarea rows="2" name="note" id="note" data-clear-btn="true" class="ui-input-text ui-corner-all ui-shadow-inset" placeholder="Page number or other information (optional)"></textarea>
@@ -203,8 +203,8 @@
         </div>
         <div role="main" class="ui-content">
             <p><img class="logo" src="images/unifr.png" /></p>
-            <h3 class="m0">DIT Centre NTE</h3>
-            <p style="margin-top: 0px;">University of Fribourg<br /> Bd Pérolles 90<br /> 1700 Fribourg<br /> Switzerland</p>
+            <h3 class="m0">Centre NTE</h3>
+            <p style="margin-top: 0px;">Direction IT<br /> University of Fribourg<br /> Bd Pérolles 90<br /> 1700 Fribourg<br /> Switzerland</p>
             <a href="mailto:nte@unifr.ch" class="ui-btn ui-corner-all ui-icon-mail ui-btn-icon-left btn-max">nte@unifr.ch</a>
             <a href="#" onclick="openUrl('http://nte.unifr.ch');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left btn-max">nte.unifr.ch</a>
         </div>
@@ -239,7 +239,7 @@
                 <p>You will use this tag to filter your references in the list on the BibUp website:</p>
                 <p><a href="#" onclick="openUrl('http://elearning.unifr.ch/bibup');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left btn-max">elearning.unifr.ch/bibup</a></p>
                 <p>Use a tag that is easy for you to remember.</p>
-                <p><a href="#" onclick="openUrl('http://diufvm14.unifr.ch/bibup/index.php?tag='+$('#introtag').val()+'&filter=Filter');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left btn-max">Access your references</a></p>
+                <p><a href="#" onclick="openUrl('http://elearning.unifr.ch/bibup/index.php?tag='+$('#introtag').val()+'&filter=Filter');" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-left btn-max">Access your references</a></p>
 
                 <p>For more information, please have a look at our tutorial and/or our FAQ:</p>
                 <p class="center-2">
@@ -383,7 +383,7 @@
                 <a href="#" onclick="openUrl('http://elearning.unifr.ch/bibup/faq.php');" data-mini="true" data-inline="true" data-icon="action" data-role="button">FAQ</a>
             </p>
 
-            <p>This application is brought to you by the <strong>Center NTE</strong> from the University of Fribourg.</p>
+            <p>This application is brought to you by the <strong>Centre DIT-NTE</strong> from the University of Fribourg.</p>
 
 
 

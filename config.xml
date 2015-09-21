@@ -24,6 +24,8 @@
 
     <gap:platform name="ios" />
     <gap:platform name="android" />
+    <!-- Phonegap version for building -->
+    <preference name="phonegap-version" value="3.5.0" />
 
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#24ace7" /> <!-- only if StatusBarOverlaysWebView is false -->
@@ -31,6 +33,8 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="default" />
 
+    <!-- Prevent backup in iCloud -->
+    <preference name="BackupWebStorage" value="local" />
 
     <gap:plugin name="org.apache.cordova.inappbrowser" />
     <gap:plugin name="org.apache.cordova.camera" />
@@ -40,6 +44,7 @@
     <gap:plugin name="org.apache.cordova.statusbar" />
     <gap:plugin name="org.apache.cordova.file-transfer" />
     <gap:plugin name="org.apache.cordova.network-information" />
+    <gap:plugin name="com.boyvanderlaak.cordova.plugin.orientationchanger" />
 
     <access origin="*" />
     <access origin="mailto:*" launch-external="yes"/>
