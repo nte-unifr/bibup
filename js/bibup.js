@@ -573,7 +573,10 @@ function uploadImage2(id) {
 function win1(r) {
     console.log("---");
     console.log("win");
-    if (r.response.substr(0,1) == "#") { //it's ok, get the id now
+    var test = $.trim(r.response);
+    test = test.substr(0,1);
+    console.log("res (" +$.trim(r.response)+ "): " + test);
+    if (test == "#") { //it's ok, get the id now
         var response = r.response.split("##");
         uniqid = response[response.length - 1];
         console.log("uid: " + uniqid);
@@ -587,7 +590,10 @@ function win1(r) {
 function win2(r) {
     console.log("---");
     console.log("win2");
-    if (r.response.substr(0,1) == "#") { //it's ok, get the id now
+    var test = $.trim(r.response);
+    test = test.substr(0,1);
+    console.log("res (" +$.trim(r.response)+ "): " + test);
+    if (test == "#") { //it's ok, get the id now
         var response = r.response.split("##");
         uniqid = response[response.length - 1];
         console.log("uid: " + uniqid);
