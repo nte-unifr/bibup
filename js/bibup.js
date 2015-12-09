@@ -320,7 +320,7 @@ function checkConnection() {
     }
 
     function deleteAllFiches() {
-        var message = "All references below will be deleted from this device, but they will still remain on http://elearning.unifr.ch/bibup. Do you want to continue?";
+        var message = "All references below will be deleted from this device, but they will still remain on https://elearning.unifr.ch/bibup. Do you want to continue?";
         navigator.notification.confirm(message,
             function(i) {
                 if (i == 1) {
@@ -361,7 +361,7 @@ function checkConnection() {
                     $('#book_info [data-book="note"]').prev().hide();
                 }
 
-                $('#book_info [data-book="tag"]').html( '<a href="#" onclick="openUrl(\'http://elearning.unifr.ch/bibup/index.php?tag='+row.tag+'&filter=Filter\');">' + row.tag + '</a>' );
+                $('#book_info [data-book="tag"]').html( '<a href="#" onclick="openUrl(\'https://elearning.unifr.ch/bibup/index.php?tag='+row.tag+'&filter=Filter\');">' + row.tag + '</a>' );
 
                 var img_plural = row.image > 1 ? 'images' : 'image';
                 $('#book_info [data-book="image"]').html( row.image + ' ' +img_plural+ ' uploaded' );
@@ -404,7 +404,7 @@ function checkConnection() {
             tx.executeSql('INSERT INTO fiche (isbn, tag, title, author, note, image) VALUES ( ?, ?, ?, ?, ?, ? )', [ t_isbn, t_tag, t_title, t_author, t_note, img_num ],
             function() {
                 if (success) {
-                    showNotification("The reference has been sent! The book will be available soon at http://elearning.unifr.ch/bibup", "Reference sent");
+                    showNotification("The reference has been sent! The book will be available soon at https://elearning.unifr.ch/bibup", "Reference sent");
                     cleanScanData('#scan');
                     showFiches();
                     goTo('#home');
@@ -704,7 +704,7 @@ function scanCode() {
             scanCodeSB();
         }
     } else {
-        showNotification("You have to give a tag to later be able to find your references on: http://elearning.unifr.ch/bibup", "Tag is mandatory");
+        showNotification("You have to give a tag to later be able to find your references on: https://elearning.unifr.ch/bibup", "Tag is mandatory");
         goTo('#home');
     }
 }
@@ -922,7 +922,7 @@ function manualCode() {
         }
 
     } else {
-        showNotification("You have to give a tag to later be able to find your references on: http://elearning.unifr.ch/bibup", "Tag is mandatory");
+        showNotification("You have to give a tag to later be able to find your references on: https://elearning.unifr.ch/bibup", "Tag is mandatory");
     }
 }
 
