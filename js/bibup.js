@@ -1,5 +1,6 @@
 var pictureSource;   // picture source
 var destinationType; // sets the format of returned value
+var encodingType;
 var captureID = 'capture1';
 var devicePlatform;  // device platform: iOS or Android
 var db; // access database
@@ -26,6 +27,7 @@ document.addEventListener("deviceready",onDeviceReady,false);
 function onDeviceReady() {
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
+    encodingType=navigator.camera.EncodingType;
     devicePlatform = device.platform;
     initForPlatform(devicePlatform);
     checkConnection();
@@ -527,6 +529,7 @@ function uploadImage1(both) {
     options.fileName = "imagebiblio.jpg";
 
     var imageURI = document.getElementById("capture1").src;
+    console.log("imageUri: " + imageURI);
     options.mimeType = "image/*";
 
     options.params = {
@@ -539,6 +542,8 @@ function uploadImage1(both) {
 
     options.chunkedMode = false; //to prevent problems uploading to a Nginx server.
     var ft = new FileTransfer();
+    // imageURI = imageURI.split('file://');
+    // console.log(imageURI);
     if (both) {
         ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win1, fail, options, true); //upload both images
     } else {
@@ -553,6 +558,7 @@ function uploadImage2(id) {
     options.fileName = "imagebiblio1.jpg";
 
     var imageURI = document.getElementById("capture2").src;
+    console.log("imageUri: " + imageURI);
     options.mimeType = "image/*";
 
     console.log("uid in 2nd upload: " + id);
@@ -567,17 +573,19 @@ function uploadImage2(id) {
 
     options.chunkedMode = false; //to prevent problems uploading to a Nginx server.
     var ft = new FileTransfer();
+    // imageURI = imageURI.split('file://');
+    // console.log(imageURI);
     ft.upload(imageURI, encodeURI($('#bibupform').attr('action')), win2, fail, options, true);
 }
 
 function win1(r) {
     console.log("---");
     console.log("win");
-    var test = $.trim(r.response);
-    test = test.substr(0,1);
-    console.log("res (" +$.trim(r.response)+ "): " + test);
+    var obj_res = JSON.parse($.trim(r.response));
+    var test = obj_res.statusIsbn.substr(0,1);
+    console.log("res (" +obj_res.statusIsbn+ "): " + test);
     if (test == "#") { //it's ok, get the id now
-        var response = r.response.split("##");
+        var response = obj_res.statusIsbn.split("##");
         uniqid = response[response.length - 1];
         console.log("uid: " + uniqid);
         console.log("uploading 2nd image");
@@ -590,15 +598,17 @@ function win1(r) {
 function win2(r) {
     console.log("---");
     console.log("win2");
-    var test = $.trim(r.response);
-    test = test.substr(0,1);
-    console.log("res (" +$.trim(r.response)+ "): " + test);
+    console.log(r);
+
+    var obj_res = JSON.parse($.trim(r.response));
+    var test = obj_res.statusIsbn.substr(0,1);
+    console.log("res (" +obj_res.statusIsbn+ "): " + test);
     if (test == "#") { //it's ok, get the id now
-        var response = r.response.split("##");
+        var response = obj_res.statusIsbn.split("##");
         uniqid = response[response.length - 1];
         console.log("uid: " + uniqid);
     } else {
-        console.log("problem: " + r.response);
+        console.log("problem: " + obj_res);
     }
     // alert("Code = " + r.responseCode);
     // alert("Response = " + r.response);
@@ -653,10 +663,10 @@ function capturePhoto( elt ) {
   // Take picture using device camera and retrieve image as base64-encoded string
   if (devicePlatform == 'Android') {
       navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
-        destinationType: destinationType.FILE_URI, correctOrientation: true });
+        destinationType: destinationType.FILE_URI, sourceType: pictureSource.CAMERA, correctOrientation: true });
   } else {
       navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
-        destinationType: destinationType.FILE_URI });
+        destinationType: destinationType.FILE_URI, sourceType: pictureSource.CAMERA, encodingType: encodingType.JPEG });
   }
 }
 
