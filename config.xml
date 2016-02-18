@@ -1,10 +1,13 @@
+<!-- USE THIS CONFIG FILE ONLY WHEN BUILDING IN THE CLOUD -->
+
 <?xml version="1.0" encoding="UTF-8" ?>
-    <widget xmlns   = "http://www.w3.org/ns/widgets"
-        xmlns:gap   = "http://phonegap.com/ns/1.0"
-        id          = "ch.unifr.nte.bibup"
-        versionCode = "3"
+    <widget xmlns       = "http://www.w3.org/ns/widgets"
+        xmlns:gap       = "http://phonegap.com/ns/1.0"
+        xmlns:android   = "http://schemas.android.com/apk/res/android"
+        id              = "ch.unifr.nte.bibup"
+        versionCode     = "3"
         android-versionCode="3"
-        version     = "2.0.1" >
+        version         = "2.0.1" >
 
     <!-- versionCode is optional and Android only -->
 
@@ -19,10 +22,11 @@
         Centre NTE, Université de Fribourg.
     </author>
 
-    <content src="index_v2.html" />
-
     <icon src="res/icon.png" />
 
+    <content src="index_v2.html" />
+
+    <!-- Build only for these platform -->
     <gap:platform name="ios" />
     <gap:platform name="android" />
     <!-- Phonegap version for building -->
