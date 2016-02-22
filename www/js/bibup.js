@@ -730,8 +730,6 @@ function getInfoFromCode( code, page ) {
     var codeType;
     var format = false;
     var x = code.substr(0, 3);
-    console.log("Code: " + code);
-    console.log("Code (0-3): " + x);
     if ( (code.length == 10) || ((code.length == 13) && (x == "978")) ) {
         codeType = "isbn";
         format = true;
@@ -745,8 +743,9 @@ function getInfoFromCode( code, page ) {
 
     //valid format
     if (format == true) {
-        $.getJSON( "http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json", function( data ) {
-            console.log("WC status: " + data.stat);
+        var request = "http://xisbn.worldcat.org/webservices/xid/" +codeType+ "/" +code+ "?method=getMetadata&fl=*&format=json";
+        console.log(request);
+        $.getJSON(request, function( data ) {
             if ( data.stat == "unknownId" ) {
                 showNotification("No book found.", "Sorry");
                 if (page == '#scan') { $('[data-refstate]').data("refstate", "none"); }
