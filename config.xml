@@ -50,6 +50,7 @@
     <gap:plugin name="org.apache.cordova.file-transfer" />
     <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="com.boyvanderlaak.cordova.plugin.orientationchanger" />
+    <gap:plugin name="cordova-plugin-transport-security" />
 
     <access origin="*" />
     <access origin="mailto:*" launch-external="yes"/>
