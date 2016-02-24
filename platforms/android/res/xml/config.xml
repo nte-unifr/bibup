@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget android-versionCode="3" id="ch.unifr.nte.bibup" version="2.0.1" versionCode="3" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:gap="http://phonegap.com/ns/1.0">
+    <preference name="loglevel" value="DEBUG" />
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Notification">
+        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
+    </feature>
+    <feature name="BarcodeScanner">
+        <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
+    </feature>
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="FileTransfer">
+        <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
+    </feature>
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <feature name="InAppBrowser">
+        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
+    </feature>
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+    </feature>
+    <feature name="NetworkStatus">
+        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
+    </feature>
+    <feature name="OrientationChanger">
+        <param name="android-package" value="com.boyvanderlaak.cordova.plugin.orientationchanger.OrientationChanger" />
+    </feature>
+    <name>BibUp</name>
+    <description>
+        BibUp allows you to easily create bibliographic references by scanning books barcodes and extracts of text. The references, including the OCRed text, can be viewed on a web page and collected using the Zotero plugin for Firefox.
+        Note: the low quality of the camera doesn't allow neither for an efficient book barcode scan, nor for a correct OCRed text.
+    </description>
+    <author email="nte@unifr.ch" href="https://nte.unifr.ch">
+        Centre NTE, Université de Fribourg.
+    </author>
+    <icon src="res/icon.png" />
+    <content src="index_v2.html" />
+    <gap:platform name="ios" />
+    <gap:platform name="android" />
+    <preference name="phonegap-version" value="3.5.0" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#24ace7" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="Orientation" value="default" />
+    <preference name="BackupWebStorage" value="local" />
+    <gap:plugin name="org.apache.cordova.inappbrowser" />
+    <gap:plugin name="org.apache.cordova.camera" />
+    <gap:plugin name="com.phonegap.plugins.barcodescanner" />
+    <gap:plugin name="org.apache.cordova.device" />
+    <gap:plugin name="org.apache.cordova.dialogs" />
+    <gap:plugin name="org.apache.cordova.statusbar" />
+    <gap:plugin name="org.apache.cordova.file-transfer" />
+    <gap:plugin name="org.apache.cordova.network-information" />
+    <gap:plugin name="com.boyvanderlaak.cordova.plugin.orientationchanger" />
+    <access origin="*" />
+    <access launch-external="yes" origin="mailto:*" />
+    <access launch-external="yes" origin="tel:*" />
+</widget>
