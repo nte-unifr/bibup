@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>23031B5B-7BEA-4827-BED7-905C5C8074DB</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>831E9A581994352DD62C475F800AF9D71E1130E6</key>
+		<string>http://svx-uo1151repo.unifr.ch/nte/bibup.git</string>
+	</dict>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>831E9A581994352DD62C475F800AF9D71E1130E6</key>
+		<string>bibup/</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://svx-uo1151repo.unifr.ch/nte/bibup.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>831E9A581994352DD62C475F800AF9D71E1130E6</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>831E9A581994352DD62C475F800AF9D71E1130E6</string>
+			<key>IDESourceControlWCCName</key>
+			<string>bibup</string>
+		</dict>
+	</array>
+</dict>
+</plist>
